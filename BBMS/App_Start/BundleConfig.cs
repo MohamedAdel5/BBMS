@@ -23,7 +23,7 @@ namespace BBMS
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+                      "~/Content/bootstrap-united.css",
                       "~/Content/site.css"));
         }
     }

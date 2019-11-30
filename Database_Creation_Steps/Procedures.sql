@@ -1,3 +1,5 @@
+USE BBMS
+GO
 ---------------------------------------------------Creating Procedures-----------------------------------------------------
 
 CREATE PROCEDURE insert_user

@@ -1,0 +1,11 @@
+﻿.carousel-indicators li  {
+    border-color : brown !important;
+}
+
+.carousel .carousel-indicators .active {
+    background-color: brown !important;
+}
+
+.jumbotron {
+    background-color: white;
+}
