@@ -142,6 +142,7 @@
     <Compile Include="blood_camp.cs">
       <DependentUpon>EBBMS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\BloodCampsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\hospitalsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -270,6 +271,11 @@
     <Content Include="Views\hospitals\Details.cshtml" />
     <Content Include="Views\hospitals\Edit.cshtml" />
     <Content Include="Views\hospitals\Index.cshtml" />
+    <Content Include="Views\BloodCamps\Create.cshtml" />
+    <Content Include="Views\BloodCamps\Delete.cshtml" />
+    <Content Include="Views\BloodCamps\Details.cshtml" />
+    <Content Include="Views\BloodCamps\Edit.cshtml" />
+    <Content Include="Views\BloodCamps\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
