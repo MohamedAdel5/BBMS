@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8aa85b2388234efc957cad39c695db1b" Name="Diagram1" ZoomLevel="54">
+        <EntityTypeShape EntityType="EBBMSModel.blood_bag" Width="1.5" PointX="5.25" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EBBMSModel.blood_camp" Width="1.5" PointX="5.25" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="EBBMSModel.donor" Width="1.5" PointX="0.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="EBBMSModel.donor_health_info" Width="1.5" PointX="8.25" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="EBBMSModel.hospital" Width="1.5" PointX="3" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="EBBMSModel.hospital_provides_service" Width="1.5" PointX="5.25" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="EBBMSModel.login" Width="1.5" PointX="0.75" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="EBBMSModel.service" Width="1.5" PointX="3" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="EBBMSModel.shift" Width="1.5" PointX="7.5" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="EBBMSModel.shift_manager" Width="1.5" PointX="3" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="EBBMSModel.user" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="EBBMSModel.user_uses_service" Width="1.5" PointX="7.5" PointY="3.625" IsExpanded="true" />
+        <AssociationConnector Association="EBBMSModel.FK__blood_bag__31EC6D26" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__blood_bag__hospi__32E0915F" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__blood_bag__natio__30F848ED" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__blood_cam__hospi__25869641" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__shift__blood_cam__2D27B809" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__donor_hea__natio__21B6055D" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__user__national_i__1A14E395" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__donor_hea__hospi__22AA2996" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__hospital___value__38996AB5" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__hospital__userna__1ED998B2" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__hospital___servi__398D8EEE" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__user_uses_servic__3C69FB99" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__shift_man__usern__286302EC" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__user__username__1B0907CE" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__shift__shift_man__2E1BDC42" ManuallyRouted="false" />
+        <AssociationConnector Association="EBBMSModel.FK__user_uses__natio__3D5E1FD2" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

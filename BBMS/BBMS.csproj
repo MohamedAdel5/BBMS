@@ -45,10 +45,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -126,11 +136,48 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="blood_bag.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="blood_camp.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\hospitalsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="db_access\DBManager.cs" />
+    <Compile Include="donor.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="donor_health_info.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EBBMS.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EBBMS.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EBBMS.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EBBMS.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EBBMS.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="hospital.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hospital_provides_service.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="login.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\BloodBag.cs" />
     <Compile Include="Models\BloodCamp.cs" />
@@ -142,6 +189,21 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Volunteer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="service.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="shift.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="shift_manager.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="user.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="user_uses_service.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\loginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -152,12 +214,29 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\indexCss.css" />
     <Content Include="Content\UserProfile.css" />
+    <Content Include="EBBMS.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EBBMS.edmx</DependentUpon>
+      <LastGenOutput>EBBMS.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="EBBMS.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EBBMS.edmx</DependentUpon>
+      <LastGenOutput>EBBMS.cs</LastGenOutput>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <EntityDeploy Include="EBBMS.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EBBMS.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="EBBMS.edmx.diagram">
+      <DependentUpon>EBBMS.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -186,6 +265,11 @@
     <Content Include="Views\User\SignUp.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\SignIn.cshtml" />
+    <Content Include="Views\hospitals\Create.cshtml" />
+    <Content Include="Views\hospitals\Delete.cshtml" />
+    <Content Include="Views\hospitals\Details.cshtml" />
+    <Content Include="Views\hospitals\Edit.cshtml" />
+    <Content Include="Views\hospitals\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -203,6 +287,9 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

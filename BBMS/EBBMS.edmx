@@ -1,0 +1,1116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="EBBMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="blood_bag">
+          <Key>
+            <PropertyRef Name="blood_bag_id" />
+          </Key>
+          <Property Name="blood_bag_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="national_id" Type="bigint" />
+          <Property Name="blood_bag_date" Type="date" />
+          <Property Name="blood_camp_id" Type="int" />
+          <Property Name="hospital_id" Type="int" />
+          <Property Name="notes" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="blood_camp">
+          <Key>
+            <PropertyRef Name="blood_camp_id" />
+          </Key>
+          <Property Name="blood_camp_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="hospital_id" Type="int" Nullable="false" />
+          <Property Name="driver_name" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="donor">
+          <Key>
+            <PropertyRef Name="national_id" />
+          </Key>
+          <Property Name="national_id" Type="bigint" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="gender" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="age" Type="tinyint" Nullable="false" />
+          <Property Name="phone" Type="bigint" Nullable="false" />
+          <Property Name="city" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="governorate" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="blood_type" Type="varchar" MaxLength="3" />
+        </EntityType>
+        <EntityType Name="donor_health_info">
+          <Key>
+            <PropertyRef Name="national_id" />
+            <PropertyRef Name="hospital_id" />
+            <PropertyRef Name="report_date" />
+          </Key>
+          <Property Name="national_id" Type="bigint" Nullable="false" />
+          <Property Name="hospital_id" Type="int" Nullable="false" />
+          <Property Name="report_date" Type="date" Nullable="false" />
+          <Property Name="blood_pressure" Type="varchar" MaxLength="10" />
+          <Property Name="glucose_level" Type="varchar" MaxLength="10" />
+          <Property Name="notes" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="hospital">
+          <Key>
+            <PropertyRef Name="hospital_id" />
+          </Key>
+          <Property Name="hospital_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="hospital_name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="phone" Type="bigint" Nullable="false" />
+          <Property Name="city" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="governorate" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hospital_provides_service">
+          <Key>
+            <PropertyRef Name="hospital_id" />
+            <PropertyRef Name="service_name" />
+          </Key>
+          <Property Name="hospital_id" Type="int" Nullable="false" />
+          <Property Name="service_name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="value" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="login">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="user_pass" Type="binary" MaxLength="64" Nullable="false" />
+          <Property Name="user_type" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="service">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="shift">
+          <Key>
+            <PropertyRef Name="blood_camp_id" />
+            <PropertyRef Name="shift_date" />
+          </Key>
+          <Property Name="blood_camp_id" Type="int" Nullable="false" />
+          <Property Name="shift_date" Type="date" Nullable="false" />
+          <Property Name="shift_manager_username" Type="varchar" MaxLength="30" />
+          <Property Name="start_hour" Type="tinyint" Nullable="false" />
+          <Property Name="finish_hour" Type="tinyint" Nullable="false" />
+          <Property Name="city" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="governorate" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="shift_manager">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="national_id" />
+          </Key>
+          <Property Name="national_id" Type="bigint" Nullable="false" />
+          <Property Name="points" Type="int" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user_uses_service">
+          <Key>
+            <PropertyRef Name="service_id" />
+          </Key>
+          <Property Name="service_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="national_id" Type="bigint" />
+          <Property Name="hospital_id" Type="int" />
+          <Property Name="service_name" Type="varchar" MaxLength="30" />
+          <Property Name="service_use_date" Type="date" />
+        </EntityType>
+        <Association Name="FK__blood_bag__31EC6D26">
+          <End Role="shift" Type="Self.shift" Multiplicity="0..1" />
+          <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shift">
+              <PropertyRef Name="blood_camp_id" />
+              <PropertyRef Name="shift_date" />
+            </Principal>
+            <Dependent Role="blood_bag">
+              <PropertyRef Name="blood_camp_id" />
+              <PropertyRef Name="blood_bag_date" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__blood_bag__hospi__32E0915F">
+          <End Role="hospital" Type="Self.hospital" Multiplicity="0..1" />
+          <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hospital">
+              <PropertyRef Name="hospital_id" />
+            </Principal>
+            <Dependent Role="blood_bag">
+              <PropertyRef Name="hospital_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__blood_bag__natio__30F848ED">
+          <End Role="donor" Type="Self.donor" Multiplicity="0..1" />
+          <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="national_id" />
+            </Principal>
+            <Dependent Role="blood_bag">
+              <PropertyRef Name="national_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__blood_cam__hospi__25869641">
+          <End Role="hospital" Type="Self.hospital" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="blood_camp" Type="Self.blood_camp" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hospital">
+              <PropertyRef Name="hospital_id" />
+            </Principal>
+            <Dependent Role="blood_camp">
+              <PropertyRef Name="hospital_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__donor_hea__hospi__22AA2996">
+          <End Role="hospital" Type="Self.hospital" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="donor_health_info" Type="Self.donor_health_info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hospital">
+              <PropertyRef Name="hospital_id" />
+            </Principal>
+            <Dependent Role="donor_health_info">
+              <PropertyRef Name="hospital_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__donor_hea__natio__21B6055D">
+          <End Role="donor" Type="Self.donor" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="donor_health_info" Type="Self.donor_health_info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="national_id" />
+            </Principal>
+            <Dependent Role="donor_health_info">
+              <PropertyRef Name="national_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__hospital___servi__398D8EEE">
+          <End Role="service" Type="Self.service" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="hospital_provides_service" Type="Self.hospital_provides_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="service">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="hospital_provides_service">
+              <PropertyRef Name="service_name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__hospital___value__38996AB5">
+          <End Role="hospital" Type="Self.hospital" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="hospital_provides_service" Type="Self.hospital_provides_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hospital">
+              <PropertyRef Name="hospital_id" />
+            </Principal>
+            <Dependent Role="hospital_provides_service">
+              <PropertyRef Name="hospital_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__hospital__userna__1ED998B2">
+          <End Role="login" Type="Self.login" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="hospital" Type="Self.hospital" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="login">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="hospital">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__shift__blood_cam__2D27B809">
+          <End Role="blood_camp" Type="Self.blood_camp" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="shift" Type="Self.shift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="blood_camp">
+              <PropertyRef Name="blood_camp_id" />
+            </Principal>
+            <Dependent Role="shift">
+              <PropertyRef Name="blood_camp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__shift__shift_man__2E1BDC42">
+          <End Role="shift_manager" Type="Self.shift_manager" Multiplicity="0..1" />
+          <End Role="shift" Type="Self.shift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shift_manager">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="shift">
+              <PropertyRef Name="shift_manager_username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__shift_man__usern__286302EC">
+          <End Role="login" Type="Self.login" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="shift_manager" Type="Self.shift_manager" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="login">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="shift_manager">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user__national_i__1A14E395">
+          <End Role="donor" Type="Self.donor" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="user" Type="Self.user" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="national_id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="national_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user__username__1B0907CE">
+          <End Role="login" Type="Self.login" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="login">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user_uses__natio__3D5E1FD2">
+          <End Role="user" Type="Self.user" Multiplicity="0..1" />
+          <End Role="user_uses_service" Type="Self.user_uses_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="national_id" />
+            </Principal>
+            <Dependent Role="user_uses_service">
+              <PropertyRef Name="national_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user_uses_servic__3C69FB99">
+          <End Role="hospital_provides_service" Type="Self.hospital_provides_service" Multiplicity="0..1" />
+          <End Role="user_uses_service" Type="Self.user_uses_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hospital_provides_service">
+              <PropertyRef Name="hospital_id" />
+              <PropertyRef Name="service_name" />
+            </Principal>
+            <Dependent Role="user_uses_service">
+              <PropertyRef Name="hospital_id" />
+              <PropertyRef Name="service_name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="insert_admin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="user_pass" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="insert_blood_camp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="hospital_id" Type="int" Mode="In" />
+          <Parameter Name="driver_name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insert_hospital" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="user_pass" Type="nvarchar" Mode="In" />
+          <Parameter Name="hospital_name" Type="varchar" Mode="In" />
+          <Parameter Name="phone" Type="varchar" Mode="In" />
+          <Parameter Name="city" Type="varchar" Mode="In" />
+          <Parameter Name="governorate" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insert_service" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insert_shift_manager" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="user_pass" Type="nvarchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insert_user" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="user_pass" Type="nvarchar" Mode="In" />
+          <Parameter Name="national_id" Type="bigint" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="gender" Type="char" Mode="In" />
+          <Parameter Name="age" Type="tinyint" Mode="In" />
+          <Parameter Name="phone" Type="varchar" Mode="In" />
+          <Parameter Name="city" Type="varchar" Mode="In" />
+          <Parameter Name="governorate" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insert_volunteer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="national_id" Type="bigint" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="gender" Type="char" Mode="In" />
+          <Parameter Name="age" Type="tinyint" Mode="In" />
+          <Parameter Name="phone" Type="bigint" Mode="In" />
+          <Parameter Name="city" Type="varchar" Mode="In" />
+          <Parameter Name="governorate" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="EBBMSModelStoreContainer">
+          <EntitySet Name="blood_bag" EntityType="Self.blood_bag" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="blood_camp" EntityType="Self.blood_camp" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="donor" EntityType="Self.donor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="donor_health_info" EntityType="Self.donor_health_info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hospital" EntityType="Self.hospital" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hospital_provides_service" EntityType="Self.hospital_provides_service" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="login" EntityType="Self.login" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="service" EntityType="Self.service" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="shift" EntityType="Self.shift" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="shift_manager" EntityType="Self.shift_manager" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user_uses_service" EntityType="Self.user_uses_service" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__blood_bag__31EC6D26" Association="Self.FK__blood_bag__31EC6D26">
+            <End Role="shift" EntitySet="shift" />
+            <End Role="blood_bag" EntitySet="blood_bag" />
+          </AssociationSet>
+          <AssociationSet Name="FK__blood_bag__hospi__32E0915F" Association="Self.FK__blood_bag__hospi__32E0915F">
+            <End Role="hospital" EntitySet="hospital" />
+            <End Role="blood_bag" EntitySet="blood_bag" />
+          </AssociationSet>
+          <AssociationSet Name="FK__blood_bag__natio__30F848ED" Association="Self.FK__blood_bag__natio__30F848ED">
+            <End Role="donor" EntitySet="donor" />
+            <End Role="blood_bag" EntitySet="blood_bag" />
+          </AssociationSet>
+          <AssociationSet Name="FK__blood_cam__hospi__25869641" Association="Self.FK__blood_cam__hospi__25869641">
+            <End Role="hospital" EntitySet="hospital" />
+            <End Role="blood_camp" EntitySet="blood_camp" />
+          </AssociationSet>
+          <AssociationSet Name="FK__donor_hea__hospi__22AA2996" Association="Self.FK__donor_hea__hospi__22AA2996">
+            <End Role="hospital" EntitySet="hospital" />
+            <End Role="donor_health_info" EntitySet="donor_health_info" />
+          </AssociationSet>
+          <AssociationSet Name="FK__donor_hea__natio__21B6055D" Association="Self.FK__donor_hea__natio__21B6055D">
+            <End Role="donor" EntitySet="donor" />
+            <End Role="donor_health_info" EntitySet="donor_health_info" />
+          </AssociationSet>
+          <AssociationSet Name="FK__hospital___servi__398D8EEE" Association="Self.FK__hospital___servi__398D8EEE">
+            <End Role="service" EntitySet="service" />
+            <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
+          </AssociationSet>
+          <AssociationSet Name="FK__hospital___value__38996AB5" Association="Self.FK__hospital___value__38996AB5">
+            <End Role="hospital" EntitySet="hospital" />
+            <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
+          </AssociationSet>
+          <AssociationSet Name="FK__hospital__userna__1ED998B2" Association="Self.FK__hospital__userna__1ED998B2">
+            <End Role="login" EntitySet="login" />
+            <End Role="hospital" EntitySet="hospital" />
+          </AssociationSet>
+          <AssociationSet Name="FK__shift__blood_cam__2D27B809" Association="Self.FK__shift__blood_cam__2D27B809">
+            <End Role="blood_camp" EntitySet="blood_camp" />
+            <End Role="shift" EntitySet="shift" />
+          </AssociationSet>
+          <AssociationSet Name="FK__shift__shift_man__2E1BDC42" Association="Self.FK__shift__shift_man__2E1BDC42">
+            <End Role="shift_manager" EntitySet="shift_manager" />
+            <End Role="shift" EntitySet="shift" />
+          </AssociationSet>
+          <AssociationSet Name="FK__shift_man__usern__286302EC" Association="Self.FK__shift_man__usern__286302EC">
+            <End Role="login" EntitySet="login" />
+            <End Role="shift_manager" EntitySet="shift_manager" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user__national_i__1A14E395" Association="Self.FK__user__national_i__1A14E395">
+            <End Role="donor" EntitySet="donor" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user__username__1B0907CE" Association="Self.FK__user__username__1B0907CE">
+            <End Role="login" EntitySet="login" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user_uses__natio__3D5E1FD2" Association="Self.FK__user_uses__natio__3D5E1FD2">
+            <End Role="user" EntitySet="user" />
+            <End Role="user_uses_service" EntitySet="user_uses_service" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user_uses_servic__3C69FB99" Association="Self.FK__user_uses_servic__3C69FB99">
+            <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
+            <End Role="user_uses_service" EntitySet="user_uses_service" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EBBMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="blood_bag">
+          <Key>
+            <PropertyRef Name="blood_bag_id" />
+          </Key>
+          <Property Name="blood_bag_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="national_id" Type="Int64" />
+          <Property Name="blood_bag_date" Type="DateTime" Precision="0" />
+          <Property Name="blood_camp_id" Type="Int32" />
+          <Property Name="hospital_id" Type="Int32" />
+          <Property Name="notes" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="shift" Relationship="Self.FK__blood_bag__31EC6D26" FromRole="blood_bag" ToRole="shift" />
+          <NavigationProperty Name="hospital" Relationship="Self.FK__blood_bag__hospi__32E0915F" FromRole="blood_bag" ToRole="hospital" />
+          <NavigationProperty Name="donor" Relationship="Self.FK__blood_bag__natio__30F848ED" FromRole="blood_bag" ToRole="donor" />
+        </EntityType>
+        <EntityType Name="blood_camp">
+          <Key>
+            <PropertyRef Name="blood_camp_id" />
+          </Key>
+          <Property Name="blood_camp_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="hospital_id" Type="Int32" Nullable="false" />
+          <Property Name="driver_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="hospital" Relationship="Self.FK__blood_cam__hospi__25869641" FromRole="blood_camp" ToRole="hospital" />
+          <NavigationProperty Name="shifts" Relationship="Self.FK__shift__blood_cam__2D27B809" FromRole="blood_camp" ToRole="shift" />
+        </EntityType>
+        <EntityType Name="donor">
+          <Key>
+            <PropertyRef Name="national_id" />
+          </Key>
+          <Property Name="national_id" Type="Int64" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="age" Type="Byte" Nullable="false" />
+          <Property Name="phone" Type="Int64" Nullable="false" />
+          <Property Name="city" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="governorate" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="blood_type" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="blood_bag" Relationship="Self.FK__blood_bag__natio__30F848ED" FromRole="donor" ToRole="blood_bag" />
+          <NavigationProperty Name="donor_health_info" Relationship="Self.FK__donor_hea__natio__21B6055D" FromRole="donor" ToRole="donor_health_info" />
+          <NavigationProperty Name="user" Relationship="Self.FK__user__national_i__1A14E395" FromRole="donor" ToRole="user" />
+        </EntityType>
+        <EntityType Name="donor_health_info">
+          <Key>
+            <PropertyRef Name="national_id" />
+            <PropertyRef Name="hospital_id" />
+            <PropertyRef Name="report_date" />
+          </Key>
+          <Property Name="national_id" Type="Int64" Nullable="false" />
+          <Property Name="hospital_id" Type="Int32" Nullable="false" />
+          <Property Name="report_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="blood_pressure" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="glucose_level" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="notes" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="donor" Relationship="Self.FK__donor_hea__natio__21B6055D" FromRole="donor_health_info" ToRole="donor" />
+          <NavigationProperty Name="hospital" Relationship="Self.FK__donor_hea__hospi__22AA2996" FromRole="donor_health_info" ToRole="hospital" />
+        </EntityType>
+        <EntityType Name="hospital">
+          <Key>
+            <PropertyRef Name="hospital_id" />
+          </Key>
+          <Property Name="hospital_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="hospital_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="phone" Type="Int64" Nullable="false" />
+          <Property Name="city" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="governorate" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="blood_bag" Relationship="Self.FK__blood_bag__hospi__32E0915F" FromRole="hospital" ToRole="blood_bag" />
+          <NavigationProperty Name="blood_camp" Relationship="Self.FK__blood_cam__hospi__25869641" FromRole="hospital" ToRole="blood_camp" />
+          <NavigationProperty Name="donor_health_info" Relationship="Self.FK__donor_hea__hospi__22AA2996" FromRole="hospital" ToRole="donor_health_info" />
+          <NavigationProperty Name="hospital_provides_service" Relationship="Self.FK__hospital___value__38996AB5" FromRole="hospital" ToRole="hospital_provides_service" />
+          <NavigationProperty Name="login" Relationship="Self.FK__hospital__userna__1ED998B2" FromRole="hospital" ToRole="login" />
+        </EntityType>
+        <EntityType Name="hospital_provides_service">
+          <Key>
+            <PropertyRef Name="hospital_id" />
+            <PropertyRef Name="service_name" />
+          </Key>
+          <Property Name="hospital_id" Type="Int32" Nullable="false" />
+          <Property Name="service_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="value" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="hospital" Relationship="Self.FK__hospital___value__38996AB5" FromRole="hospital_provides_service" ToRole="hospital" />
+          <NavigationProperty Name="service" Relationship="Self.FK__hospital___servi__398D8EEE" FromRole="hospital_provides_service" ToRole="service" />
+          <NavigationProperty Name="user_uses_service" Relationship="Self.FK__user_uses_servic__3C69FB99" FromRole="hospital_provides_service" ToRole="user_uses_service" />
+        </EntityType>
+        <EntityType Name="login">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="user_pass" Type="Binary" MaxLength="64" FixedLength="true" Nullable="false" />
+          <Property Name="user_type" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="hospitals" Relationship="Self.FK__hospital__userna__1ED998B2" FromRole="login" ToRole="hospital" />
+          <NavigationProperty Name="shift_manager" Relationship="Self.FK__shift_man__usern__286302EC" FromRole="login" ToRole="shift_manager" />
+          <NavigationProperty Name="users" Relationship="Self.FK__user__username__1B0907CE" FromRole="login" ToRole="user" />
+        </EntityType>
+        <EntityType Name="service">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="hospital_provides_service" Relationship="Self.FK__hospital___servi__398D8EEE" FromRole="service" ToRole="hospital_provides_service" />
+        </EntityType>
+        <EntityType Name="shift">
+          <Key>
+            <PropertyRef Name="blood_camp_id" />
+            <PropertyRef Name="shift_date" />
+          </Key>
+          <Property Name="blood_camp_id" Type="Int32" Nullable="false" />
+          <Property Name="shift_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="shift_manager_username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="start_hour" Type="Byte" Nullable="false" />
+          <Property Name="finish_hour" Type="Byte" Nullable="false" />
+          <Property Name="city" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="governorate" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="blood_bag" Relationship="Self.FK__blood_bag__31EC6D26" FromRole="shift" ToRole="blood_bag" />
+          <NavigationProperty Name="blood_camp" Relationship="Self.FK__shift__blood_cam__2D27B809" FromRole="shift" ToRole="blood_camp" />
+          <NavigationProperty Name="shift_manager" Relationship="Self.FK__shift__shift_man__2E1BDC42" FromRole="shift" ToRole="shift_manager" />
+        </EntityType>
+        <EntityType Name="shift_manager">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="login" Relationship="Self.FK__shift_man__usern__286302EC" FromRole="shift_manager" ToRole="login" />
+          <NavigationProperty Name="shifts" Relationship="Self.FK__shift__shift_man__2E1BDC42" FromRole="shift_manager" ToRole="shift" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="national_id" />
+          </Key>
+          <Property Name="national_id" Type="Int64" Nullable="false" />
+          <Property Name="points" Type="Int32" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="donor" Relationship="Self.FK__user__national_i__1A14E395" FromRole="user" ToRole="donor" />
+          <NavigationProperty Name="login" Relationship="Self.FK__user__username__1B0907CE" FromRole="user" ToRole="login" />
+          <NavigationProperty Name="user_uses_service" Relationship="Self.FK__user_uses__natio__3D5E1FD2" FromRole="user" ToRole="user_uses_service" />
+        </EntityType>
+        <EntityType Name="user_uses_service">
+          <Key>
+            <PropertyRef Name="service_id" />
+          </Key>
+          <Property Name="service_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="national_id" Type="Int64" />
+          <Property Name="hospital_id" Type="Int32" />
+          <Property Name="service_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="service_use_date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="hospital_provides_service" Relationship="Self.FK__user_uses_servic__3C69FB99" FromRole="user_uses_service" ToRole="hospital_provides_service" />
+          <NavigationProperty Name="user" Relationship="Self.FK__user_uses__natio__3D5E1FD2" FromRole="user_uses_service" ToRole="user" />
+        </EntityType>
+        <Association Name="FK__blood_bag__31EC6D26">
+          <End Role="shift" Type="Self.shift" Multiplicity="0..1" />
+          <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shift">
+              <PropertyRef Name="blood_camp_id" />
+              <PropertyRef Name="shift_date" />
+            </Principal>
+            <Dependent Role="blood_bag">
+              <PropertyRef Name="blood_camp_id" />
+              <PropertyRef Name="blood_bag_date" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__blood_bag__hospi__32E0915F">
+          <End Role="hospital" Type="Self.hospital" Multiplicity="0..1" />
+          <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hospital">
+              <PropertyRef Name="hospital_id" />
+            </Principal>
+            <Dependent Role="blood_bag">
+              <PropertyRef Name="hospital_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__blood_bag__natio__30F848ED">
+          <End Role="donor" Type="Self.donor" Multiplicity="0..1" />
+          <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="national_id" />
+            </Principal>
+            <Dependent Role="blood_bag">
+              <PropertyRef Name="national_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__blood_cam__hospi__25869641">
+          <End Role="hospital" Type="Self.hospital" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="blood_camp" Type="Self.blood_camp" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hospital">
+              <PropertyRef Name="hospital_id" />
+            </Principal>
+            <Dependent Role="blood_camp">
+              <PropertyRef Name="hospital_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__shift__blood_cam__2D27B809">
+          <End Role="blood_camp" Type="Self.blood_camp" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="shift" Type="Self.shift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="blood_camp">
+              <PropertyRef Name="blood_camp_id" />
+            </Principal>
+            <Dependent Role="shift">
+              <PropertyRef Name="blood_camp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__donor_hea__natio__21B6055D">
+          <End Role="donor" Type="Self.donor" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="donor_health_info" Type="Self.donor_health_info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="national_id" />
+            </Principal>
+            <Dependent Role="donor_health_info">
+              <PropertyRef Name="national_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user__national_i__1A14E395">
+          <End Role="donor" Type="Self.donor" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="user" Type="Self.user" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="national_id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="national_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__donor_hea__hospi__22AA2996">
+          <End Role="hospital" Type="Self.hospital" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="donor_health_info" Type="Self.donor_health_info" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hospital">
+              <PropertyRef Name="hospital_id" />
+            </Principal>
+            <Dependent Role="donor_health_info">
+              <PropertyRef Name="hospital_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__hospital___value__38996AB5">
+          <End Role="hospital" Type="Self.hospital" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="hospital_provides_service" Type="Self.hospital_provides_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hospital">
+              <PropertyRef Name="hospital_id" />
+            </Principal>
+            <Dependent Role="hospital_provides_service">
+              <PropertyRef Name="hospital_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__hospital__userna__1ED998B2">
+          <End Role="login" Type="Self.login" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="hospital" Type="Self.hospital" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="login">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="hospital">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__hospital___servi__398D8EEE">
+          <End Role="service" Type="Self.service" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="hospital_provides_service" Type="Self.hospital_provides_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="service">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="hospital_provides_service">
+              <PropertyRef Name="service_name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user_uses_servic__3C69FB99">
+          <End Role="hospital_provides_service" Type="Self.hospital_provides_service" Multiplicity="0..1" />
+          <End Role="user_uses_service" Type="Self.user_uses_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hospital_provides_service">
+              <PropertyRef Name="hospital_id" />
+              <PropertyRef Name="service_name" />
+            </Principal>
+            <Dependent Role="user_uses_service">
+              <PropertyRef Name="hospital_id" />
+              <PropertyRef Name="service_name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__shift_man__usern__286302EC">
+          <End Role="login" Type="Self.login" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="shift_manager" Type="Self.shift_manager" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="login">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="shift_manager">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user__username__1B0907CE">
+          <End Role="login" Type="Self.login" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="login">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__shift__shift_man__2E1BDC42">
+          <End Role="shift_manager" Type="Self.shift_manager" Multiplicity="0..1" />
+          <End Role="shift" Type="Self.shift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shift_manager">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="shift">
+              <PropertyRef Name="shift_manager_username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user_uses__natio__3D5E1FD2">
+          <End Role="user" Type="Self.user" Multiplicity="0..1" />
+          <End Role="user_uses_service" Type="Self.user_uses_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="national_id" />
+            </Principal>
+            <Dependent Role="user_uses_service">
+              <PropertyRef Name="national_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EBBMSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="blood_bag" EntityType="Self.blood_bag" />
+          <EntitySet Name="blood_camp" EntityType="Self.blood_camp" />
+          <EntitySet Name="donors" EntityType="Self.donor" />
+          <EntitySet Name="donor_health_info" EntityType="Self.donor_health_info" />
+          <EntitySet Name="hospitals" EntityType="Self.hospital" />
+          <EntitySet Name="hospital_provides_service" EntityType="Self.hospital_provides_service" />
+          <EntitySet Name="logins" EntityType="Self.login" />
+          <EntitySet Name="services" EntityType="Self.service" />
+          <EntitySet Name="shifts" EntityType="Self.shift" />
+          <EntitySet Name="shift_manager" EntityType="Self.shift_manager" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <EntitySet Name="user_uses_service" EntityType="Self.user_uses_service" />
+          <AssociationSet Name="FK__blood_bag__31EC6D26" Association="Self.FK__blood_bag__31EC6D26">
+            <End Role="shift" EntitySet="shifts" />
+            <End Role="blood_bag" EntitySet="blood_bag" />
+          </AssociationSet>
+          <AssociationSet Name="FK__blood_bag__hospi__32E0915F" Association="Self.FK__blood_bag__hospi__32E0915F">
+            <End Role="hospital" EntitySet="hospitals" />
+            <End Role="blood_bag" EntitySet="blood_bag" />
+          </AssociationSet>
+          <AssociationSet Name="FK__blood_bag__natio__30F848ED" Association="Self.FK__blood_bag__natio__30F848ED">
+            <End Role="donor" EntitySet="donors" />
+            <End Role="blood_bag" EntitySet="blood_bag" />
+          </AssociationSet>
+          <AssociationSet Name="FK__blood_cam__hospi__25869641" Association="Self.FK__blood_cam__hospi__25869641">
+            <End Role="hospital" EntitySet="hospitals" />
+            <End Role="blood_camp" EntitySet="blood_camp" />
+          </AssociationSet>
+          <AssociationSet Name="FK__shift__blood_cam__2D27B809" Association="Self.FK__shift__blood_cam__2D27B809">
+            <End Role="blood_camp" EntitySet="blood_camp" />
+            <End Role="shift" EntitySet="shifts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__donor_hea__natio__21B6055D" Association="Self.FK__donor_hea__natio__21B6055D">
+            <End Role="donor" EntitySet="donors" />
+            <End Role="donor_health_info" EntitySet="donor_health_info" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user__national_i__1A14E395" Association="Self.FK__user__national_i__1A14E395">
+            <End Role="donor" EntitySet="donors" />
+            <End Role="user" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK__donor_hea__hospi__22AA2996" Association="Self.FK__donor_hea__hospi__22AA2996">
+            <End Role="hospital" EntitySet="hospitals" />
+            <End Role="donor_health_info" EntitySet="donor_health_info" />
+          </AssociationSet>
+          <AssociationSet Name="FK__hospital___value__38996AB5" Association="Self.FK__hospital___value__38996AB5">
+            <End Role="hospital" EntitySet="hospitals" />
+            <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
+          </AssociationSet>
+          <AssociationSet Name="FK__hospital__userna__1ED998B2" Association="Self.FK__hospital__userna__1ED998B2">
+            <End Role="login" EntitySet="logins" />
+            <End Role="hospital" EntitySet="hospitals" />
+          </AssociationSet>
+          <AssociationSet Name="FK__hospital___servi__398D8EEE" Association="Self.FK__hospital___servi__398D8EEE">
+            <End Role="service" EntitySet="services" />
+            <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user_uses_servic__3C69FB99" Association="Self.FK__user_uses_servic__3C69FB99">
+            <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
+            <End Role="user_uses_service" EntitySet="user_uses_service" />
+          </AssociationSet>
+          <AssociationSet Name="FK__shift_man__usern__286302EC" Association="Self.FK__shift_man__usern__286302EC">
+            <End Role="login" EntitySet="logins" />
+            <End Role="shift_manager" EntitySet="shift_manager" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user__username__1B0907CE" Association="Self.FK__user__username__1B0907CE">
+            <End Role="login" EntitySet="logins" />
+            <End Role="user" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK__shift__shift_man__2E1BDC42" Association="Self.FK__shift__shift_man__2E1BDC42">
+            <End Role="shift_manager" EntitySet="shift_manager" />
+            <End Role="shift" EntitySet="shifts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user_uses__natio__3D5E1FD2" Association="Self.FK__user_uses__natio__3D5E1FD2">
+            <End Role="user" EntitySet="users" />
+            <End Role="user_uses_service" EntitySet="user_uses_service" />
+          </AssociationSet>
+          <FunctionImport Name="insert_admin">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="user_pass" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="insert_blood_camp">
+            <Parameter Name="hospital_id" Mode="In" Type="Int32" />
+            <Parameter Name="driver_name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="insert_hospital">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="user_pass" Mode="In" Type="String" />
+            <Parameter Name="hospital_name" Mode="In" Type="String" />
+            <Parameter Name="phone" Mode="In" Type="String" />
+            <Parameter Name="city" Mode="In" Type="String" />
+            <Parameter Name="governorate" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="insert_service">
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="insert_shift_manager">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="user_pass" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="insert_user">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="user_pass" Mode="In" Type="String" />
+            <Parameter Name="national_id" Mode="In" Type="Int64" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="age" Mode="In" Type="Byte" />
+            <Parameter Name="phone" Mode="In" Type="String" />
+            <Parameter Name="city" Mode="In" Type="String" />
+            <Parameter Name="governorate" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="insert_volunteer">
+            <Parameter Name="national_id" Mode="In" Type="Int64" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="age" Mode="In" Type="Byte" />
+            <Parameter Name="phone" Mode="In" Type="Int64" />
+            <Parameter Name="city" Mode="In" Type="String" />
+            <Parameter Name="governorate" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EBBMSModelStoreContainer" CdmEntityContainer="EBBMSEntities">
+          <EntitySetMapping Name="blood_bag">
+            <EntityTypeMapping TypeName="EBBMSModel.blood_bag">
+              <MappingFragment StoreEntitySet="blood_bag">
+                <ScalarProperty Name="blood_bag_id" ColumnName="blood_bag_id" />
+                <ScalarProperty Name="national_id" ColumnName="national_id" />
+                <ScalarProperty Name="blood_bag_date" ColumnName="blood_bag_date" />
+                <ScalarProperty Name="blood_camp_id" ColumnName="blood_camp_id" />
+                <ScalarProperty Name="hospital_id" ColumnName="hospital_id" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="blood_camp">
+            <EntityTypeMapping TypeName="EBBMSModel.blood_camp">
+              <MappingFragment StoreEntitySet="blood_camp">
+                <ScalarProperty Name="blood_camp_id" ColumnName="blood_camp_id" />
+                <ScalarProperty Name="hospital_id" ColumnName="hospital_id" />
+                <ScalarProperty Name="driver_name" ColumnName="driver_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="donors">
+            <EntityTypeMapping TypeName="EBBMSModel.donor">
+              <MappingFragment StoreEntitySet="donor">
+                <ScalarProperty Name="national_id" ColumnName="national_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="age" ColumnName="age" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="governorate" ColumnName="governorate" />
+                <ScalarProperty Name="blood_type" ColumnName="blood_type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="donor_health_info">
+            <EntityTypeMapping TypeName="EBBMSModel.donor_health_info">
+              <MappingFragment StoreEntitySet="donor_health_info">
+                <ScalarProperty Name="national_id" ColumnName="national_id" />
+                <ScalarProperty Name="hospital_id" ColumnName="hospital_id" />
+                <ScalarProperty Name="report_date" ColumnName="report_date" />
+                <ScalarProperty Name="blood_pressure" ColumnName="blood_pressure" />
+                <ScalarProperty Name="glucose_level" ColumnName="glucose_level" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hospitals">
+            <EntityTypeMapping TypeName="EBBMSModel.hospital">
+              <MappingFragment StoreEntitySet="hospital">
+                <ScalarProperty Name="hospital_id" ColumnName="hospital_id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="hospital_name" ColumnName="hospital_name" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="governorate" ColumnName="governorate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hospital_provides_service">
+            <EntityTypeMapping TypeName="EBBMSModel.hospital_provides_service">
+              <MappingFragment StoreEntitySet="hospital_provides_service">
+                <ScalarProperty Name="hospital_id" ColumnName="hospital_id" />
+                <ScalarProperty Name="service_name" ColumnName="service_name" />
+                <ScalarProperty Name="value" ColumnName="value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="logins">
+            <EntityTypeMapping TypeName="EBBMSModel.login">
+              <MappingFragment StoreEntitySet="login">
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="user_pass" ColumnName="user_pass" />
+                <ScalarProperty Name="user_type" ColumnName="user_type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="services">
+            <EntityTypeMapping TypeName="EBBMSModel.service">
+              <MappingFragment StoreEntitySet="service">
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="shifts">
+            <EntityTypeMapping TypeName="EBBMSModel.shift">
+              <MappingFragment StoreEntitySet="shift">
+                <ScalarProperty Name="blood_camp_id" ColumnName="blood_camp_id" />
+                <ScalarProperty Name="shift_date" ColumnName="shift_date" />
+                <ScalarProperty Name="shift_manager_username" ColumnName="shift_manager_username" />
+                <ScalarProperty Name="start_hour" ColumnName="start_hour" />
+                <ScalarProperty Name="finish_hour" ColumnName="finish_hour" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="governorate" ColumnName="governorate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="shift_manager">
+            <EntityTypeMapping TypeName="EBBMSModel.shift_manager">
+              <MappingFragment StoreEntitySet="shift_manager">
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="EBBMSModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="national_id" ColumnName="national_id" />
+                <ScalarProperty Name="points" ColumnName="points" />
+                <ScalarProperty Name="username" ColumnName="username" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_uses_service">
+            <EntityTypeMapping TypeName="EBBMSModel.user_uses_service">
+              <MappingFragment StoreEntitySet="user_uses_service">
+                <ScalarProperty Name="service_id" ColumnName="service_id" />
+                <ScalarProperty Name="national_id" ColumnName="national_id" />
+                <ScalarProperty Name="hospital_id" ColumnName="hospital_id" />
+                <ScalarProperty Name="service_name" ColumnName="service_name" />
+                <ScalarProperty Name="service_use_date" ColumnName="service_use_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="insert_admin" FunctionName="EBBMSModel.Store.insert_admin" />
+          <FunctionImportMapping FunctionImportName="insert_blood_camp" FunctionName="EBBMSModel.Store.insert_blood_camp" />
+          <FunctionImportMapping FunctionImportName="insert_hospital" FunctionName="EBBMSModel.Store.insert_hospital" />
+          <FunctionImportMapping FunctionImportName="insert_service" FunctionName="EBBMSModel.Store.insert_service" />
+          <FunctionImportMapping FunctionImportName="insert_shift_manager" FunctionName="EBBMSModel.Store.insert_shift_manager" />
+          <FunctionImportMapping FunctionImportName="insert_user" FunctionName="EBBMSModel.Store.insert_user" />
+          <FunctionImportMapping FunctionImportName="insert_volunteer" FunctionName="EBBMSModel.Store.insert_volunteer" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

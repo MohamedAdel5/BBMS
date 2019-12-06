@@ -53,9 +53,9 @@
     <div class="form-group">
         @Html.LabelFor(model => model.gender, "Gender", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <label for=" male">Male</label>
+            <label for="male">Male</label>
             @Html.RadioButtonFor(m => m.gender, "M", new { @id = "male" })
-            <label for=" female">Female</label>
+            <label for="female">Female</label>
             @Html.RadioButtonFor(m => m.gender, "F", new { @id = "female" })
             @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
         </div>
@@ -90,11 +90,11 @@
             <input type="submit" value="Create" class="btn btn-default" />
             @if (IsPost && ViewBag.DuplicateNationalID == true)
             {
-                <label class=" text-danger">This National ID is already registered</label>
+                <label class="text-danger">This National ID is already registered</label>
             }
             @if (IsPost && ViewBag.DuplicateUsername == true)
             {
-                <label class=" text-danger">This username is already registered use another one</label>
+                <label class="text-danger">This username is already registered use another one</label>
             }
         </div>
     </div>
