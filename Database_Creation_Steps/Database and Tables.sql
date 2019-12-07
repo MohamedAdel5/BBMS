@@ -119,7 +119,7 @@ CREATE TABLE [blood_bag]
 	FOREIGN KEY (hospital_id) REFERENCES [hospital] ON DELETE no action -- VIPPPPPP!!!
 	--PRIMARY KEY (national_id, blood_camp_id, blood_bag_date, hospital_id)
 )
-drop table blood_bag
+--drop table blood_bag
 CREATE TABLE [service]
 (
 	name varchar(30) PRIMARY KEY

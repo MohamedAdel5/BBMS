@@ -1,0 +1,33 @@
+﻿@model IEnumerable<BBMS.service>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th> Service Name</th>
+    </tr>
+
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+
+            <td>
+               
+               
+                @Html.ActionLink("Delete", "Delete", new { id = item.name })
+            </td>
+        </tr>
+    }
+
+</table>

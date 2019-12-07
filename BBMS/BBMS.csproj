@@ -145,6 +145,7 @@
     <Compile Include="Controllers\BloodCampsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\hospitalsController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
     <Compile Include="Controllers\ShiftManagerController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -288,6 +289,9 @@
     <Content Include="Views\Shift\Details.cshtml" />
     <Content Include="Views\Shift\Edit.cshtml" />
     <Content Include="Views\Shift\Index.cshtml" />
+    <Content Include="Views\Service\Create.cshtml" />
+    <Content Include="Views\Service\Delete.cshtml" />
+    <Content Include="Views\Service\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
