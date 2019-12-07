@@ -145,6 +145,7 @@
     <Compile Include="Controllers\BloodCampsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\hospitalsController.cs" />
+    <Compile Include="Controllers\ShiftManagerController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="db_access\DBManager.cs" />
     <Compile Include="donor.cs">
@@ -276,6 +277,11 @@
     <Content Include="Views\BloodCamps\Details.cshtml" />
     <Content Include="Views\BloodCamps\Edit.cshtml" />
     <Content Include="Views\BloodCamps\Index.cshtml" />
+    <Content Include="Views\ShiftManager\Create.cshtml" />
+    <Content Include="Views\ShiftManager\Delete.cshtml" />
+    <Content Include="Views\ShiftManager\Details.cshtml" />
+    <Content Include="Views\ShiftManager\Edit.cshtml" />
+    <Content Include="Views\ShiftManager\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -14,3 +14,8 @@ SET hospital_name = 'omeghyption',
 	City= 'saft',
 	governorate='giza'
 WHERE username='dsfds';
+
+select *from blood_camp;
+insert into blood_camp (hospital_id,driver_name) values(15,'omar')
+
+update blood_camp set hospital_id=17 ,driver_name='samy'where hospital_id=15
