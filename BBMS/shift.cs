@@ -23,8 +23,8 @@ namespace BBMS
         public int blood_camp_id { get; set; }
         public System.DateTime shift_date { get; set; }
         public string shift_manager_username { get; set; }
-        public byte start_hour { get; set; }
-        public byte finish_hour { get; set; }
+        public Nullable<System.TimeSpan> start_hour { get; set; }
+        public Nullable<System.TimeSpan> finish_hour { get; set; }
         public string city { get; set; }
         public string governorate { get; set; }
     

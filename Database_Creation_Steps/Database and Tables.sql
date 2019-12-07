@@ -91,8 +91,8 @@ CREATE TABLE [shift]
 	blood_camp_id int,
 	shift_date date,
 	shift_manager_username varchar(30),
-	start_hour tinyint NOT NULL CHECK(start_hour BETWEEN 0 AND 23),
-	finish_hour tinyint NOT NULL CHECK(finish_hour BETWEEN 0 AND 23),
+	start_hour time,
+	finish_hour time,
 	city varchar(30) NOT NULL,
 	governorate varchar(30) NOT NULL,
 
@@ -101,6 +101,8 @@ CREATE TABLE [shift]
 	PRIMARY KEY(blood_camp_id, shift_date)
 
 )
+--drop table shift
+--alter table shift  alter column  start_hour date
 
 
 CREATE TABLE [blood_bag]
@@ -114,10 +116,10 @@ CREATE TABLE [blood_bag]
 
 	FOREIGN KEY (national_id) REFERENCES [donor] ON DELETE SET NULL,
 	FOREIGN KEY (blood_camp_id, blood_bag_date) REFERENCES [shift] ON DELETE SET NULL,
-	FOREIGN KEY (hospital_id) REFERENCES [hospital] ON DELETE NO ACTION -- VIPPPPPP!!!
+	FOREIGN KEY (hospital_id) REFERENCES [hospital] ON DELETE no action -- VIPPPPPP!!!
 	--PRIMARY KEY (national_id, blood_camp_id, blood_bag_date, hospital_id)
 )
-
+drop table blood_bag
 CREATE TABLE [service]
 (
 	name varchar(30) PRIMARY KEY

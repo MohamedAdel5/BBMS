@@ -1,0 +1,66 @@
+﻿@model BBMS.shift
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>shift</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.start_hour)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.start_hour)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.finish_hour)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.finish_hour)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.city)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.city)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.governorate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.governorate)
+        </dd>
+
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.shift_manager_username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.shift_manager_username)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

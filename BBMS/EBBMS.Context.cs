@@ -35,10 +35,10 @@ namespace BBMS
         public virtual DbSet<hospital_provides_service> hospital_provides_service { get; set; }
         public virtual DbSet<login> logins { get; set; }
         public virtual DbSet<service> services { get; set; }
-        public virtual DbSet<shift> shifts { get; set; }
         public virtual DbSet<shift_manager> shift_manager { get; set; }
         public virtual DbSet<user> users { get; set; }
         public virtual DbSet<user_uses_service> user_uses_service { get; set; }
+        public virtual DbSet<shift> shifts { get; set; }
     
         public virtual int insert_admin(string username, string user_pass)
         {

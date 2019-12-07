@@ -1,0 +1,74 @@
+﻿@model IEnumerable<BBMS.shift>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+           Start
+        </th>
+        <th>
+            Finish
+        </th>
+        <th>
+            Date
+         </th>
+        <th>
+          City
+        </th>
+        <th>
+            Governorate
+        </th>
+        <th>
+            Driver name
+           </th>
+        <th>
+        Shift Manager
+          </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.start_hour)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.finish_hour)
+        </td>
+        <td>
+            @{ 
+                var date = item.shift_date.ToShortDateString();
+            }
+       
+            @date
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.city)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.governorate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.blood_camp.driver_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.shift_manager.name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.blood_camp_id, date = item.shift_date }) |
+            @Html.ActionLink("Details", "Details", new { id = item.blood_camp_id, date = item.shift_date }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.blood_camp_id, date = item.shift_date })
+        </td>
+    </tr>
+}
+
+</table>

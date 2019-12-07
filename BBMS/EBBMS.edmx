@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="EBBMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="EBBMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="blood_bag">
           <Key>
             <PropertyRef Name="blood_bag_id" />
@@ -92,8 +92,8 @@
           <Property Name="blood_camp_id" Type="int" Nullable="false" />
           <Property Name="shift_date" Type="date" Nullable="false" />
           <Property Name="shift_manager_username" Type="varchar" MaxLength="30" />
-          <Property Name="start_hour" Type="tinyint" Nullable="false" />
-          <Property Name="finish_hour" Type="tinyint" Nullable="false" />
+          <Property Name="start_hour" Type="time" Precision="7" />
+          <Property Name="finish_hour" Type="time" Precision="7" />
           <Property Name="city" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="governorate" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
@@ -122,7 +122,7 @@
           <Property Name="service_name" Type="varchar" MaxLength="30" />
           <Property Name="service_use_date" Type="date" />
         </EntityType>
-        <Association Name="FK__blood_bag__31EC6D26">
+        <Association Name="FK__blood_bag__74AE54BC">
           <End Role="shift" Type="Self.shift" Multiplicity="0..1" />
           <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
           <ReferentialConstraint>
@@ -136,7 +136,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__blood_bag__hospi__32E0915F">
+        <Association Name="FK__blood_bag__hospi__75A278F5">
           <End Role="hospital" Type="Self.hospital" Multiplicity="0..1" />
           <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
           <ReferentialConstraint>
@@ -148,7 +148,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__blood_bag__natio__30F848ED">
+        <Association Name="FK__blood_bag__natio__73BA3083">
           <End Role="donor" Type="Self.donor" Multiplicity="0..1" />
           <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
           <ReferentialConstraint>
@@ -244,7 +244,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__shift__blood_cam__2D27B809">
+        <Association Name="FK__shift__blood_cam__6FE99F9F">
           <End Role="blood_camp" Type="Self.blood_camp" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -258,7 +258,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__shift__shift_man__2E1BDC42">
+        <Association Name="FK__shift__shift_man__70DDC3D8">
           <End Role="shift_manager" Type="Self.shift_manager" Multiplicity="0..1" />
           <End Role="shift" Type="Self.shift" Multiplicity="*" />
           <ReferentialConstraint>
@@ -395,15 +395,15 @@
           <EntitySet Name="shift_manager" EntityType="Self.shift_manager" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_uses_service" EntityType="Self.user_uses_service" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__blood_bag__31EC6D26" Association="Self.FK__blood_bag__31EC6D26">
+          <AssociationSet Name="FK__blood_bag__74AE54BC" Association="Self.FK__blood_bag__74AE54BC">
             <End Role="shift" EntitySet="shift" />
             <End Role="blood_bag" EntitySet="blood_bag" />
           </AssociationSet>
-          <AssociationSet Name="FK__blood_bag__hospi__32E0915F" Association="Self.FK__blood_bag__hospi__32E0915F">
+          <AssociationSet Name="FK__blood_bag__hospi__75A278F5" Association="Self.FK__blood_bag__hospi__75A278F5">
             <End Role="hospital" EntitySet="hospital" />
             <End Role="blood_bag" EntitySet="blood_bag" />
           </AssociationSet>
-          <AssociationSet Name="FK__blood_bag__natio__30F848ED" Association="Self.FK__blood_bag__natio__30F848ED">
+          <AssociationSet Name="FK__blood_bag__natio__73BA3083" Association="Self.FK__blood_bag__natio__73BA3083">
             <End Role="donor" EntitySet="donor" />
             <End Role="blood_bag" EntitySet="blood_bag" />
           </AssociationSet>
@@ -431,11 +431,11 @@
             <End Role="login" EntitySet="login" />
             <End Role="hospital" EntitySet="hospital" />
           </AssociationSet>
-          <AssociationSet Name="FK__shift__blood_cam__2D27B809" Association="Self.FK__shift__blood_cam__2D27B809">
+          <AssociationSet Name="FK__shift__blood_cam__6FE99F9F" Association="Self.FK__shift__blood_cam__6FE99F9F">
             <End Role="blood_camp" EntitySet="blood_camp" />
             <End Role="shift" EntitySet="shift" />
           </AssociationSet>
-          <AssociationSet Name="FK__shift__shift_man__2E1BDC42" Association="Self.FK__shift__shift_man__2E1BDC42">
+          <AssociationSet Name="FK__shift__shift_man__70DDC3D8" Association="Self.FK__shift__shift_man__70DDC3D8">
             <End Role="shift_manager" EntitySet="shift_manager" />
             <End Role="shift" EntitySet="shift" />
           </AssociationSet>
@@ -460,8 +460,7 @@
             <End Role="user_uses_service" EntitySet="user_uses_service" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="EBBMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -475,9 +474,9 @@
           <Property Name="blood_camp_id" Type="Int32" />
           <Property Name="hospital_id" Type="Int32" />
           <Property Name="notes" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="shift" Relationship="Self.FK__blood_bag__31EC6D26" FromRole="blood_bag" ToRole="shift" />
           <NavigationProperty Name="hospital" Relationship="Self.FK__blood_bag__hospi__32E0915F" FromRole="blood_bag" ToRole="hospital" />
           <NavigationProperty Name="donor" Relationship="Self.FK__blood_bag__natio__30F848ED" FromRole="blood_bag" ToRole="donor" />
+          <NavigationProperty Name="shift" Relationship="EBBMSModel.FK__blood_bag__74AE54BC" FromRole="blood_bag" ToRole="shift" />
         </EntityType>
         <EntityType Name="blood_camp">
           <Key>
@@ -487,7 +486,7 @@
           <Property Name="hospital_id" Type="Int32" Nullable="false" />
           <Property Name="driver_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="hospital" Relationship="Self.FK__blood_cam__hospi__25869641" FromRole="blood_camp" ToRole="hospital" />
-          <NavigationProperty Name="shifts" Relationship="Self.FK__shift__blood_cam__2D27B809" FromRole="blood_camp" ToRole="shift" />
+          <NavigationProperty Name="shifts" Relationship="EBBMSModel.FK__shift__blood_cam__6FE99F9F" FromRole="blood_camp" ToRole="shift" />
         </EntityType>
         <EntityType Name="donor">
           <Key>
@@ -566,22 +565,6 @@
           <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="hospital_provides_service" Relationship="Self.FK__hospital___servi__398D8EEE" FromRole="service" ToRole="hospital_provides_service" />
         </EntityType>
-        <EntityType Name="shift">
-          <Key>
-            <PropertyRef Name="blood_camp_id" />
-            <PropertyRef Name="shift_date" />
-          </Key>
-          <Property Name="blood_camp_id" Type="Int32" Nullable="false" />
-          <Property Name="shift_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="shift_manager_username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="start_hour" Type="Byte" Nullable="false" />
-          <Property Name="finish_hour" Type="Byte" Nullable="false" />
-          <Property Name="city" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="governorate" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="blood_bag" Relationship="Self.FK__blood_bag__31EC6D26" FromRole="shift" ToRole="blood_bag" />
-          <NavigationProperty Name="blood_camp" Relationship="Self.FK__shift__blood_cam__2D27B809" FromRole="shift" ToRole="blood_camp" />
-          <NavigationProperty Name="shift_manager" Relationship="Self.FK__shift__shift_man__2E1BDC42" FromRole="shift" ToRole="shift_manager" />
-        </EntityType>
         <EntityType Name="shift_manager">
           <Key>
             <PropertyRef Name="username" />
@@ -589,7 +572,7 @@
           <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="login" Relationship="Self.FK__shift_man__usern__286302EC" FromRole="shift_manager" ToRole="login" />
-          <NavigationProperty Name="shifts" Relationship="Self.FK__shift__shift_man__2E1BDC42" FromRole="shift_manager" ToRole="shift" />
+          <NavigationProperty Name="shifts" Relationship="EBBMSModel.FK__shift__shift_man__70DDC3D8" FromRole="shift_manager" ToRole="shift" />
         </EntityType>
         <EntityType Name="user">
           <Key>
@@ -614,20 +597,6 @@
           <NavigationProperty Name="hospital_provides_service" Relationship="Self.FK__user_uses_servic__3C69FB99" FromRole="user_uses_service" ToRole="hospital_provides_service" />
           <NavigationProperty Name="user" Relationship="Self.FK__user_uses__natio__3D5E1FD2" FromRole="user_uses_service" ToRole="user" />
         </EntityType>
-        <Association Name="FK__blood_bag__31EC6D26">
-          <End Role="shift" Type="Self.shift" Multiplicity="0..1" />
-          <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="shift">
-              <PropertyRef Name="blood_camp_id" />
-              <PropertyRef Name="shift_date" />
-            </Principal>
-            <Dependent Role="blood_bag">
-              <PropertyRef Name="blood_camp_id" />
-              <PropertyRef Name="blood_bag_date" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__blood_bag__hospi__32E0915F">
           <End Role="hospital" Type="Self.hospital" Multiplicity="0..1" />
           <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
@@ -663,20 +632,6 @@
             </Principal>
             <Dependent Role="blood_camp">
               <PropertyRef Name="hospital_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__shift__blood_cam__2D27B809">
-          <End Role="blood_camp" Type="Self.blood_camp" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="shift" Type="Self.shift" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="blood_camp">
-              <PropertyRef Name="blood_camp_id" />
-            </Principal>
-            <Dependent Role="shift">
-              <PropertyRef Name="blood_camp_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -806,18 +761,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__shift__shift_man__2E1BDC42">
-          <End Role="shift_manager" Type="Self.shift_manager" Multiplicity="0..1" />
-          <End Role="shift" Type="Self.shift" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="shift_manager">
-              <PropertyRef Name="username" />
-            </Principal>
-            <Dependent Role="shift">
-              <PropertyRef Name="shift_manager_username" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__user_uses__natio__3D5E1FD2">
           <End Role="user" Type="Self.user" Multiplicity="0..1" />
           <End Role="user_uses_service" Type="Self.user_uses_service" Multiplicity="*" />
@@ -839,14 +782,9 @@
           <EntitySet Name="hospital_provides_service" EntityType="Self.hospital_provides_service" />
           <EntitySet Name="logins" EntityType="Self.login" />
           <EntitySet Name="services" EntityType="Self.service" />
-          <EntitySet Name="shifts" EntityType="Self.shift" />
           <EntitySet Name="shift_manager" EntityType="Self.shift_manager" />
           <EntitySet Name="users" EntityType="Self.user" />
           <EntitySet Name="user_uses_service" EntityType="Self.user_uses_service" />
-          <AssociationSet Name="FK__blood_bag__31EC6D26" Association="Self.FK__blood_bag__31EC6D26">
-            <End Role="shift" EntitySet="shifts" />
-            <End Role="blood_bag" EntitySet="blood_bag" />
-          </AssociationSet>
           <AssociationSet Name="FK__blood_bag__hospi__32E0915F" Association="Self.FK__blood_bag__hospi__32E0915F">
             <End Role="hospital" EntitySet="hospitals" />
             <End Role="blood_bag" EntitySet="blood_bag" />
@@ -858,10 +796,6 @@
           <AssociationSet Name="FK__blood_cam__hospi__25869641" Association="Self.FK__blood_cam__hospi__25869641">
             <End Role="hospital" EntitySet="hospitals" />
             <End Role="blood_camp" EntitySet="blood_camp" />
-          </AssociationSet>
-          <AssociationSet Name="FK__shift__blood_cam__2D27B809" Association="Self.FK__shift__blood_cam__2D27B809">
-            <End Role="blood_camp" EntitySet="blood_camp" />
-            <End Role="shift" EntitySet="shifts" />
           </AssociationSet>
           <AssociationSet Name="FK__donor_hea__natio__21B6055D" Association="Self.FK__donor_hea__natio__21B6055D">
             <End Role="donor" EntitySet="donors" />
@@ -899,10 +833,6 @@
             <End Role="login" EntitySet="logins" />
             <End Role="user" EntitySet="users" />
           </AssociationSet>
-          <AssociationSet Name="FK__shift__shift_man__2E1BDC42" Association="Self.FK__shift__shift_man__2E1BDC42">
-            <End Role="shift_manager" EntitySet="shift_manager" />
-            <End Role="shift" EntitySet="shifts" />
-          </AssociationSet>
           <AssociationSet Name="FK__user_uses__natio__3D5E1FD2" Association="Self.FK__user_uses__natio__3D5E1FD2">
             <End Role="user" EntitySet="users" />
             <End Role="user_uses_service" EntitySet="user_uses_service" />
@@ -924,7 +854,7 @@
             <Parameter Name="governorate" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="insert_service">
-            <Parameter Name="name" Mode="In" Type="String" />
+          <Parameter Name="name" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="insert_shift_manager">
             <Parameter Name="username" Mode="In" Type="String" />
@@ -951,7 +881,76 @@
             <Parameter Name="city" Mode="In" Type="String" />
             <Parameter Name="governorate" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="shifts" EntityType="EBBMSModel.shift" />
+          <AssociationSet Name="FK__blood_bag__74AE54BC" Association="EBBMSModel.FK__blood_bag__74AE54BC">
+            <End Role="shift" EntitySet="shifts" />
+            <End Role="blood_bag" EntitySet="blood_bag" />
+          </AssociationSet>
+          <AssociationSet Name="FK__shift__blood_cam__6FE99F9F" Association="EBBMSModel.FK__shift__blood_cam__6FE99F9F">
+            <End Role="blood_camp" EntitySet="blood_camp" />
+            <End Role="shift" EntitySet="shifts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__shift__shift_man__70DDC3D8" Association="EBBMSModel.FK__shift__shift_man__70DDC3D8">
+            <End Role="shift_manager" EntitySet="shift_manager" />
+            <End Role="shift" EntitySet="shifts" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="shift">
+          <Key>
+            <PropertyRef Name="blood_camp_id" />
+            <PropertyRef Name="shift_date" />
+          </Key>
+          <Property Name="blood_camp_id" Type="Int32" Nullable="false" />
+          <Property Name="shift_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="shift_manager_username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="start_hour" Type="Time" Precision="7" />
+          <Property Name="finish_hour" Type="Time" Precision="7" />
+          <Property Name="city" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="governorate" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="blood_bag" Relationship="EBBMSModel.FK__blood_bag__74AE54BC" FromRole="shift" ToRole="blood_bag" />
+          <NavigationProperty Name="blood_camp" Relationship="EBBMSModel.FK__shift__blood_cam__6FE99F9F" FromRole="shift" ToRole="blood_camp" />
+          <NavigationProperty Name="shift_manager" Relationship="EBBMSModel.FK__shift__shift_man__70DDC3D8" FromRole="shift" ToRole="shift_manager" />
+        </EntityType>
+        <Association Name="FK__blood_bag__74AE54BC">
+          <End Type="EBBMSModel.shift" Role="shift" Multiplicity="0..1" />
+          <End Type="EBBMSModel.blood_bag" Role="blood_bag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shift">
+              <PropertyRef Name="blood_camp_id" />
+              <PropertyRef Name="shift_date" />
+            </Principal>
+            <Dependent Role="blood_bag">
+              <PropertyRef Name="blood_camp_id" />
+              <PropertyRef Name="blood_bag_date" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__shift__blood_cam__6FE99F9F">
+          <End Type="EBBMSModel.blood_camp" Role="blood_camp" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="EBBMSModel.shift" Role="shift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="blood_camp">
+              <PropertyRef Name="blood_camp_id" />
+            </Principal>
+            <Dependent Role="shift">
+              <PropertyRef Name="blood_camp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__shift__shift_man__70DDC3D8">
+          <End Type="EBBMSModel.shift_manager" Role="shift_manager" Multiplicity="0..1" />
+          <End Type="EBBMSModel.shift" Role="shift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shift_manager">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="shift">
+              <PropertyRef Name="shift_manager_username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1042,19 +1041,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="shifts">
-            <EntityTypeMapping TypeName="EBBMSModel.shift">
-              <MappingFragment StoreEntitySet="shift">
-                <ScalarProperty Name="blood_camp_id" ColumnName="blood_camp_id" />
-                <ScalarProperty Name="shift_date" ColumnName="shift_date" />
-                <ScalarProperty Name="shift_manager_username" ColumnName="shift_manager_username" />
-                <ScalarProperty Name="start_hour" ColumnName="start_hour" />
-                <ScalarProperty Name="finish_hour" ColumnName="finish_hour" />
-                <ScalarProperty Name="city" ColumnName="city" />
-                <ScalarProperty Name="governorate" ColumnName="governorate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="shift_manager">
             <EntityTypeMapping TypeName="EBBMSModel.shift_manager">
               <MappingFragment StoreEntitySet="shift_manager">
@@ -1090,6 +1076,19 @@
           <FunctionImportMapping FunctionImportName="insert_shift_manager" FunctionName="EBBMSModel.Store.insert_shift_manager" />
           <FunctionImportMapping FunctionImportName="insert_user" FunctionName="EBBMSModel.Store.insert_user" />
           <FunctionImportMapping FunctionImportName="insert_volunteer" FunctionName="EBBMSModel.Store.insert_volunteer" />
+          <EntitySetMapping Name="shifts">
+            <EntityTypeMapping TypeName="EBBMSModel.shift">
+              <MappingFragment StoreEntitySet="shift">
+                <ScalarProperty Name="governorate" ColumnName="governorate" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="finish_hour" ColumnName="finish_hour" />
+                <ScalarProperty Name="start_hour" ColumnName="start_hour" />
+                <ScalarProperty Name="shift_manager_username" ColumnName="shift_manager_username" />
+                <ScalarProperty Name="shift_date" ColumnName="shift_date" />
+                <ScalarProperty Name="blood_camp_id" ColumnName="blood_camp_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

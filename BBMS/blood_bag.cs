@@ -21,8 +21,8 @@ namespace BBMS
         public Nullable<int> hospital_id { get; set; }
         public string notes { get; set; }
     
-        public virtual shift shift { get; set; }
         public virtual hospital hospital { get; set; }
         public virtual donor donor { get; set; }
+        public virtual shift shift { get; set; }
     }
 }

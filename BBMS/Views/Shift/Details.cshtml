@@ -1,0 +1,76 @@
+﻿@model BBMS.shift
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>shift</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+           Start
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.start_hour)
+        </dd>
+
+        <dt>
+           Finish
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.finish_hour)
+        </dd>
+
+        <dt>
+            Date
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.shift_date)
+        </dd>
+
+
+
+        <dt>
+            City
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.city)
+        </dd>
+
+        <dt>
+            Governorate
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.governorate)
+        </dd>
+
+        <dt>
+          Driver Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.blood_camp.driver_name)
+        </dd>
+
+        <dt>
+            Shift Manager
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.shift_manager.name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.blood_camp_id, date=Model.shift_date }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

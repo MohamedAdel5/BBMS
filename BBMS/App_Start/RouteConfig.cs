@@ -18,6 +18,12 @@ namespace BBMS
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+            //routes.MapRoute(
+            //"ShiftIndex",                                              // Route name
+            //"{controlle}/{action}/{blood_camp_id}/{shift_date}",                           // URL with parameters
+            //new { controller = "Shift", action = "Details", blood_camp_id = "", shift_date = "" }  // Parameter defaults
+        //);
+
         }
     }
 }
