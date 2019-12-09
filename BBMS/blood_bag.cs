@@ -20,6 +20,7 @@ namespace BBMS
         public Nullable<int> blood_camp_id { get; set; }
         public Nullable<int> hospital_id { get; set; }
         public string notes { get; set; }
+        public string blood_type { get; set; }
     
         public virtual hospital hospital { get; set; }
         public virtual donor donor { get; set; }

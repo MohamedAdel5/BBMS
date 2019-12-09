@@ -40,3 +40,6 @@ select*from shift_manager  where username='maged98'
 select*from blood_camp
 select*from shift_manager
 select* from shift
+select*from blood_bag
+Select*from service
+insert into service values('operation')

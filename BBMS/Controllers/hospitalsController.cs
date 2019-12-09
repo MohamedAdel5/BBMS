@@ -57,15 +57,6 @@ namespace BBMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Hospital hospital)
         {
-            //Dictionary<string, object> Parameters = new Dictionary<string, object>();
-            //Parameters.Add("@username", hospital.username);
-            //Parameters.Add("@user_pass", hospital.password);
-            //Parameters.Add("@hospital_name", hospital.hospital_name);
-            //Parameters.Add("@phone", hospital.phone);
-            //Parameters.Add("@city", hospital.city);
-            //Parameters.Add("@governorate", hospital.governorate);
-            //db.insert_hospital(hospital.username, hospital.password, hospital.hospital_name, hospital.phone, hospital.city, hospital.governorate);
-
             string q1 = $"INSERT INTO login (username,user_pass, user_type) " + $"Values ('{hospital.username}', HASHBYTES('SHA2_512','{hospital.password}'),'H')";
                 dbm.ExecuteNonQuery(q1);
             string q2 = "INSERT INTO Hospital (username,hospital_name, phone, City, governorate)"+$"Values('{hospital.username}','{hospital.hospital_name}','{hospital.phone}','{hospital.city}','{hospital.governorate}')";

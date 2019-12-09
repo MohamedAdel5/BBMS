@@ -142,6 +142,7 @@
     <Compile Include="blood_camp.cs">
       <DependentUpon>EBBMS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\BloodBagController.cs" />
     <Compile Include="Controllers\BloodCampsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\hospitalsController.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Controllers\ShiftController.cs" />
     <Compile Include="Controllers\ShiftManagerController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="db_access\convert.cs" />
     <Compile Include="db_access\DBManager.cs" />
     <Compile Include="donor.cs">
       <DependentUpon>EBBMS.tt</DependentUpon>
@@ -292,6 +294,11 @@
     <Content Include="Views\Service\Create.cshtml" />
     <Content Include="Views\Service\Delete.cshtml" />
     <Content Include="Views\Service\Index.cshtml" />
+    <Content Include="Views\BloodBag\Create.cshtml" />
+    <Content Include="Views\BloodBag\Delete.cshtml" />
+    <Content Include="Views\BloodBag\Details.cshtml" />
+    <Content Include="Views\BloodBag\Edit.cshtml" />
+    <Content Include="Views\BloodBag\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

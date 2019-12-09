@@ -36,6 +36,8 @@ CREATE TABLE [user]
 	FOREIGN KEY ([national_id]) REFERENCES [donor] ON DELETE CASCADE,	--it is the pk (this will never happen)
 	FOREIGN KEY (username) REFERENCES [login] ON DELETE CASCADE	--if the user is deleted from log in table then he is no longer in the system
 )
+ALTER TABLE [user]
+ADD donation_count int;
 
 --CREATE TABLE [volunteer]
 --(
@@ -96,7 +98,7 @@ CREATE TABLE [shift]
 	city varchar(30) NOT NULL,
 	governorate varchar(30) NOT NULL,
 
-	FOREIGN KEY (blood_camp_id) REFERENCES [blood_camp] ON DELETE CASCADE,  --included in pk
+	FOREIGN KEY (blood_camp_id) REFERENCES [blood_camp] ON DELETE CASCADE,               --included in pk
 	FOREIGN KEY (shift_manager_username) REFERENCES [shift_manager] ON DELETE NO ACTION, -- VIPPPPPPPP !!!!!
 	PRIMARY KEY(blood_camp_id, shift_date)
 
@@ -113,11 +115,13 @@ CREATE TABLE [blood_bag]
 	blood_camp_id int,
 	hospital_id int,
 	notes varchar(500),
+	blood_type varchar(3) CHECK (blood_type = 'A+' OR blood_type = 'A-' OR blood_type = 'B+' OR blood_type = 'B-' OR blood_type = 'O+' OR blood_type = 'O-' OR blood_type = 'AB+' OR blood_type = 'AB-'),
 
+	FOREIGN KEY (hospital_id) REFERENCES [hospital] ON DELETE cascade,
 	FOREIGN KEY (national_id) REFERENCES [donor] ON DELETE SET NULL,
-	FOREIGN KEY (blood_camp_id, blood_bag_date) REFERENCES [shift] ON DELETE SET NULL,
-	FOREIGN KEY (hospital_id) REFERENCES [hospital] ON DELETE no action -- VIPPPPPP!!!
-	--PRIMARY KEY (national_id, blood_camp_id, blood_bag_date, hospital_id)
+    FOREIGN KEY (blood_camp_id, blood_bag_date) REFERENCES [shift] ON DELETE no action,
+	-- VIPPPPPP!!!
+    --PRIMARY KEY (national_id, blood_camp_id, blood_bag_date, hospital_id)
 )
 --drop table blood_bag
 CREATE TABLE [service]

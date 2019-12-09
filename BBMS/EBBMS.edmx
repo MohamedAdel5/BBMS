@@ -15,6 +15,7 @@
           <Property Name="blood_camp_id" Type="int" />
           <Property Name="hospital_id" Type="int" />
           <Property Name="notes" Type="varchar" MaxLength="500" />
+          <Property Name="blood_type" Type="varchar" MaxLength="3" />
         </EntityType>
         <EntityType Name="blood_camp">
           <Key>
@@ -111,6 +112,7 @@
           <Property Name="national_id" Type="bigint" Nullable="false" />
           <Property Name="points" Type="int" Nullable="false" />
           <Property Name="username" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="donation_count" Type="int" />
         </EntityType>
         <EntityType Name="user_uses_service">
           <Key>
@@ -122,7 +124,7 @@
           <Property Name="service_name" Type="varchar" MaxLength="30" />
           <Property Name="service_use_date" Type="date" />
         </EntityType>
-        <Association Name="FK__blood_bag__74AE54BC">
+        <Association Name="FK__blood_bag__2BFE89A6">
           <End Role="shift" Type="Self.shift" Multiplicity="0..1" />
           <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
           <ReferentialConstraint>
@@ -136,8 +138,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__blood_bag__hospi__75A278F5">
-          <End Role="hospital" Type="Self.hospital" Multiplicity="0..1" />
+        <Association Name="FK__blood_bag__hospi__2A164134">
+          <End Role="hospital" Type="Self.hospital" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="hospital">
@@ -148,7 +152,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__blood_bag__natio__73BA3083">
+        <Association Name="FK__blood_bag__natio__2B0A656D">
           <End Role="donor" Type="Self.donor" Multiplicity="0..1" />
           <End Role="blood_bag" Type="Self.blood_bag" Multiplicity="*" />
           <ReferentialConstraint>
@@ -395,15 +399,15 @@
           <EntitySet Name="shift_manager" EntityType="Self.shift_manager" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_uses_service" EntityType="Self.user_uses_service" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__blood_bag__74AE54BC" Association="Self.FK__blood_bag__74AE54BC">
+          <AssociationSet Name="FK__blood_bag__2BFE89A6" Association="Self.FK__blood_bag__2BFE89A6">
             <End Role="shift" EntitySet="shift" />
             <End Role="blood_bag" EntitySet="blood_bag" />
           </AssociationSet>
-          <AssociationSet Name="FK__blood_bag__hospi__75A278F5" Association="Self.FK__blood_bag__hospi__75A278F5">
+          <AssociationSet Name="FK__blood_bag__hospi__2A164134" Association="Self.FK__blood_bag__hospi__2A164134">
             <End Role="hospital" EntitySet="hospital" />
             <End Role="blood_bag" EntitySet="blood_bag" />
           </AssociationSet>
-          <AssociationSet Name="FK__blood_bag__natio__73BA3083" Association="Self.FK__blood_bag__natio__73BA3083">
+          <AssociationSet Name="FK__blood_bag__natio__2B0A656D" Association="Self.FK__blood_bag__natio__2B0A656D">
             <End Role="donor" EntitySet="donor" />
             <End Role="blood_bag" EntitySet="blood_bag" />
           </AssociationSet>
@@ -477,6 +481,7 @@
           <NavigationProperty Name="hospital" Relationship="Self.FK__blood_bag__hospi__32E0915F" FromRole="blood_bag" ToRole="hospital" />
           <NavigationProperty Name="donor" Relationship="Self.FK__blood_bag__natio__30F848ED" FromRole="blood_bag" ToRole="donor" />
           <NavigationProperty Name="shift" Relationship="EBBMSModel.FK__blood_bag__74AE54BC" FromRole="blood_bag" ToRole="shift" />
+          <Property Name="blood_type" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="blood_camp">
           <Key>
@@ -584,6 +589,7 @@
           <NavigationProperty Name="donor" Relationship="Self.FK__user__national_i__1A14E395" FromRole="user" ToRole="donor" />
           <NavigationProperty Name="login" Relationship="Self.FK__user__username__1B0907CE" FromRole="user" ToRole="login" />
           <NavigationProperty Name="user_uses_service" Relationship="Self.FK__user_uses__natio__3D5E1FD2" FromRole="user" ToRole="user_uses_service" />
+          <Property Name="donation_count" Type="Int32" />
         </EntityType>
         <EntityType Name="user_uses_service">
           <Key>
@@ -960,6 +966,7 @@
           <EntitySetMapping Name="blood_bag">
             <EntityTypeMapping TypeName="EBBMSModel.blood_bag">
               <MappingFragment StoreEntitySet="blood_bag">
+                <ScalarProperty Name="blood_type" ColumnName="blood_type" />
                 <ScalarProperty Name="blood_bag_id" ColumnName="blood_bag_id" />
                 <ScalarProperty Name="national_id" ColumnName="national_id" />
                 <ScalarProperty Name="blood_bag_date" ColumnName="blood_bag_date" />
@@ -1052,6 +1059,7 @@
           <EntitySetMapping Name="users">
             <EntityTypeMapping TypeName="EBBMSModel.user">
               <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="donation_count" ColumnName="donation_count" />
                 <ScalarProperty Name="national_id" ColumnName="national_id" />
                 <ScalarProperty Name="points" ColumnName="points" />
                 <ScalarProperty Name="username" ColumnName="username" />

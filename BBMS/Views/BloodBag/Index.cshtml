@@ -1,0 +1,60 @@
+﻿@model IEnumerable<BBMS.blood_bag>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Blood Bags</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Notes
+        </th>
+        <th>
+           Hospital Name
+        </th>
+        <th>
+           Donor Name
+        </th>
+        <th>
+            Shift Manager
+        </th>
+        <th>
+            Type
+                </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.notes)
+        </td>
+        <td>
+           
+            @Html.DisplayFor(modelItem => item.hospital.hospital_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.donor.name)
+        </td>
+        <td>
+            
+            @Html.DisplayFor(modelItem => item.shift.shift_manager.name)
+        </td>
+        <td>
+
+            @Html.DisplayFor(modelItem => item.blood_type)
+        </td>
+        <td>
+            
+            @Html.ActionLink("Details", "Details", new { id=item.blood_bag_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.blood_bag_id })
+        </td>
+    </tr>
+}
+
+</table>

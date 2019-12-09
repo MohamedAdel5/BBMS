@@ -13,10 +13,12 @@ using BBMS.Models;
 
 namespace BBMS.Controllers
 {
+    
     public class ServiceController : Controller
     {
+       // convert C = new convert();
         private EBBMSEntities db = new EBBMSEntities();
-
+        
         public DBManager dbm;
         public ServiceController()
         {
@@ -25,7 +27,15 @@ namespace BBMS.Controllers
         // GET: Service
         public ActionResult Index()
         {
-            //var service=dbm.ExecuteReader("Select*from service")
+            //DataTable dt = dbm.ExecuteReader("Select*from service");
+            //List<Service> ServiceList = new List<Service>();
+            // ServiceList = C.ConvertDataTable<Service>(dt);
+
+            // List<Service> ServiceList = new List<Service>();
+            // ServiceList= db.services.ToList()
+
+            //IEnumerable<Service> list =
+           // db.services;
 
             return View(db.services.ToList());
         }
@@ -65,37 +75,9 @@ namespace BBMS.Controllers
 
         }
 
-        // GET: Service/Edit/5
-        public ActionResult Edit(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            service service = db.services.Find(id);
-            if (service == null)
-            {
-                return HttpNotFound();
-            }
-            return View(service);
-        }
+       
 
-        // POST: Service/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "name")] service service)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(service).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(service);
-        }
-
+ 
         // GET: Service/Delete/5
         public ActionResult Delete(string id)
         {

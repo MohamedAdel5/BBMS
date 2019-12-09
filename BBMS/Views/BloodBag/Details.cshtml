@@ -1,0 +1,57 @@
+﻿@model BBMS.blood_bag
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>blood_bag</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+           Notes
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.notes)
+        </dd>
+
+        <dt>
+            
+           Hospital Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.hospital.hospital_name)
+        </dd>
+
+        <dt>
+           Donor Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.donor.name)
+        </dd>
+
+        <dt>
+           Shift Manager
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.shift.shift_manager.name)
+        </dd>
+        <dt>
+            Type
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.blood_type)
+        </dd>
+
+    </dl>
+</div>
+<p>
+   
+    @Html.ActionLink("Back to List", "Index")
+</p>

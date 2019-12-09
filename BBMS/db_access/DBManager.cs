@@ -10,7 +10,7 @@ namespace BBMS.db_access
 {
     public class DBManager
     {
-        private SqlConnection myConnection; 
+        public SqlConnection myConnection; 
         public DBManager() /*You should use try catch to check for an exception after initializing an object of this class*/
         {
             myConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString); /*returns the connection string entered in web config file*/

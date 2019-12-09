@@ -23,6 +23,7 @@ namespace BBMS
         public long national_id { get; set; }
         public int points { get; set; }
         public string username { get; set; }
+        public Nullable<int> donation_count { get; set; }
     
         public virtual donor donor { get; set; }
         public virtual login login { get; set; }
