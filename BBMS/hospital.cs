@@ -36,8 +36,8 @@ namespace BBMS
         public virtual ICollection<blood_camp> blood_camp { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<donor_health_info> donor_health_info { get; set; }
+        public virtual login login { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<hospital_provides_service> hospital_provides_service { get; set; }
-        public virtual login login { get; set; }
     }
 }

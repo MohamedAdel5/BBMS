@@ -21,6 +21,7 @@ namespace BBMS
         }
     
         public string name { get; set; }
+        public int service_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<hospital_provides_service> hospital_provides_service { get; set; }

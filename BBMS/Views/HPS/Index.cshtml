@@ -1,0 +1,47 @@
+﻿@model IEnumerable<BBMS.hospital_provides_service>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.value)
+        </th>
+      
+        <th>
+            @Html.DisplayNameFor(model => model.hospital.username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.service.name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.value)
+        </td>
+        <td>
+            
+            @Html.DisplayFor(modelItem => item.hospital.username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.service.name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new {id=item.service_id_p,h_id=item.hospital_id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.service_id_p, h_id = item.hospital_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.service_id_p, h_id = item.hospital_id })
+        </td>
+    </tr>
+}
+
+</table>

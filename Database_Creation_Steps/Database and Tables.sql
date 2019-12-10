@@ -126,29 +126,33 @@ CREATE TABLE [blood_bag]
 --drop table blood_bag
 CREATE TABLE [service]
 (
-	name varchar(30) PRIMARY KEY
+	name varchar(30) unique not null,
+	service_id   int IDENTITY(1,1) PRIMARY KEY
 )
+--drop table service
 CREATE TABLE [hospital_provides_service]
 (
 	hospital_id int,
-	[service_name] varchar(30),
-	value int NOT NULL DEFAULT 0
+	[service_id_p] int,
+	value int NOT NULL DEFAULT 0,
+	
 
 	FOREIGN KEY (hospital_id) REFERENCES [hospital] ON DELETE CASCADE, --if the hospital is deleted then its data should be deleted
-	FOREIGN KEY ([service_name]) REFERENCES [service] ON DELETE CASCADE, --will not happen but if we wish to delete a service then it should be deleted from all relations
-	PRIMARY KEY(hospital_id, [service_name])
+	FOREIGN KEY ([service_id_p]) REFERENCES [service] ON DELETE CASCADE, --will not happen but if we wish to delete a service then it should be deleted from all relations
+	PRIMARY KEY(hospital_id, [service_id_p])
 )
+--drop table hospital_provides_service
 CREATE TABLE [user_uses_service]
 (
-	service_id int IDENTITY(1,1) PRIMARY KEY,
+	user_service_id int IDENTITY(1,1) PRIMARY KEY,
 	national_id bigint,
 	hospital_id int,
-	[service_name] varchar(30),
+	[service_id_s] int,
 	service_use_date date,
 
-	FOREIGN KEY (hospital_id, [service_name]) REFERENCES [hospital_provides_service] ON DELETE SET NULL,
-	FOREIGN KEY (national_id) REFERENCES [user] ON DELETE NO ACTION --VIPPPPP!!!
+	FOREIGN KEY (hospital_id, [service_id_s]) REFERENCES [hospital_provides_service] ON DELETE SET NULL,
+	FOREIGN KEY (national_id) REFERENCES [user] ON DELETE no action --VIPPPPP!!!
 
 	--PRIMARY KEY (hospital_id, national_id, [service_name], service_use_date)
 )
-
+--drop table user_uses_service

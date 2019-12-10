@@ -146,6 +146,7 @@
     <Compile Include="Controllers\BloodCampsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\hospitalsController.cs" />
+    <Compile Include="Controllers\HPSController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
     <Compile Include="Controllers\ShiftManagerController.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Models\BloodCamp.cs" />
     <Compile Include="Models\DonorHealthInfo.cs" />
     <Compile Include="Models\Hospital.cs" />
+    <Compile Include="Models\HPS.cs" />
     <Compile Include="Models\Service.cs" />
     <Compile Include="Models\Shift.cs" />
     <Compile Include="Models\ShiftManager.cs" />
@@ -202,6 +204,9 @@
       <DependentUpon>EBBMS.tt</DependentUpon>
     </Compile>
     <Compile Include="shift_manager.cs">
+      <DependentUpon>EBBMS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagram.cs">
       <DependentUpon>EBBMS.tt</DependentUpon>
     </Compile>
     <Compile Include="user.cs">
@@ -299,6 +304,11 @@
     <Content Include="Views\BloodBag\Details.cshtml" />
     <Content Include="Views\BloodBag\Edit.cshtml" />
     <Content Include="Views\BloodBag\Index.cshtml" />
+    <Content Include="Views\HPS\Create.cshtml" />
+    <Content Include="Views\HPS\Delete.cshtml" />
+    <Content Include="Views\HPS\Details.cshtml" />
+    <Content Include="Views\HPS\Edit.cshtml" />
+    <Content Include="Views\HPS\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

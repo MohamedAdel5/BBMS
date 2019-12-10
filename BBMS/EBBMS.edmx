@@ -65,10 +65,10 @@
         <EntityType Name="hospital_provides_service">
           <Key>
             <PropertyRef Name="hospital_id" />
-            <PropertyRef Name="service_name" />
+            <PropertyRef Name="service_id_p" />
           </Key>
           <Property Name="hospital_id" Type="int" Nullable="false" />
-          <Property Name="service_name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="service_id_p" Type="int" Nullable="false" />
           <Property Name="value" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="login">
@@ -81,9 +81,10 @@
         </EntityType>
         <EntityType Name="service">
           <Key>
-            <PropertyRef Name="name" />
+            <PropertyRef Name="service_id" />
           </Key>
           <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="service_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="shift">
           <Key>
@@ -105,6 +106,16 @@
           <Property Name="username" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
         <EntityType Name="user">
           <Key>
             <PropertyRef Name="national_id" />
@@ -116,12 +127,12 @@
         </EntityType>
         <EntityType Name="user_uses_service">
           <Key>
-            <PropertyRef Name="service_id" />
+            <PropertyRef Name="user_service_id" />
           </Key>
-          <Property Name="service_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_service_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="national_id" Type="bigint" />
           <Property Name="hospital_id" Type="int" />
-          <Property Name="service_name" Type="varchar" MaxLength="30" />
+          <Property Name="service_id_s" Type="int" />
           <Property Name="service_use_date" Type="date" />
         </EntityType>
         <Association Name="FK__blood_bag__2BFE89A6">
@@ -206,21 +217,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__hospital___servi__398D8EEE">
-          <End Role="service" Type="Self.service" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="hospital_provides_service" Type="Self.hospital_provides_service" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="service">
-              <PropertyRef Name="name" />
-            </Principal>
-            <Dependent Role="hospital_provides_service">
-              <PropertyRef Name="service_name" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__hospital___value__38996AB5">
+        <Association Name="FK__hospital___hospi__32767D0B">
           <End Role="hospital" Type="Self.hospital" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -231,6 +228,20 @@
             </Principal>
             <Dependent Role="hospital_provides_service">
               <PropertyRef Name="hospital_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__hospital___servi__336AA144">
+          <End Role="service" Type="Self.service" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="hospital_provides_service" Type="Self.hospital_provides_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="service">
+              <PropertyRef Name="service_id" />
+            </Principal>
+            <Dependent Role="hospital_provides_service">
+              <PropertyRef Name="service_id_p" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -316,7 +327,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__user_uses__natio__3D5E1FD2">
+        <Association Name="FK__user_uses__natio__373B3228">
           <End Role="user" Type="Self.user" Multiplicity="0..1" />
           <End Role="user_uses_service" Type="Self.user_uses_service" Multiplicity="*" />
           <ReferentialConstraint>
@@ -328,17 +339,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__user_uses_servic__3C69FB99">
+        <Association Name="FK__user_uses_servic__36470DEF">
           <End Role="hospital_provides_service" Type="Self.hospital_provides_service" Multiplicity="0..1" />
           <End Role="user_uses_service" Type="Self.user_uses_service" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="hospital_provides_service">
               <PropertyRef Name="hospital_id" />
-              <PropertyRef Name="service_name" />
+              <PropertyRef Name="service_id_p" />
             </Principal>
             <Dependent Role="user_uses_service">
               <PropertyRef Name="hospital_id" />
-              <PropertyRef Name="service_name" />
+              <PropertyRef Name="service_id_s" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -397,6 +408,7 @@
           <EntitySet Name="service" EntityType="Self.service" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="shift" EntityType="Self.shift" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="shift_manager" EntityType="Self.shift_manager" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_uses_service" EntityType="Self.user_uses_service" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__blood_bag__2BFE89A6" Association="Self.FK__blood_bag__2BFE89A6">
@@ -423,12 +435,12 @@
             <End Role="donor" EntitySet="donor" />
             <End Role="donor_health_info" EntitySet="donor_health_info" />
           </AssociationSet>
-          <AssociationSet Name="FK__hospital___servi__398D8EEE" Association="Self.FK__hospital___servi__398D8EEE">
-            <End Role="service" EntitySet="service" />
+          <AssociationSet Name="FK__hospital___hospi__32767D0B" Association="Self.FK__hospital___hospi__32767D0B">
+            <End Role="hospital" EntitySet="hospital" />
             <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
           </AssociationSet>
-          <AssociationSet Name="FK__hospital___value__38996AB5" Association="Self.FK__hospital___value__38996AB5">
-            <End Role="hospital" EntitySet="hospital" />
+          <AssociationSet Name="FK__hospital___servi__336AA144" Association="Self.FK__hospital___servi__336AA144">
+            <End Role="service" EntitySet="service" />
             <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
           </AssociationSet>
           <AssociationSet Name="FK__hospital__userna__1ED998B2" Association="Self.FK__hospital__userna__1ED998B2">
@@ -455,11 +467,11 @@
             <End Role="login" EntitySet="login" />
             <End Role="user" EntitySet="user" />
           </AssociationSet>
-          <AssociationSet Name="FK__user_uses__natio__3D5E1FD2" Association="Self.FK__user_uses__natio__3D5E1FD2">
+          <AssociationSet Name="FK__user_uses__natio__373B3228" Association="Self.FK__user_uses__natio__373B3228">
             <End Role="user" EntitySet="user" />
             <End Role="user_uses_service" EntitySet="user_uses_service" />
           </AssociationSet>
-          <AssociationSet Name="FK__user_uses_servic__3C69FB99" Association="Self.FK__user_uses_servic__3C69FB99">
+          <AssociationSet Name="FK__user_uses_servic__36470DEF" Association="Self.FK__user_uses_servic__36470DEF">
             <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
             <End Role="user_uses_service" EntitySet="user_uses_service" />
           </AssociationSet>
@@ -537,20 +549,8 @@
           <NavigationProperty Name="blood_bag" Relationship="Self.FK__blood_bag__hospi__32E0915F" FromRole="hospital" ToRole="blood_bag" />
           <NavigationProperty Name="blood_camp" Relationship="Self.FK__blood_cam__hospi__25869641" FromRole="hospital" ToRole="blood_camp" />
           <NavigationProperty Name="donor_health_info" Relationship="Self.FK__donor_hea__hospi__22AA2996" FromRole="hospital" ToRole="donor_health_info" />
-          <NavigationProperty Name="hospital_provides_service" Relationship="Self.FK__hospital___value__38996AB5" FromRole="hospital" ToRole="hospital_provides_service" />
           <NavigationProperty Name="login" Relationship="Self.FK__hospital__userna__1ED998B2" FromRole="hospital" ToRole="login" />
-        </EntityType>
-        <EntityType Name="hospital_provides_service">
-          <Key>
-            <PropertyRef Name="hospital_id" />
-            <PropertyRef Name="service_name" />
-          </Key>
-          <Property Name="hospital_id" Type="Int32" Nullable="false" />
-          <Property Name="service_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="value" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="hospital" Relationship="Self.FK__hospital___value__38996AB5" FromRole="hospital_provides_service" ToRole="hospital" />
-          <NavigationProperty Name="service" Relationship="Self.FK__hospital___servi__398D8EEE" FromRole="hospital_provides_service" ToRole="service" />
-          <NavigationProperty Name="user_uses_service" Relationship="Self.FK__user_uses_servic__3C69FB99" FromRole="hospital_provides_service" ToRole="user_uses_service" />
+          <NavigationProperty Name="hospital_provides_service" Relationship="EBBMSModel.FK__hospital___hospi__32767D0B" FromRole="hospital" ToRole="hospital_provides_service" />
         </EntityType>
         <EntityType Name="login">
           <Key>
@@ -562,13 +562,6 @@
           <NavigationProperty Name="hospitals" Relationship="Self.FK__hospital__userna__1ED998B2" FromRole="login" ToRole="hospital" />
           <NavigationProperty Name="shift_manager" Relationship="Self.FK__shift_man__usern__286302EC" FromRole="login" ToRole="shift_manager" />
           <NavigationProperty Name="users" Relationship="Self.FK__user__username__1B0907CE" FromRole="login" ToRole="user" />
-        </EntityType>
-        <EntityType Name="service">
-          <Key>
-            <PropertyRef Name="name" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="hospital_provides_service" Relationship="Self.FK__hospital___servi__398D8EEE" FromRole="service" ToRole="hospital_provides_service" />
         </EntityType>
         <EntityType Name="shift_manager">
           <Key>
@@ -588,20 +581,8 @@
           <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="donor" Relationship="Self.FK__user__national_i__1A14E395" FromRole="user" ToRole="donor" />
           <NavigationProperty Name="login" Relationship="Self.FK__user__username__1B0907CE" FromRole="user" ToRole="login" />
-          <NavigationProperty Name="user_uses_service" Relationship="Self.FK__user_uses__natio__3D5E1FD2" FromRole="user" ToRole="user_uses_service" />
           <Property Name="donation_count" Type="Int32" />
-        </EntityType>
-        <EntityType Name="user_uses_service">
-          <Key>
-            <PropertyRef Name="service_id" />
-          </Key>
-          <Property Name="service_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="national_id" Type="Int64" />
-          <Property Name="hospital_id" Type="Int32" />
-          <Property Name="service_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="service_use_date" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="hospital_provides_service" Relationship="Self.FK__user_uses_servic__3C69FB99" FromRole="user_uses_service" ToRole="hospital_provides_service" />
-          <NavigationProperty Name="user" Relationship="Self.FK__user_uses__natio__3D5E1FD2" FromRole="user_uses_service" ToRole="user" />
+          <NavigationProperty Name="user_uses_service" Relationship="EBBMSModel.FK__user_uses__natio__373B3228" FromRole="user" ToRole="user_uses_service" />
         </EntityType>
         <Association Name="FK__blood_bag__hospi__32E0915F">
           <End Role="hospital" Type="Self.hospital" Multiplicity="0..1" />
@@ -683,20 +664,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__hospital___value__38996AB5">
-          <End Role="hospital" Type="Self.hospital" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="hospital_provides_service" Type="Self.hospital_provides_service" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="hospital">
-              <PropertyRef Name="hospital_id" />
-            </Principal>
-            <Dependent Role="hospital_provides_service">
-              <PropertyRef Name="hospital_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__hospital__userna__1ED998B2">
           <End Role="login" Type="Self.login" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -708,34 +675,6 @@
             </Principal>
             <Dependent Role="hospital">
               <PropertyRef Name="username" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__hospital___servi__398D8EEE">
-          <End Role="service" Type="Self.service" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="hospital_provides_service" Type="Self.hospital_provides_service" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="service">
-              <PropertyRef Name="name" />
-            </Principal>
-            <Dependent Role="hospital_provides_service">
-              <PropertyRef Name="service_name" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__user_uses_servic__3C69FB99">
-          <End Role="hospital_provides_service" Type="Self.hospital_provides_service" Multiplicity="0..1" />
-          <End Role="user_uses_service" Type="Self.user_uses_service" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="hospital_provides_service">
-              <PropertyRef Name="hospital_id" />
-              <PropertyRef Name="service_name" />
-            </Principal>
-            <Dependent Role="user_uses_service">
-              <PropertyRef Name="hospital_id" />
-              <PropertyRef Name="service_name" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -767,30 +706,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__user_uses__natio__3D5E1FD2">
-          <End Role="user" Type="Self.user" Multiplicity="0..1" />
-          <End Role="user_uses_service" Type="Self.user_uses_service" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="national_id" />
-            </Principal>
-            <Dependent Role="user_uses_service">
-              <PropertyRef Name="national_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="EBBMSEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="blood_bag" EntityType="Self.blood_bag" />
           <EntitySet Name="blood_camp" EntityType="Self.blood_camp" />
           <EntitySet Name="donors" EntityType="Self.donor" />
           <EntitySet Name="donor_health_info" EntityType="Self.donor_health_info" />
           <EntitySet Name="hospitals" EntityType="Self.hospital" />
-          <EntitySet Name="hospital_provides_service" EntityType="Self.hospital_provides_service" />
           <EntitySet Name="logins" EntityType="Self.login" />
-          <EntitySet Name="services" EntityType="Self.service" />
           <EntitySet Name="shift_manager" EntityType="Self.shift_manager" />
           <EntitySet Name="users" EntityType="Self.user" />
-          <EntitySet Name="user_uses_service" EntityType="Self.user_uses_service" />
           <AssociationSet Name="FK__blood_bag__hospi__32E0915F" Association="Self.FK__blood_bag__hospi__32E0915F">
             <End Role="hospital" EntitySet="hospitals" />
             <End Role="blood_bag" EntitySet="blood_bag" />
@@ -815,21 +739,9 @@
             <End Role="hospital" EntitySet="hospitals" />
             <End Role="donor_health_info" EntitySet="donor_health_info" />
           </AssociationSet>
-          <AssociationSet Name="FK__hospital___value__38996AB5" Association="Self.FK__hospital___value__38996AB5">
-            <End Role="hospital" EntitySet="hospitals" />
-            <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
-          </AssociationSet>
           <AssociationSet Name="FK__hospital__userna__1ED998B2" Association="Self.FK__hospital__userna__1ED998B2">
             <End Role="login" EntitySet="logins" />
             <End Role="hospital" EntitySet="hospitals" />
-          </AssociationSet>
-          <AssociationSet Name="FK__hospital___servi__398D8EEE" Association="Self.FK__hospital___servi__398D8EEE">
-            <End Role="service" EntitySet="services" />
-            <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
-          </AssociationSet>
-          <AssociationSet Name="FK__user_uses_servic__3C69FB99" Association="Self.FK__user_uses_servic__3C69FB99">
-            <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
-            <End Role="user_uses_service" EntitySet="user_uses_service" />
           </AssociationSet>
           <AssociationSet Name="FK__shift_man__usern__286302EC" Association="Self.FK__shift_man__usern__286302EC">
             <End Role="login" EntitySet="logins" />
@@ -838,10 +750,6 @@
           <AssociationSet Name="FK__user__username__1B0907CE" Association="Self.FK__user__username__1B0907CE">
             <End Role="login" EntitySet="logins" />
             <End Role="user" EntitySet="users" />
-          </AssociationSet>
-          <AssociationSet Name="FK__user_uses__natio__3D5E1FD2" Association="Self.FK__user_uses__natio__3D5E1FD2">
-            <End Role="user" EntitySet="users" />
-            <End Role="user_uses_service" EntitySet="user_uses_service" />
           </AssociationSet>
           <FunctionImport Name="insert_admin">
             <Parameter Name="username" Mode="In" Type="String" />
@@ -900,7 +808,27 @@
             <End Role="shift_manager" EntitySet="shift_manager" />
             <End Role="shift" EntitySet="shifts" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="sysdiagrams" EntityType="EBBMSModel.sysdiagram" />
+          <EntitySet Name="services" EntityType="EBBMSModel.service" />
+          <EntitySet Name="hospital_provides_service" EntityType="EBBMSModel.hospital_provides_service" />
+          <EntitySet Name="user_uses_service" EntityType="EBBMSModel.user_uses_service" />
+          <AssociationSet Name="FK__hospital___hospi__32767D0B" Association="EBBMSModel.FK__hospital___hospi__32767D0B">
+            <End Role="hospital" EntitySet="hospitals" />
+            <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
+          </AssociationSet>
+          <AssociationSet Name="FK__hospital___servi__336AA144" Association="EBBMSModel.FK__hospital___servi__336AA144">
+            <End Role="service" EntitySet="services" />
+            <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user_uses_servic__36470DEF" Association="EBBMSModel.FK__user_uses_servic__36470DEF">
+            <End Role="hospital_provides_service" EntitySet="hospital_provides_service" />
+            <End Role="user_uses_service" EntitySet="user_uses_service" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user_uses__natio__373B3228" Association="EBBMSModel.FK__user_uses__natio__373B3228">
+            <End Role="user" EntitySet="users" />
+            <End Role="user_uses_service" EntitySet="user_uses_service" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="shift">
           <Key>
             <PropertyRef Name="blood_camp_id" />
@@ -957,7 +885,103 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="service">
+          <Key>
+            <PropertyRef Name="service_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="service_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="hospital_provides_service" Relationship="EBBMSModel.FK__hospital___servi__336AA144" FromRole="service" ToRole="hospital_provides_service" />
+        </EntityType>
+        <EntityType Name="hospital_provides_service">
+          <Key>
+            <PropertyRef Name="hospital_id" />
+            <PropertyRef Name="service_id_p" />
+          </Key>
+          <Property Name="hospital_id" Type="Int32" Nullable="false" />
+          <Property Name="service_id_p" Type="Int32" Nullable="false" />
+          <Property Name="value" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="hospital" Relationship="EBBMSModel.FK__hospital___hospi__32767D0B" FromRole="hospital_provides_service" ToRole="hospital" />
+          <NavigationProperty Name="service" Relationship="EBBMSModel.FK__hospital___servi__336AA144" FromRole="hospital_provides_service" ToRole="service" />
+          <NavigationProperty Name="user_uses_service" Relationship="EBBMSModel.FK__user_uses_servic__36470DEF" FromRole="hospital_provides_service" ToRole="user_uses_service" />
+        </EntityType>
+        <EntityType Name="user_uses_service">
+          <Key>
+            <PropertyRef Name="user_service_id" />
+          </Key>
+          <Property Name="user_service_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="national_id" Type="Int64" />
+          <Property Name="hospital_id" Type="Int32" />
+          <Property Name="service_id_s" Type="Int32" />
+          <Property Name="service_use_date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="hospital_provides_service" Relationship="EBBMSModel.FK__user_uses_servic__36470DEF" FromRole="user_uses_service" ToRole="hospital_provides_service" />
+          <NavigationProperty Name="user" Relationship="EBBMSModel.FK__user_uses__natio__373B3228" FromRole="user_uses_service" ToRole="user" />
+        </EntityType>
+        <Association Name="FK__hospital___hospi__32767D0B">
+          <End Type="EBBMSModel.hospital" Role="hospital" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="EBBMSModel.hospital_provides_service" Role="hospital_provides_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hospital">
+              <PropertyRef Name="hospital_id" />
+            </Principal>
+            <Dependent Role="hospital_provides_service">
+              <PropertyRef Name="hospital_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__hospital___servi__336AA144">
+          <End Type="EBBMSModel.service" Role="service" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="EBBMSModel.hospital_provides_service" Role="hospital_provides_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="service">
+              <PropertyRef Name="service_id" />
+            </Principal>
+            <Dependent Role="hospital_provides_service">
+              <PropertyRef Name="service_id_p" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user_uses_servic__36470DEF">
+          <End Type="EBBMSModel.hospital_provides_service" Role="hospital_provides_service" Multiplicity="0..1" />
+          <End Type="EBBMSModel.user_uses_service" Role="user_uses_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hospital_provides_service">
+              <PropertyRef Name="hospital_id" />
+              <PropertyRef Name="service_id_p" />
+            </Principal>
+            <Dependent Role="user_uses_service">
+              <PropertyRef Name="hospital_id" />
+              <PropertyRef Name="service_id_s" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user_uses__natio__373B3228">
+          <End Type="EBBMSModel.user" Role="user" Multiplicity="0..1" />
+          <End Type="EBBMSModel.user_uses_service" Role="user_uses_service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="national_id" />
+            </Principal>
+            <Dependent Role="user_uses_service">
+              <PropertyRef Name="national_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1023,28 +1047,12 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="hospital_provides_service">
-            <EntityTypeMapping TypeName="EBBMSModel.hospital_provides_service">
-              <MappingFragment StoreEntitySet="hospital_provides_service">
-                <ScalarProperty Name="hospital_id" ColumnName="hospital_id" />
-                <ScalarProperty Name="service_name" ColumnName="service_name" />
-                <ScalarProperty Name="value" ColumnName="value" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="logins">
             <EntityTypeMapping TypeName="EBBMSModel.login">
               <MappingFragment StoreEntitySet="login">
                 <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="user_pass" ColumnName="user_pass" />
                 <ScalarProperty Name="user_type" ColumnName="user_type" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="services">
-            <EntityTypeMapping TypeName="EBBMSModel.service">
-              <MappingFragment StoreEntitySet="service">
-                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1063,17 +1071,6 @@
                 <ScalarProperty Name="national_id" ColumnName="national_id" />
                 <ScalarProperty Name="points" ColumnName="points" />
                 <ScalarProperty Name="username" ColumnName="username" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="user_uses_service">
-            <EntityTypeMapping TypeName="EBBMSModel.user_uses_service">
-              <MappingFragment StoreEntitySet="user_uses_service">
-                <ScalarProperty Name="service_id" ColumnName="service_id" />
-                <ScalarProperty Name="national_id" ColumnName="national_id" />
-                <ScalarProperty Name="hospital_id" ColumnName="hospital_id" />
-                <ScalarProperty Name="service_name" ColumnName="service_name" />
-                <ScalarProperty Name="service_use_date" ColumnName="service_use_date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1097,7 +1094,46 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="EBBMSModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="services">
+            <EntityTypeMapping TypeName="EBBMSModel.service">
+              <MappingFragment StoreEntitySet="service">
+                <ScalarProperty Name="service_id" ColumnName="service_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hospital_provides_service">
+            <EntityTypeMapping TypeName="EBBMSModel.hospital_provides_service">
+              <MappingFragment StoreEntitySet="hospital_provides_service">
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="service_id_p" ColumnName="service_id_p" />
+                <ScalarProperty Name="hospital_id" ColumnName="hospital_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_uses_service">
+            <EntityTypeMapping TypeName="EBBMSModel.user_uses_service">
+              <MappingFragment StoreEntitySet="user_uses_service">
+                <ScalarProperty Name="service_use_date" ColumnName="service_use_date" />
+                <ScalarProperty Name="service_id_s" ColumnName="service_id_s" />
+                <ScalarProperty Name="hospital_id" ColumnName="hospital_id" />
+                <ScalarProperty Name="national_id" ColumnName="national_id" />
+                <ScalarProperty Name="user_service_id" ColumnName="user_service_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

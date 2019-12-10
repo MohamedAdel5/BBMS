@@ -12,15 +12,12 @@ namespace BBMS
     using System;
     using System.Collections.Generic;
     
-    public partial class user_uses_service
+    public partial class sysdiagram
     {
-        public int user_service_id { get; set; }
-        public Nullable<long> national_id { get; set; }
-        public Nullable<int> hospital_id { get; set; }
-        public Nullable<int> service_id_s { get; set; }
-        public Nullable<System.DateTime> service_use_date { get; set; }
-    
-        public virtual hospital_provides_service hospital_provides_service { get; set; }
-        public virtual user user { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace BBMS
         }
     
         public int hospital_id { get; set; }
-        public string service_name { get; set; }
+        public int service_id_p { get; set; }
         public int value { get; set; }
     
         public virtual hospital hospital { get; set; }

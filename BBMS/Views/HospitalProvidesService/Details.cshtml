@@ -1,0 +1,44 @@
+﻿@model BBMS.hospital_provides_service
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>hospital_provides_service</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.value)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.value)
+        </dd>
+
+        <dt>
+            
+            @Html.DisplayNameFor(model => model.hospital.hospital_name)
+        </dt>
+
+        <dd>
+           
+            @Html.DisplayFor(model => model.hospital.hospital_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.service.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.service.name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.hospital_id, service = Model.service_name }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
