@@ -144,6 +144,7 @@
     </Compile>
     <Compile Include="Controllers\BloodBagController.cs" />
     <Compile Include="Controllers\BloodCampsController.cs" />
+    <Compile Include="Controllers\DHIController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\hospitalsController.cs" />
     <Compile Include="Controllers\HPSController.cs" />
@@ -188,6 +189,7 @@
     </Compile>
     <Compile Include="Models\BloodBag.cs" />
     <Compile Include="Models\BloodCamp.cs" />
+    <Compile Include="Models\DHI.cs" />
     <Compile Include="Models\DonorHealthInfo.cs" />
     <Compile Include="Models\Hospital.cs" />
     <Compile Include="Models\HPS.cs" />
@@ -309,6 +311,11 @@
     <Content Include="Views\HPS\Details.cshtml" />
     <Content Include="Views\HPS\Edit.cshtml" />
     <Content Include="Views\HPS\Index.cshtml" />
+    <Content Include="Views\DHI\Create.cshtml" />
+    <Content Include="Views\DHI\Delete.cshtml" />
+    <Content Include="Views\DHI\Details.cshtml" />
+    <Content Include="Views\DHI\Edit.cshtml" />
+    <Content Include="Views\DHI\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
