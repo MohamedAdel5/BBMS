@@ -24,8 +24,10 @@ namespace BBMS.Controllers
         // GET: hospitals
         public ActionResult Index()
         {
-            var hospitals = db.hospitals.Include(h => h.login);
-            return View(hospitals.ToList());
+            /*var hospitals = db.hospitals.Include(h => h.login);
+            return View(hospitals.ToList());*/
+            return View();
+
         }
 
         // GET: hospitals/Details/5
@@ -57,20 +59,44 @@ namespace BBMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Hospital hospital)
         {
-            string q1 = $"INSERT INTO login (username,user_pass, user_type) " + $"Values ('{hospital.username}', HASHBYTES('SHA2_512','{hospital.password}'),'H')";
-                dbm.ExecuteNonQuery(q1);
-            string q2 = "INSERT INTO Hospital (username,hospital_name, phone, City, governorate)"+$"Values('{hospital.username}','{hospital.hospital_name}','{hospital.phone}','{hospital.city}','{hospital.governorate}')";
-            dbm.ExecuteNonQuery(q2);
+            //string q1 = $"INSERT INTO login (username,user_pass, user_type) " + $"Values ('{hospital.username}', HASHBYTES('SHA2_512','{hospital.password}'),'H')";
+            //    dbm.ExecuteNonQuery(q1);
+            //string q2 = "INSERT INTO Hospital (username,hospital_name, phone, City, governorate)"+$"Values('{hospital.username}','{hospital.hospital_name}','{hospital.phone}','{hospital.city}','{hospital.governorate}')";
 
+            //dbm.ExecuteNonQuery(q2);
+            //if (ModelState.IsValid)
+            //{
 
+            //    return RedirectToAction("Index", "Admin");
+            //}
+
+            //ViewBag.username = new SelectList(db.logins, "username", "user_type", hospital.username);
+            //return View(hospital);
+            Dictionary<string, object> Parameters = new Dictionary<string, object>();
+            Parameters.Add("@username", hospital.username);
+            Parameters.Add("@user_pass", hospital.password);
+            Parameters.Add("@hospital_name", hospital.hospital_name);
+            Parameters.Add("@phone", Convert.ToInt64(hospital.phone));
+            Parameters.Add("@city", hospital.city);
+            Parameters.Add("@governorate", hospital.governorate);
+             
             if (ModelState.IsValid)
             {
-
-                return RedirectToAction("Index");
+                if (dbm.ExecuteNonQuery_proc("insert_hospital", Parameters) != 0)
+                {
+                    
+                    return RedirectToAction("Create", "hospitals");
+                }
+                else
+                {
+                    return Content("FATAL ERROR");
+                }
             }
-
-            ViewBag.username = new SelectList(db.logins, "username", "user_type", hospital.username);
-            return View(hospital);
+            else
+            {
+                return View(hospital);
+            }
+            
         }
 
         // GET: hospitals/Edit/5
@@ -111,32 +137,40 @@ namespace BBMS.Controllers
             return View(hospital);
         }
 
-        // GET: hospitals/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            hospital hospital = db.hospitals.Find(id);
-            if (hospital == null)
-            {
-                return HttpNotFound();
-            }
-            return View(hospital);
-        }
+        //// GET: hospitals/Delete/5
+        //public ActionResult Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    hospital hospital = db.hospitals.Find(id);
+        //    if (hospital == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(hospital);
+        //}
 
         // POST: hospitals/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            hospital hospital = db.hospitals.Find(id);
-            db.hospitals.Remove(hospital);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+            //hospital hospital = db.hospitals.Find(id);
+            //db.hospitals.Remove(hospital);
+            //db.SaveChanges();
 
+
+            if (dbm.ExecuteNonQuery_proc("deleteHospital", new Dictionary<string, object>() { { "@h_id", id } }) != 0)
+            {
+                return RedirectToAction("RemoveHospital");
+            }
+            else
+            {
+                return Content("Fatal error");
+            }
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -144,6 +178,45 @@ namespace BBMS.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        //GET: remove hospital View
+        public ActionResult RemoveHospital()
+        {
+          
+            /*Get all hospitals names and ids and send them to the view through the view bag*/
+            return View();
+        }
+
+        //GET: remove hospital View
+        [HttpPost]
+        public ActionResult RemoveHospital(string searchString)
+        {
+            /*Retreieve the selected hospital id and redirect*/
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                DataTable hospitals = dbm.ExecuteReader_proc("getHospitals", null /*-> no parameters*/);  /*Gets all hospitals*/
+                DataTable hospitalsFilter = new DataTable();    /*will contain the hospitals that match the string*/
+                hospitalsFilter.Columns.Add(new DataColumn("hospital_name", typeof(string)));
+                hospitalsFilter.Columns.Add(new DataColumn("hospital_id", typeof(int)));
+
+                foreach (DataRow row in hospitals.Rows)
+                {
+                    if(Convert.ToString(row["hospital_name"]).Contains(searchString))
+                    {
+                        DataRow r = hospitalsFilter.NewRow();
+                        r["hospital_name"] = Convert.ToString(row["hospital_name"]);
+                        r["hospital_id"] = Convert.ToInt32(row["hospital_id"]);
+                        hospitalsFilter.Rows.Add(r);
+                    }
+                    
+                }
+                if(hospitalsFilter.Rows.Count != 0)
+                    ViewBag.hospitalsFilter = hospitalsFilter;
+
+            }
+            return View();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Hospital dashboard";
+    ViewBag.Title = "Admin dashboard";
 }
 @{
     Layout = "";    /*Disable the layout page*/
@@ -34,10 +34,10 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Hospital</a>
+                <a href="@Url.Action("Index", "Admin")" class="navbar-brand">Admin</a>
             </div>
             <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
-                <a href="#" class="btn btn-danger square-btn-adjust">Logout</a>
+                <a href="@Url.Action("SignIn", "Admin")" class="btn btn-danger square-btn-adjust">Logout</a>
             </div>
         </nav>
         <!-- /. NAV TOP  -->
@@ -49,60 +49,30 @@
                         <img src="@Url.Content("~/Content/dashboardAssets/img/find_user.png")" class="user-image img-responsive" />
                     </li>
                     <li>
-                        <a class="active-menu" href="#"><i class="fa fa-dashboard fa-3x"></i>My Info</a>
+                        <a class="active-menu" href="@Url.Action("Index", "Admin")"><i class="fa fa-dashboard fa-3x"></i> Hospitals Statistics</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("UsersStatistics", "Admin")"><i class="fa fa-desktop fa-3x"></i> Users Statistics</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-sitemap fa-3x"></i> Hospitals<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="@Url.Action("Create", "Hospitals")">Add Hospital</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("RemoveHospital", "Hospitals", null)">Remove Hospital</a>
+                            </li>
+                        </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i> Services<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="#">Add</a>
+                                <a href="@Url.Action("Create", "Service")">Add</a>
                             </li>
                             <li>
-                                <a href="#">Remove</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-sitemap fa-3x"></i>Blood Camps<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="#">Add</a>
-                            </li>
-                            <li>
-                                <a href="#">Remove</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shifts<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="#">Add</a>
-                            </li>
-                            <li>
-                                <a href="#">Remove</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shift Managers<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="#">Add</a>
-                            </li>
-                            <li>
-                                <a href="#">Remove</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-sitemap fa-3x"></i>Stock<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="#">Add blood bag</a>
-                            </li>
-                            <li>
-                                <a href="#">Remove blood bag</a>
+                                <a href="@Url.Action("Delete", "Service")">Remove</a>
                             </li>
                         </ul>
                     </li>
@@ -114,7 +84,30 @@
 
         <div id="page-wrapper">
             <div id="page-inner">
-
+                <!-- ROW1  -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Admin Dashboard</h2>
+                        <h5>Welcome!</h5>
+                    </div>
+                </div>
+                <!-- /. ROW1  -->
+                <!-- ROW2  -->
+                <div class="row">
+                    <div class="col-md-9 col-sm-12 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Blood Bags
+                            </div>
+                            <div class="panel-body">
+                                <div id="blood-bar-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /. ROW2  -->
+                <!-- ROW3  -->
+                <!--  ROW3  -->
             </div>
             <!-- /. PAGE INNER  -->
         </div>
@@ -127,7 +120,6 @@
         </div>
     </div>
     <!-- /. WRAPPER  -->
-    
 
 
 
@@ -144,110 +136,38 @@
     <script src="@Url.Content("~/Content/dashboardAssets/js/custom.js")"></script>
     <script src="@Url.Content("https://canvasjs.com/assets/script/canvasjs.min.js")"></script>
 
+    <script>
+        window.onload = function () {
 
+            var chart = new CanvasJS.Chart("blood-bar-chart", {
+                animationEnabled: true,
+                theme: "light2", // "light1", "light2", "dark1", "dark2"
+                title: {
+                    text: "Blood Bags Statistics"
+                },
+                axisY: {
+                    title: "Number of Bags"
+                },
+                data: [{
+                    type: "column",
+                    showInLegend: false,
+                    legendMarkerColor: "grey",
+                    legendText: "Write Legend Text here",
+                    dataPoints: [
+                        { y: 300878, label: "A+" },
+                        { y: 266455, label: "A-" },
+                        { y: 169709, label: "B+" },
+                        { y: 158400, label: "B-" },
+                        { y: 142503, label: "AB+" },
+                        { y: 101500, label: "AB-" },
+                        { y: 97800, label: "O+" },
+                        { y: 80000, label: "O-" }
+                    ]
+                }]
+            });
+            chart.render();
+
+        }
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*@model IEnumerable<BBMS.hospital>
-
-    @{
-        ViewBag.Title = "Index";
-    }
-
-    <h2>Index</h2>
-
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.hospital_name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.city)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.governorate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.login.user_type)
-            </th>
-            <th></th>
-        </tr>
-
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.hospital_name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.city)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.governorate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.login.user_type)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.hospital_id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.hospital_id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.hospital_id })
-            </td>
-        </tr>
-    }
-
-    </table>*@

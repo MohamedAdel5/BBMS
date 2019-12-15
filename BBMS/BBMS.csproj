@@ -142,6 +142,7 @@
     <Compile Include="blood_camp.cs">
       <DependentUpon>EBBMS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BloodBagController.cs" />
     <Compile Include="Controllers\BloodCampsController.cs" />
     <Compile Include="Controllers\DHIController.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="login.cs">
       <DependentUpon>EBBMS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\BloodBag.cs" />
     <Compile Include="Models\BloodCamp.cs" />
     <Compile Include="Models\DHI.cs" />
@@ -316,6 +318,13 @@
     <Content Include="Views\DHI\Details.cshtml" />
     <Content Include="Views\DHI\Edit.cshtml" />
     <Content Include="Views\DHI\Index.cshtml" />
+    <Content Include="Views\Shared\_ProfileLayout.cshtml" />
+    <Content Include="Views\Admin\SignUp.cshtml" />
+    <Content Include="Views\Admin\SignIn.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\UsersStatistics.cshtml" />
+    <Content Include="Views\hospitals\removeHospital.cshtml" />
+    <Content Include="Views\Shared\_NoNavLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

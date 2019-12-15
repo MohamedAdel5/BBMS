@@ -102,7 +102,7 @@ namespace BBMS.Controllers
         [Route("User/SignIn")]
         public ActionResult SignIn()
         {
-
+            /*The viewBag is empty*/
             return View();
         }
 

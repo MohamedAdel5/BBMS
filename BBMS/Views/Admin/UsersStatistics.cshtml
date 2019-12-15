@@ -1,0 +1,166 @@
+﻿
+@{
+    ViewBag.Title = "UsersStatistics";
+}
+@{
+    Layout = "";    /*Disable the layout page*/
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - BBMS</title>
+    <link rel="shortcut icon" type="image/ico" href="@Url.Content("~/bloodBag.ico")">
+
+    <link href="@Url.Content("~/Content/dashboardAssets/css/bootstrap.css")" rel="stylesheet" />
+    <!-- FONTAWESOME STYLES-->
+    <link href="@Url.Content("~/Content/dashboardAssets/css/font-awesome.css")" rel="stylesheet" />
+    <!-- MORRIS CHART STYLES-->
+    <link href="@Url.Content("~/Content/dashboardAssets/js/morris/morris-0.4.3.min.css")" rel="stylesheet" />
+    <!-- CUSTOM STYLES-->
+    <link href="@Url.Content("~/Content/dashboardAssets/css/custom.css")" rel="stylesheet" />
+    <!-- GOOGLE FONTS-->
+    <link href='@Url.Content("http://fonts.googleapis.com/css?family=Open+Sans")' rel='stylesheet' type='text/css' />
+</head>
+<body>
+    <!-- WRAPPER  -->
+    <div id="wrapper">
+
+        <!----------------------------- Navigation bar TOP & SIDE -------------------------------------->
+        <!-- NAV TOP  -->
+        <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="fa fa-bar"></span>
+                    <span class="fa fa-bar"></span>
+                    <span class="fa fa-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Action("Index", "Admin")">Admin</a>
+            </div>
+            <div style="color: white;	padding: 15px 50px 5px 50px;	float: right;	font-size: 16px;">
+                <a href="@Url.Action("SignIn", "Admin")" class="btn btn-danger square-btn-adjust">Logout</a>
+            </div>
+        </nav>
+        <!-- /. NAV TOP  -->
+        <!-- NAV SIDE  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+                    <li class="text-center">
+                        <img src="@Url.Content("~/Content/dashboardAssets/img/find_user.png")" class="user-image img-responsive" />
+                    </li>
+
+
+                    <li>
+                        <a href="@Url.Action("Index", "Admin")"><i class="fa fa-dashboard fa-3x"></i> Hospitals Statistics</a>
+                    </li>
+                    <li>
+                        <a class="active-menu" href="@Url.Action("UserStatistics", "Admin")"><i class="fa fa-desktop fa-3x"></i> Users Statistics</a>
+                    </li>
+
+
+                    <li>
+                        <a href="#"><i class="fa fa-sitemap fa-3x"></i> Hospitals<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="@Url.Action("Create", "Hospitals")">Add Hospital</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Delete", "Hospitals")">Remove Hospital</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#"><i class="fa fa-sitemap fa-3x"></i> Services<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="@Url.Action("Create", "Service")">Add</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Delete", "Service")">Remove</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                </ul>
+
+            </div>
+
+        </nav>
+        <!-- /. NAV SIDE  -->
+        <!-- PAGE WRAPPER  -->
+        <div id="page-wrapper">
+            <!-- PAGE INNER  -->
+            <div id="page-inner">
+
+                <!-- WRITE THE PAGE BODY HERE -->
+                <!-- WRITE THE PAGE BODY HERE -->
+                <!-- WRITE THE PAGE BODY HERE -->
+                <!-- WRITE THE PAGE BODY HERE -->
+                <!-- WRITE THE PAGE BODY HERE -->
+
+            </div>
+            <!-- /. PAGE INNER  -->
+        </div>
+        <!-- /. PAGE WRAPPER  -->
+
+
+
+    </div>
+    <!-- /. WRAPPER  -->
+    <hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Made by Coffee and Love</p>
+    </footer>
+
+    <script src="@Url.Content("~/Content/dashboardAssets/js/jquery-1.10.2.js")"></script>
+    <!-- BOOTSTRAP SCRIPTS -->
+    <script src="@Url.Content("~/Content/dashboardAssets/js/bootstrap.min.js")"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="@Url.Content("~/Content/dashboardAssets/js/jquery.metisMenu.js")"></script>
+    <!-- MORRIS CHART SCRIPTS -->
+    <script src="@Url.Content("~/Content/dashboardAssets/js/morris/raphael-2.1.0.min.js")"></script>
+    <script src="@Url.Content("~/Content/dashboardAssets/js/morris/morris.js")"></script>
+    <!-- CUSTOM SCRIPTS -->
+    <script src="@Url.Content("~/Content/dashboardAssets/js/custom.js")"></script>
+    <script src="@Url.Content("https://canvasjs.com/assets/script/canvasjs.min.js")"></script>
+
+    <script>
+        window.onload = function () {
+
+            var chart = new CanvasJS.Chart("blood-bar-chart", {
+                animationEnabled: true,
+                theme: "light2", // "light1", "light2", "dark1", "dark2"
+                title: {
+                    text: "Blood Bags Statistics"
+                },
+                axisY: {
+                    title: "Number of Bags"
+                },
+                data: [{
+                    type: "column",
+                    showInLegend: false,
+                    legendMarkerColor: "grey",
+                    legendText: "Write Legend Text here",
+                    dataPoints: [
+                        { y: 300878, label: "A+" },
+                        { y: 266455, label: "A-" },
+                        { y: 169709, label: "B+" },
+                        { y: 158400, label: "B-" },
+                        { y: 142503, label: "AB+" },
+                        { y: 101500, label: "AB-" },
+                        { y: 97800, label: "O+" },
+                        { y: 80000, label: "O-" }
+                    ]
+                }]
+            });
+            chart.render();
+
+        }
+    </script>
+</body>
+</html>
