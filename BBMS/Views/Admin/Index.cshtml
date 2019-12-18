@@ -106,24 +106,7 @@
                     </div>
                 </div>
 
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
-                <hr />
+
 
                 <div class="row">
                     <div class="col-md-9 col-sm-12 col-xs-12">
@@ -134,6 +117,18 @@
                             <div class="panel-body">
                                 <div id="hospitals-bar-chart"></div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-9 col-sm-12 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Best Blood Camp Belongs to Hospital <strong>#@ViewBag.hospitalID @ViewBag.hospitalName</strong>
+                                <br />
+                                Blood Camp <strong>#@ViewBag.bloodCampID</strong> with Blood Bags = <strong>@ViewBag.bloodCampBags</strong>
+</div>
                         </div>
                     </div>
                 </div>
@@ -229,6 +224,8 @@
 
             chart.render();
             chart2.render();
+
+            $(".canvasjs-chart-container").find(".canvasjs-chart-canvas:first").css("position", "relative");    
         }
     </script>
 </body>

@@ -112,6 +112,18 @@ namespace BBMS.Controllers
             ViewBag.hospitals = hospitals;
             ViewBag.usingCount = usingCount;
 
+            DataTable bestBloodCamp = dbm.ExecuteReader_proc("bestBloodCamp", null);
+
+            Int64 hospitalID = Convert.ToInt64(bestBloodCamp.Rows[0]["hospital_id"]);
+            string hospitalName = Convert.ToString(bestBloodCamp.Rows[0]["hospital_name"]);
+            Int64 bloodCampID = Convert.ToInt64(bestBloodCamp.Rows[0]["blood_camp_id"]);
+            Int64 bloodCampBags = Convert.ToInt64(bestBloodCamp.Rows[0]["num"]);
+
+            ViewBag.hospitalID = hospitalID;
+            ViewBag.hospitalName = hospitalName;
+            ViewBag.bloodCampID = bloodCampID;
+            ViewBag.bloodCampBags = bloodCampBags;
+
             return View(inputAdmin);
         }
         
