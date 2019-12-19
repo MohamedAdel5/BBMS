@@ -1,0 +1,83 @@
+﻿@using System.Data;
+@{
+    ViewBag.Title = "Hospitals";
+    if (ViewBag.userLoggedIn != null && ViewBag.userLoggedIn == true)
+    {
+        Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
+    }
+    DataTable shownHospitals = null;
+}
+<h2>Available Hospitals</h2>
+
+@using (Html.BeginForm("searchHospitals", "Home", FormMethod.Post))
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Search By Hospital Name</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form accept-charset="UTF-8" role="form">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="control-label">Hospital Name: </label> @Html.TextBox("SearchString", null, new { @class = "form-control", @placeholder = "e.g: Nile" })
+                                    @if (IsPost && ViewBag.hospitalsFilter == null)
+                                    {
+                                        <label class="text-danger">No results</label>
+                                    }
+                                </div>
+                                <input class="btn btn-lg btn-danger btn-block" type="submit" value="Filter">
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" row">
+            @if (ViewBag.hospitalsFilter != null)
+            {
+                shownHospitals = ViewBag.hospitalsFilter;
+            }
+            else
+            {
+                shownHospitals = ViewBag.hospitals;
+            }
+            @if (shownHospitals != null)
+            {
+                if (shownHospitals == ViewBag.hospitals && shownHospitals.Rows.Count == 0)
+                {
+                    <label class=" text-danger">Sorry!  There are no hospitals provided yet</label>
+                }
+                else
+                {
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr class=" row">
+                                @foreach (DataColumn col in shownHospitals.Columns)
+                                {
+                                    <th>@col.ColumnName</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (DataRow row in shownHospitals.Rows)
+                            {
+
+                                <tr class="row">
+                                    @foreach (DataColumn col in shownHospitals.Columns)
+                                    {
+                                        <td>@row[col.ColumnName]</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+
+            }
+        </div>
+    </div>
+}
+

@@ -7,6 +7,7 @@ using BBMS.Models;
 using BBMS.ViewModels;
 using BBMS.db_access;
 using System.Data;
+using System.Web.Security;
 using System.Data.SqlClient;
 
 namespace BBMS.Controllers
@@ -22,7 +23,13 @@ namespace BBMS.Controllers
         // GET: User (Profile Page)
         public ActionResult Index()
         {
+
             User inputUser = (User)TempData["inputUser"];
+            if (inputUser == null)
+            {
+                return RedirectToAction("SignIn", "User");
+            }
+            
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
             Parameters1.Add("@national_id", inputUser.national_id);
             DataTable userDonations = dbm.ExecuteReader_proc("getUserDonations", Parameters1);
@@ -34,7 +41,9 @@ namespace BBMS.Controllers
             Dictionary<string, object> Parameters3 = new Dictionary<string, object>();
             Parameters3.Add("@national_id", inputUser.national_id);
             DataTable userServices = dbm.ExecuteReader_proc("getUserServices", Parameters3);
-            
+
+
+            TempData["inputUser"] = inputUser;
             ViewBag.userDonations = userDonations;
             ViewBag.userHealthInfo = userHealthInfo;
             ViewBag.userServices = userServices;
@@ -69,7 +78,7 @@ namespace BBMS.Controllers
             Parameters.Add("@city", inputUser.city);
             Parameters.Add("@governorate", inputUser.governorate);
             
-            if(ModelState.IsValid )
+            if(ModelState.IsValid)
             {   
                 if (dbm.ExecuteReader_proc("checkNationalID", new Dictionary<string, object> { { "@n_id", inputUser.national_id } }) != null)
                 {
@@ -99,6 +108,7 @@ namespace BBMS.Controllers
             }
         }
         //GET: Sing in page
+        [AllowAnonymous]
         [Route("User/SignIn")]
         public ActionResult SignIn()
         {
@@ -153,6 +163,7 @@ namespace BBMS.Controllers
                         phone = phone,
                         password = password
                     };
+                    FormsAuthentication.SignOut();
                     TempData["inputUser"] = inputUser;
                     return RedirectToAction("Index", "User");
                 }
@@ -161,7 +172,11 @@ namespace BBMS.Controllers
             {
                 return View(inputLogin);
             }
-
+        }
+        public ActionResult SignOut()
+        {
+            TempData.Remove("inputUser");
+            return RedirectToAction("Index", "User");
         }
     }
 }

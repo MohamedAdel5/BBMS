@@ -325,6 +325,10 @@
     <Content Include="Views\Admin\UsersStatistics.cshtml" />
     <Content Include="Views\hospitals\removeHospital.cshtml" />
     <Content Include="Views\Shared\_NoNavLayout.cshtml" />
+    <Content Include="Views\Shared\_UserHomeLayout.cshtml" />
+    <Content Include="Views\Home\ShowProvidedServices.cshtml" />
+    <Content Include="Views\Home\ShowHospitals.cshtml" />
+    <Content Include="Views\Home\ShowBloodCamps.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

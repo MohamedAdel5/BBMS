@@ -1,7 +1,12 @@
 ﻿@{
+
     ViewBag.Title = "About";
+}
+@{
+    if (ViewBag.userLoggedIn != null && ViewBag.userLoggedIn == true)
+    {
+        Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
+    }
 }
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
-
-<p>Use this area to provide additional information.</p>

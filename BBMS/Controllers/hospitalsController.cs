@@ -151,17 +151,23 @@ namespace BBMS.Controllers
         //    }
         //    return View(hospital);
         //}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
         // POST: hospitals/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             //hospital hospital = db.hospitals.Find(id);
             //db.hospitals.Remove(hospital);
             //db.SaveChanges();
-
-
             if (dbm.ExecuteNonQuery_proc("deleteHospital", new Dictionary<string, object>() { { "@h_id", id } }) != 0)
             {
                 return RedirectToAction("RemoveHospital");
@@ -170,14 +176,6 @@ namespace BBMS.Controllers
             {
                 return Content("Fatal error");
             }
-        }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
 
         //GET: remove hospital View
@@ -190,6 +188,7 @@ namespace BBMS.Controllers
 
         //GET: remove hospital View
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult RemoveHospital(string searchString)
         {
             /*Retreieve the selected hospital id and redirect*/
@@ -203,7 +202,7 @@ namespace BBMS.Controllers
 
                 foreach (DataRow row in hospitals.Rows)
                 {
-                    if(Convert.ToString(row["hospital_name"]).Contains(searchString))
+                    if(Convert.ToString(row["hospital_name"]).ToLower().Contains(searchString.ToLower()))
                     {
                         DataRow r = hospitalsFilter.NewRow();
                         r["hospital_name"] = Convert.ToString(row["hospital_name"]);

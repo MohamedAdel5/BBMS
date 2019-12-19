@@ -1,0 +1,82 @@
+﻿@using System.Data;
+@{
+    ViewBag.Title = "Services";
+    if (ViewBag.userLoggedIn != null && ViewBag.userLoggedIn == true)
+    {
+        Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
+    }
+    DataTable shownServices = null;
+}
+<h2>Provided Services</h2>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Search By Service Name</h3>
+                </div>
+                <div class="panel-body">
+                    @using (Html.BeginForm("SearchProvidedServices", "Home", FormMethod.Post))
+                    {
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="control-label">Service Name: </label> @Html.TextBox("SearchString", null, new { @class = "form-control", @placeholder = "e.g: Full Scan" })
+                                @if (IsPost && ViewBag.servicesFilter == null)
+                                {
+                                    <label class="text-danger">No results</label>
+                                }
+                            </div>
+                            <input class="btn btn-lg btn-danger btn-block" type="submit" value="Filter">
+                        </fieldset>
+                    }
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class=" row">
+        @if(ViewBag.servicesFilter != null)
+        {
+            shownServices = ViewBag.servicesFilter;
+        }
+        else
+        {
+            shownServices = ViewBag.services;
+        }
+        @if (shownServices != null)
+        {
+            if(shownServices == ViewBag.services && shownServices.Rows.Count == 0)
+            {
+                <label class=" text-danger">Sorry!  There are no services provided yet</label>
+            }
+            else
+            {
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr class=" row">
+                            @foreach (DataColumn col in shownServices.Columns)
+                            {
+                                <th>@col.ColumnName</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (DataRow row in shownServices.Rows)
+                        {
+
+                            <tr class="row">
+                                @foreach (DataColumn col in shownServices.Columns)
+                                {
+                                    <td>@row[col.ColumnName]</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+                
+        }
+    </div>  
+</div>
+

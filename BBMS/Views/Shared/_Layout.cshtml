@@ -15,7 +15,7 @@
     }
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top"> 
+    <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -23,16 +23,20 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("BBMS", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @style = "color:darkred;"})
+                @Html.ActionLink("BBMS", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @style = "color:darkred;" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact Us", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Hospitals", "showHospitals", "Home")</li>
+                    <li>@Html.ActionLink("BloodCamps&Shifts", "showBloodCamps", "Home")</li>
+                    <li>@Html.ActionLink("Services", "ShowProvidedServices", "Home")</li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
                     <li>@Html.ActionLink("Sign In", "SignIn", "User")</li>
                     <li>@Html.ActionLink("Sign Up", "SignUp", "User")</li>
-
                 </ul>
             </div>
         </div>
@@ -48,5 +52,10 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    @if (IsSectionDefined("AddToScripts"))
+    {
+        @RenderSection("AddToScripts", required: false)
+    }
 </body>
 </html>

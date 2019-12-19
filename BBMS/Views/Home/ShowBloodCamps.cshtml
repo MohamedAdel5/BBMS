@@ -1,0 +1,123 @@
+﻿@using System.Data;
+@{
+    ViewBag.Title = "BloodCamps&Shifts";
+    if (ViewBag.userLoggedIn != null && ViewBag.userLoggedIn == true)
+    {
+        Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
+    }
+    DataTable shownBloodCamps = null;
+}
+@section AddToHead
+{
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+}
+<h2>Provided BloodCamps</h2>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Search By bloodCamp location or date</h3>
+                </div>
+                <div class="panel-body">
+                    <label class="control-label">Blood Camp Location(City or Governorate): </label>
+                    <div class="form-group row">
+                        @using (Html.BeginForm("SearchBloodCampsByLoc", "Home", FormMethod.Post))
+                        {
+                            <fieldset>
+
+                                <div class="col-sm-8">
+                                    @Html.TextBox("SearchString", null, new { @class = "form-control", @placeholder = "e.g: Cairo" })
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <input class="btn btn-sm btn-danger " type="submit" value="Filter">
+                                </div>
+                            </fieldset>
+                        }
+                    </div>
+                    <label class="control-label">Blood Camp Date: </label>
+                    <div class="form-group row">
+                        @using (Html.BeginForm("SearchBloodCampsByDate", "Home", FormMethod.Post))
+                        {
+
+                            <!-- Datepicker as text field -->
+                            <div class="form-group">
+                                <div class="col-sm-8">
+                                    <div class='input-group date'>
+                                        <input type='text' name ="searchString" id='datepicker' class="form-control" placeholder="e.g:- yyyy-mm-dd" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-sm-2">
+                                <input class="btn btn-sm btn-danger " type="submit" value="Filter">
+                            </div>
+                        }
+                    </div>
+                    @if (IsPost && ViewBag.bloodCampsFilter == null)
+                    {
+                        <label class="text-danger">No results</label>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class=" row">
+        @if (ViewBag.bloodCampsFilter != null)
+        {
+            shownBloodCamps = ViewBag.bloodCampsFilter;
+        }
+        else
+        {
+            shownBloodCamps = ViewBag.bloodCamps;
+        }
+        @if (shownBloodCamps != null)
+        {
+            if (shownBloodCamps == ViewBag.bloodCamps && shownBloodCamps.Rows.Count == 0)
+            {
+                <label class=" text-danger text-center">Sorry!  There are no Blood Camps or Shifts provided yet</label>
+            }
+            else
+            {
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr class=" row">
+                            @foreach (DataColumn col in shownBloodCamps.Columns)
+                            {
+                                <th>@col.ColumnName</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (DataRow row in shownBloodCamps.Rows)
+                        {
+
+                            <tr class="row">
+                                @foreach (DataColumn col in shownBloodCamps.Columns)
+                                {
+                                    <td>@row[col.ColumnName]</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+        }
+    </div>
+</div>
+@section AddToScripts
+{
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' }).Val();
+        });
+    </script>
+
+}
+
