@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "UsersStatistics";
+    ViewBag.Title = "Admin dashboard";
 }
 @{
     Layout = "";    /*Disable the layout page*/
@@ -24,43 +24,36 @@
     <link href='@Url.Content("http://fonts.googleapis.com/css?family=Open+Sans")' rel='stylesheet' type='text/css' />
 </head>
 <body>
-    <!-- WRAPPER  -->
-    <div id="wrapper">
 
-        <!----------------------------- Navigation bar TOP & SIDE -------------------------------------->
-        <!-- NAV TOP  -->
+    <div id="wrapper">
         <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                     <span class="sr-only">Toggle navigation</span>
-                    <span class="fa fa-bar"></span>
-                    <span class="fa fa-bar"></span>
-                    <span class="fa fa-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="@Url.Action("Index", "Admin")">Admin</a>
+                <a href="@Url.Action("Index", "Admin")" class="navbar-brand">Admin</a>
             </div>
-            <div style="color: white;	padding: 15px 50px 5px 50px;	float: right;	font-size: 16px;">
+            <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
                 <a href="@Url.Action("SignIn", "Admin")" class="btn btn-danger square-btn-adjust">Logout</a>
             </div>
         </nav>
         <!-- /. NAV TOP  -->
-        <!-- NAV SIDE  -->
+        <!--NAV SIDE -->
         <nav class="navbar-default navbar-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav" id="main-menu">
                     <li class="text-center">
                         <img src="@Url.Content("~/Content/dashboardAssets/img/find_user.png")" class="user-image img-responsive" />
                     </li>
-
-
                     <li>
                         <a href="@Url.Action("Index", "Admin")"><i class="fa fa-dashboard fa-3x"></i> Hospitals Statistics</a>
                     </li>
                     <li>
-                        <a class="active-menu" href="@Url.Action("UserStatistics", "Admin")"><i class="fa fa-desktop fa-3x"></i> Users Statistics</a>
+                        <a class="active-menu" href="@Url.Action("UsersStatistics", "Admin")"><i class="fa fa-desktop fa-3x"></i> Users Statistics</a>
                     </li>
-
-
                     <li>
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i> Hospitals<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
@@ -68,11 +61,10 @@
                                 <a href="@Url.Action("Create", "Hospitals")">Add Hospital</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("Delete", "Hospitals")">Remove Hospital</a>
+                                <a href="@Url.Action("RemoveHospital", "Hospitals", null)">Remove Hospital</a>
                             </li>
                         </ul>
                     </li>
-
                     <li>
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i> Services<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
@@ -84,38 +76,67 @@
                             </li>
                         </ul>
                     </li>
-
-
                 </ul>
-
             </div>
-
         </nav>
         <!-- /. NAV SIDE  -->
-        <!-- PAGE WRAPPER  -->
+
+
         <div id="page-wrapper">
-            <!-- PAGE INNER  -->
             <div id="page-inner">
+                <!-- ROW1  -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Admin Dashboard</h2>
+                        <h5>Welcome!</h5>
+                    </div>
+                </div>
+                <!-- /. ROW1  -->
+                <!-- ROW2  -->
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Top Donating Users
+                            </div>
+                            <div class="panel-body">
+                                <div id="top-users-bar-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <!-- WRITE THE PAGE BODY HERE -->
-                <!-- WRITE THE PAGE BODY HERE -->
-                <!-- WRITE THE PAGE BODY HERE -->
-                <!-- WRITE THE PAGE BODY HERE -->
-                <!-- WRITE THE PAGE BODY HERE -->
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Top Users Using services
+                            </div>
+                            <div class="panel-body">
+                                <div id="top-services-users-bar-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- /. ROW2  -->
+                <!-- ROW3  -->
+                <!--  ROW3  -->
             </div>
             <!-- /. PAGE INNER  -->
         </div>
         <!-- /. PAGE WRAPPER  -->
-
-
-
+        <hr />
+        <div class="container-fluid" style="background-color:#202020;">
+            <div class="text-center center-block bg-dark text-white">
+                <p style="  color: white;">&copy; @DateTime.Now.Year - Made by Coffee and Love</p>
+            </div>
+        </div>
     </div>
     <!-- /. WRAPPER  -->
-    <hr />
-    <footer>
-        <p>&copy; @DateTime.Now.Year - Made by Coffee and Love</p>
-    </footer>
+
+
+
 
     <script src="@Url.Content("~/Content/dashboardAssets/js/jquery-1.10.2.js")"></script>
     <!-- BOOTSTRAP SCRIPTS -->
@@ -132,14 +153,14 @@
     <script>
         window.onload = function () {
 
-            var chart = new CanvasJS.Chart("blood-bar-chart", {
+            var chart = new CanvasJS.Chart("top-users-bar-chart", {
                 animationEnabled: true,
                 theme: "light2", // "light1", "light2", "dark1", "dark2"
                 title: {
-                    text: "Blood Bags Statistics"
+                    text: "Top " + @ViewBag.topDonatorsCount + " Donating Users"
                 },
                 axisY: {
-                    title: "Number of Bags"
+                    title: "Number of Donations"
                 },
                 data: [{
                     type: "column",
@@ -147,19 +168,53 @@
                     legendMarkerColor: "grey",
                     legendText: "Write Legend Text here",
                     dataPoints: [
-                        { y: 300878, label: "A+" },
-                        { y: 266455, label: "A-" },
-                        { y: 169709, label: "B+" },
-                        { y: 158400, label: "B-" },
-                        { y: 142503, label: "AB+" },
-                        { y: 101500, label: "AB-" },
-                        { y: 97800, label: "O+" },
-                        { y: 80000, label: "O-" }
+                        { y: @ViewBag.donsCounts[0], label: "@ViewBag.users[0]" },
+                        { y: @ViewBag.donsCounts[1], label: "@ViewBag.users[1]" },
+                        { y: @ViewBag.donsCounts[2], label: "@ViewBag.users[2]" },
+                        { y: @ViewBag.donsCounts[3], label: "@ViewBag.users[3]" },
+                        { y: @ViewBag.donsCounts[4], label: "@ViewBag.users[4]" },
+                        { y: @ViewBag.donsCounts[5], label: "@ViewBag.users[5]" },
+                        { y: @ViewBag.donsCounts[6], label: "@ViewBag.users[6]" },
+                        { y: @ViewBag.donsCounts[7], label: "@ViewBag.users[7]" },
+                        { y: @ViewBag.donsCounts[8], label: "@ViewBag.users[8]" },
+                        { y: @ViewBag.donsCounts[9], label: "@ViewBag.users[9]" }
                     ]
                 }]
             });
-            chart.render();
 
+            var chart2 = new CanvasJS.Chart("top-services-users-bar-chart", {
+                animationEnabled: true,
+                theme: "light2", // "light1", "light2", "dark1", "dark2"
+                title: {
+                    text: "Top " + @ViewBag.topUserServiceCount + " Service Using Users"
+                },
+                axisY: {
+                    title: "Number of Services Used"
+                },
+                data: [{
+                    type: "column",
+                    showInLegend: false,
+                    legendMarkerColor: "grey",
+                    legendText: "Write Legend Text here",
+                    dataPoints: [
+                        { y: @ViewBag.usersCountServ[0], label: "@ViewBag.usersService[0]" },
+                        { y: @ViewBag.usersCountServ[1], label: "@ViewBag.usersService[1]" },
+                        { y: @ViewBag.usersCountServ[2], label: "@ViewBag.usersService[2]" },
+                        { y: @ViewBag.usersCountServ[3], label: "@ViewBag.usersService[3]" },
+                        { y: @ViewBag.usersCountServ[4], label: "@ViewBag.usersService[4]" },
+                        { y: @ViewBag.usersCountServ[5], label: "@ViewBag.usersService[5]" },
+                        { y: @ViewBag.usersCountServ[6], label: "@ViewBag.usersService[6]" },
+                        { y: @ViewBag.usersCountServ[7], label: "@ViewBag.usersService[7]" },
+                        { y: @ViewBag.usersCountServ[8], label: "@ViewBag.usersService[8]" },
+                        { y: @ViewBag.usersCountServ[9], label: "@ViewBag.usersService[9]" },
+                    ]
+                }]
+            });
+
+            chart.render();
+            chart2.render();
+
+            $(".canvasjs-chart-container").find(".canvasjs-chart-canvas:first").css("position", "relative");
         }
     </script>
 </body>

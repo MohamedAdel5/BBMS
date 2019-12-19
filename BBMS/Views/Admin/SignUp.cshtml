@@ -1,9 +1,40 @@
-﻿
+﻿@model BBMS.Models.Admin
 @{
     ViewBag.Title = "SignUp";
 }
-@{
-    Layout = "~/Views/Shared/_NoNavLayout.cshtml";
-}
-<h2>SignUp</h2>
 
+<h2>SignUp</h2>
+@using (Html.BeginForm("SignUp", "Admin", FormMethod.Post))
+{
+    <div class="form-horizontal">
+        <h4>Admin</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.username, "Username", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.username, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.password, "Password", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.password, new { @class = "form-control", @type = "password" })
+                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+                @if (IsPost && ViewBag.DuplicateUsername == true)
+                {
+                    <label class="text-danger">This username is already registered use another one</label>
+                }
+            </div>
+        </div>
+    </div>
+}
