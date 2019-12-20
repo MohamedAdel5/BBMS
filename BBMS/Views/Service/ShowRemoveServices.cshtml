@@ -1,0 +1,43 @@
+﻿@using System.Data;
+@{
+    ViewBag.Title = "ShowRemoveServices";
+    Layout = "~/Views/Shared/_NoNavLayout.cshtml";
+}
+
+<h2>All Services</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h3 class="panel-title text-warning">Press Delete to remove the service</h3>
+        </div>
+    </div>
+    <div class=" row">
+        
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr class=" row">
+                        <th>Service Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in ViewBag.services.Rows)
+                    {
+
+                        <tr class="row">
+                            
+                                <td>@row["name"]</td>
+                            @using (Html.BeginForm("RemoveService", "Service", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <td><button class=" btn btn-xs btn-danger" type="submit" value="@row["service_id"]" name="id">Delete</button></td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+    </div>
+    <div>
+        @Html.ActionLink("Back to Admin dashboard", "Index", "Admin")
+    </div>
+</div>

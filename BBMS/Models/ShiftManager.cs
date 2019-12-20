@@ -24,5 +24,8 @@ namespace BBMS.Models
         [StringLength(30, ErrorMessage = "Max length = 30 characters")] /*maximum length = 30*/
         [RegularExpression("^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$", ErrorMessage = "Only letters are allowed")]
         public string name { get; set; }
+
+        [Required]
+        public int hospital_id { get; set; }
     }
 }

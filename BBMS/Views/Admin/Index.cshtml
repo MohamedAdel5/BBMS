@@ -36,10 +36,14 @@
                 </button>
                 <a href="@Url.Action("Index", "Admin")" class="navbar-brand">Admin</a>
             </div>
-            <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
-                <a href="@Url.Action("SignIn", "Admin")" class="btn btn-danger square-btn-adjust">Logout</a>
-            </div>
-        </nav>
+            @using (Html.BeginForm("SignOut", "Admin", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
+                    <button class=" btn btn-sm btn-danger square-btn-adjust" type="submit" value="SignOut" name="id">Log Out</button>
+                </div>
+            }
+            </nav>
         <!-- /. NAV TOP  -->
         <!--NAV SIDE -->
         <nav class="navbar-default navbar-side" role="navigation">
@@ -69,13 +73,17 @@
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i> Services<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="@Url.Action("Create", "Service")">Add</a>
+                                <a href="@Url.Action("Create", "Service")">Add Service</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("Delete", "Service")">Remove</a>
+                                <a href="@Url.Action("ShowRemoveServices", "Service")">Show/Remove Services</a>
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="@Url.Action("SignUp", "Admin")"><i class="fa fa-user fa-3x"></i> SignUp an Admin</a>
+                    </li>
+
                 </ul>
             </div>
         </nav>
@@ -128,13 +136,11 @@
                                 Best Blood Camp Belongs to Hospital <strong>#@ViewBag.hospitalID @ViewBag.hospitalName</strong>
                                 <br />
                                 Blood Camp <strong>#@ViewBag.bloodCampID</strong> with Blood Bags = <strong>@ViewBag.bloodCampBags</strong>
-</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!-- /. ROW2  -->
-                <!-- ROW3  -->
-                <!--  ROW3  -->
             </div>
             <!-- /. PAGE INNER  -->
         </div>
@@ -225,7 +231,8 @@
             chart.render();
             chart2.render();
 
-            $(".canvasjs-chart-container").find(".canvasjs-chart-canvas:first").css("position", "relative");    
+            $(".canvasjs-chart-container").find(".canvasjs-chart-canvas:first").css("position", "relative");
+
         }
     </script>
 </body>

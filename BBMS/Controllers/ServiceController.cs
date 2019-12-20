@@ -58,20 +58,48 @@ namespace BBMS.Controllers
         // GET: Service/Create
         public ActionResult Create()
         {
+            Admin inputAdmin = (Admin)TempData["inputAdmin"];
+            if (inputAdmin != null)
+            {
+                TempData["inputAdmin"] = inputAdmin;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Admin");
+            }
             return View();
         }
 
         // POST: Service/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create( Service service)
+        public ActionResult Create( string service_name)
         {
-            string q1 = $"insert into service values('{service.name}')";
+            //string q1 = $"insert into service values('{service.name}')";
 
-            dbm.ExecuteNonQuery(q1);
-            return RedirectToAction("Index");
+            //dbm.ExecuteNonQuery(q1);
+            //return RedirectToAction("Index");
+            Admin inputAdmin = (Admin)TempData["inputAdmin"];
+            if (inputAdmin != null)
+            {
+                TempData["inputAdmin"] = inputAdmin;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Admin");
+            }
+            Dictionary<string, object> Parameters = new Dictionary<string, object>();
+            Parameters.Add("@name", service_name);
+            if (dbm.ExecuteNonQuery_proc("insert_service", Parameters) != 0)
+            {
+                /*The service is inserted --> go back to The dashboard*/
+                return RedirectToAction("Index", "Admin");
+            }
+            else
+            {
+                ViewBag.Failure = true;
+                return View();
+            }
 
         }
 
@@ -111,6 +139,49 @@ namespace BBMS.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        //GET: show services and a remove button
+        public ActionResult ShowRemoveServices()
+        {
+            Admin inputAdmin = (Admin)TempData["inputAdmin"];
+            if (inputAdmin != null)
+            {
+                TempData["inputAdmin"] = inputAdmin;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Admin");
+            }
+            DataTable services = dbm.ExecuteReader_proc("getServicesNamesAndIDs", null /*-> no parameters*/);  /*Gets all Services*/
+
+            ViewBag.services = services;
+            return View();
+        }
+
+        //POST:
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemoveService(int id)
+        {
+            Admin inputAdmin = (Admin)TempData["inputAdmin"];
+            if (inputAdmin != null)
+            {
+                TempData["inputAdmin"] = inputAdmin;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Admin");
+            }
+
+            if (dbm.ExecuteNonQuery_proc("deleteService", new Dictionary<string, object>() { { "@service_id", id } }) != 0)
+            {
+                return RedirectToAction("ShowRemoveServices");
+            }
+            else
+            {
+                return Content("Fatal error");
+            }
         }
     }
 }

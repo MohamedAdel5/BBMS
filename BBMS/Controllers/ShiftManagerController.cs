@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using BBMS;
 using BBMS.db_access;
 using BBMS.Models;
+using BBMS.ViewModels;
+
 namespace BBMS.Controllers
 {
     public class ShiftManagerController : Controller
@@ -25,8 +27,18 @@ namespace BBMS.Controllers
         // GET: ShiftManager
         public ActionResult Index()
         {
-            var shift_manager = db.shift_manager.Include(s => s.login);
-            return View(shift_manager.ToList());
+            //var shift_manager = db.shift_manager.Include(s => s.login);
+            //return View(shift_manager.ToList());
+            ShiftManager inputShiftManager = (ShiftManager)TempData["inputShiftManager"];
+            if (inputShiftManager == null)
+            {
+                return RedirectToAction("SignIn", "ShiftManager");
+            }
+            else
+            {
+                TempData["inputShiftManager"] = inputShiftManager;
+                return View();
+            }
         }
 
         // GET: ShiftManager/Details/5
@@ -146,6 +158,129 @@ namespace BBMS.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+
+        //GET: Sing in page
+        [Route("ShiftManager/SignIn")]
+        public ActionResult SignIn()/*Empty function --> redirects the user to Sign In page*/
+        {
+            ShiftManager inputShiftManager = (ShiftManager)TempData["inputShiftManager"];
+            if (inputShiftManager != null)
+            {
+                TempData["inputShiftManager"] = inputShiftManager;
+                return RedirectToAction("Index", "ShiftManager");
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+        //POST: signIn
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SignIn(loginViewModel sm)
+        {
+            Dictionary<string, object> Parameters = new Dictionary<string, object>();
+            Parameters.Add("@username", sm.username);
+            Parameters.Add("@password", sm.password);
+            if (ModelState.IsValid)
+            {
+                DataTable inputSMTable = dbm.ExecuteReader_proc("checkShiftManager", Parameters);
+                ShiftManager inputShiftManager;
+                if (inputSMTable == null)
+                {
+                    return View(sm);
+                }
+                else
+                {
+                    string username = Convert.ToString(inputSMTable.Rows[0]["username"]);
+                    string password = Convert.ToString(inputSMTable.Rows[0]["user_pass"].GetHashCode());
+                    string name = Convert.ToString(inputSMTable.Rows[0]["name"]);
+                    int hospital_id = Convert.ToInt32(inputSMTable.Rows[0]["hospital_id"]);
+                    inputShiftManager = new ShiftManager()
+                    {
+                        username = username,
+                        password = password,
+                        name = name,
+                        hospital_id = hospital_id
+                    };
+                    TempData["inputShiftManager"] = inputShiftManager;
+
+                    return RedirectToAction("Index", "ShiftManager");
+                }
+            }
+            else
+            {
+                return View(sm);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SignOut()
+        {
+            TempData.Remove("ShiftManager");
+            return RedirectToAction("SignIn", "ShiftManager");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult GrantUser(FormCollection collection)
+        {
+            string username = Convert.ToString(collection["username"]);
+            int points = Convert.ToInt32(collection["points"]);
+            if(dbm.ExecuteReader_proc("checkUsernameIsUser", new Dictionary<string, object>() { { "@username", username} }) == null)
+            {
+                ViewBag.invalidUsername = true;
+                return View("Index");
+            }
+            else
+            {
+                dbm.ExecuteReader_proc("GrantUserPoints", new Dictionary<string, object>() { { "@username", username }, { "@points", points } });
+                ViewBag.successUsername = true;
+                return View("Index");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddVolunteer(Volunteer v)
+        {
+            if(ModelState.IsValid)
+            {
+                if (dbm.ExecuteReader_proc("checkNationalID", new Dictionary<string, object>() { { "@n_id", v.national_id } }) != null)
+                {
+                    ViewBag.DuplicateNationalID = true;
+                    return View("Index");
+                }
+                else
+                {
+                    Dictionary<string, object> Parameters = new Dictionary<string, object>();
+                    Parameters.Add("@national_id", v.national_id);
+                    Parameters.Add("@name", v.name);
+                    Parameters.Add("@gender", v.gender);
+                    Parameters.Add("@age", v.age);
+                    Parameters.Add("@phone", v.phone);
+                    Parameters.Add("@city", v.city);
+                    Parameters.Add("@governorate", v.governorate);
+
+                    if (dbm.ExecuteNonQuery_proc("insert_volunteer", Parameters) != 0)
+                    {
+                        ViewBag.successVolunteer = true;
+                        return View("Index");
+                    }
+                    else
+                    {
+                        return Content("Fatal Error");
+                    }
+                }
+            }
+            else
+            {
+                return View("Index",v);
+            }
+            
         }
     }
 }

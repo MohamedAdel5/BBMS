@@ -65,6 +65,7 @@ namespace BBMS.Controllers
          * If they are not valid it leaves the user at the Sign up page with some errors.
          */
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SignUp(User inputUser)
         {
             Dictionary<string, object> Parameters = new Dictionary<string, object>();
@@ -108,12 +109,20 @@ namespace BBMS.Controllers
             }
         }
         //GET: Sing in page
-        [AllowAnonymous]
         [Route("User/SignIn")]
         public ActionResult SignIn()
         {
-            /*The viewBag is empty*/
-            return View();
+
+            User inputUser = (User)TempData["inputUser"];
+            if (inputUser != null)
+            {
+                TempData["inputUser"] = inputUser;
+                return RedirectToAction("Index", "User");
+            }
+            else
+            {
+                return View();
+            }
         }
 
         //POST: 
@@ -122,6 +131,7 @@ namespace BBMS.Controllers
          *else it throws an error and leaves you in the same page
          */
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SignIn(loginViewModel inputLogin)
         {
             Dictionary<string, object> Parameters = new Dictionary<string, object>();
@@ -163,7 +173,6 @@ namespace BBMS.Controllers
                         phone = phone,
                         password = password
                     };
-                    FormsAuthentication.SignOut();
                     TempData["inputUser"] = inputUser;
                     return RedirectToAction("Index", "User");
                 }
@@ -173,10 +182,12 @@ namespace BBMS.Controllers
                 return View(inputLogin);
             }
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SignOut()
         {
             TempData.Remove("inputUser");
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

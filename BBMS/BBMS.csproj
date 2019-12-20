@@ -329,6 +329,9 @@
     <Content Include="Views\Home\ShowProvidedServices.cshtml" />
     <Content Include="Views\Home\ShowHospitals.cshtml" />
     <Content Include="Views\Home\ShowBloodCamps.cshtml" />
+    <Content Include="Views\Service\ShowRemoveServices.cshtml" />
+    <Content Include="Views\ShiftManager\SignIn.cshtml" />
+    <Content Include="Views\Shared\_ShiftMgrLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

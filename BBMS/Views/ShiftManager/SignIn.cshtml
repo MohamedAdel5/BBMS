@@ -1,12 +1,13 @@
 ﻿@model BBMS.ViewModels.loginViewModel
 @{
     ViewBag.Title = "SignIn";
+    Layout = "~/Views/Shared/_NoNavLayout.cshtml";
 }
 
-<h2>User Sign In</h2>
-@using (Html.BeginForm("SignIn", "User", FormMethod.Post))
+<h2>Shift Manager Sign In</h2>
+@using (Html.BeginForm("SignIn", "ShiftManager", FormMethod.Post))
 {
-    @Html.AntiForgeryToken()
+    @Html.AntiForgeryToken();
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="container">
         <div class="row">
@@ -19,7 +20,7 @@
                         <form accept-charset="UTF-8" role="form">
                             <fieldset>
                                 <div class="form-group">
-                                    @Html.TextBoxFor(model => model.username, new { @class = "form-control",  @placeholder = "Username" , @type = "text"})
+                                    @Html.TextBoxFor(model => model.username, new { @class = "form-control", @placeholder = "Username", @type = "text" })
                                     @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="form-group">
@@ -35,3 +36,4 @@
         </div>
     </div>
 }
+

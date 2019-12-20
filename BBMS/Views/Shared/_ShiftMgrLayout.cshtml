@@ -25,6 +25,16 @@
                 </button>
                 @Html.ActionLink("BBMS", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @style = "color:darkred;" })
             </div>
+            @using (Html.BeginForm("SignOut", "ShiftManager", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li style=" margin-top: 10px"><button class=" btn btn-sm btn-danger" type="submit" value="SignOut" name="id">Log Out</button></li>
+                    </ul>
+                </div>
+            }
         </div>
     </div>
     <div class="container body-content">

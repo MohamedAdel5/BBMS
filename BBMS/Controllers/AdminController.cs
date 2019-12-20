@@ -30,6 +30,14 @@ namespace BBMS.Controllers
         public ActionResult Index() /*This view also includes --> Hospitals Statistics*/
         {
             Admin inputAdmin = (Admin)TempData["inputAdmin"];
+            if (inputAdmin != null)
+            {
+                TempData["inputAdmin"] = inputAdmin;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Admin");
+            }
 
             DataTable bloodBagsStatistics = dbm.ExecuteReader_proc("getBBagsNums", null);
 
@@ -77,7 +85,7 @@ namespace BBMS.Controllers
                     ON = Convert.ToInt64(row["Num"]);
                 }
             }
-
+            
             ViewBag.AP = AP;
             ViewBag.AN = AN;
             ViewBag.BP = BP;
@@ -130,7 +138,15 @@ namespace BBMS.Controllers
         /*Retreives users statistics data from database and show it*/
         public ActionResult UsersStatistics()
         {
-
+            Admin inputAdmin = (Admin)TempData["inputAdmin"];
+            if (inputAdmin != null)
+            {
+                TempData["inputAdmin"] = inputAdmin;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Admin");
+            }
             DataTable topUsers = dbm.ExecuteReader_proc("getTopUsers", null);
             DataTable topUserServices = dbm.ExecuteReader_proc("topUsersUseService", null);
 
@@ -181,16 +197,30 @@ namespace BBMS.Controllers
 
         //GET: Sign Up
         [Route("Admin/SignUp")]
-        public ActionResult SignUp() /*Empty function --> redirects the user to Sign Up page*/
+        public ActionResult SignUp()
         {
+            Admin inputAdmin = (Admin)TempData["inputAdmin"];
+            if (inputAdmin != null)
+            {
+                TempData["inputAdmin"] = inputAdmin;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Admin");
+            }
             /*The viewBag is empty*/
             return View();
         }
 
-        //POST: signUp;;
+        //POST: signUp;
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SignUp(Admin admin) 
         {
+            Admin inputAdmin = (Admin)TempData["inputAdmin"];
+            TempData["inputAdmin"] = inputAdmin;
+
+
             Dictionary<string, object> Parameters = new Dictionary<string, object>();
             Parameters.Add("@username", admin.username);
             Parameters.Add("@user_pass", admin.password);
@@ -205,7 +235,7 @@ namespace BBMS.Controllers
                 }
                 if (dbm.ExecuteNonQuery_proc("insert_admin", Parameters) != 0)
                 {
-                    TempData["inputAdmin"] = admin;
+                    /*The admin is inserted --> go back to The dashboard*/
                     return RedirectToAction("Index", "Admin");
                 }
                 else
@@ -224,18 +254,26 @@ namespace BBMS.Controllers
         [Route("Admin/SignIn")]
         public ActionResult SignIn()/*Empty function --> redirects the user to Sign In page*/
         {
-            /*The viewBag is empty*/
-            return View();
+            Admin inputAdmin = (Admin)TempData["inputAdmin"];
+            if (inputAdmin != null)
+            {
+                TempData["inputAdmin"] = inputAdmin;
+                return RedirectToAction("Index", "Admin");
+            }
+            else
+            {
+                return View();
+            }
         }
 
         //POST: signIn
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SignIn(loginViewModel admin)
         {
             Dictionary<string, object> Parameters = new Dictionary<string, object>();
             Parameters.Add("@username", admin.username);
             Parameters.Add("@password", admin.password);
-
             if (ModelState.IsValid)
             {
                 DataTable inputAdminTable = dbm.ExecuteReader_proc("checkAdmin", Parameters);
@@ -254,6 +292,7 @@ namespace BBMS.Controllers
                         password = password
                     };
                     TempData["inputAdmin"] = inputAdmin;
+                
                     return RedirectToAction("Index", "Admin");
                 }
             }
@@ -262,5 +301,12 @@ namespace BBMS.Controllers
                 return View(admin);
             }
         }
-}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SignOut()
+        {
+            TempData.Remove("inputAdmin");
+            return RedirectToAction("SignIn", "Admin");
+        }
+    }
 }
