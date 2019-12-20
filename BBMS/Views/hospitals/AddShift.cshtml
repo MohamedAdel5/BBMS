@@ -1,0 +1,234 @@
+﻿@using System.Data;
+@model BBMS.Models.Shift
+@{
+    ViewBag.Title = "Add Shift";
+}
+@{
+    Layout = "";    /*Disable the layout page*/
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - BBMS</title>
+    <link rel="shortcut icon" type="image/ico" href="@Url.Content("~/bloodBag.ico")">
+
+    <link href="@Url.Content("~/Content/dashboardAssets/css/bootstrap.css")" rel="stylesheet" />
+    <!-- FONTAWESOME STYLES-->
+    <link href="@Url.Content("~/Content/dashboardAssets/css/font-awesome.css")" rel="stylesheet" />
+    <!-- MORRIS CHART STYLES-->
+    <link href="@Url.Content("~/Content/dashboardAssets/js/morris/morris-0.4.3.min.css")" rel="stylesheet" />
+    <!-- CUSTOM STYLES-->
+    <link href="@Url.Content("~/Content/dashboardAssets/css/custom.css")" rel="stylesheet" />
+    <!-- GOOGLE FONTS-->
+    <link href='@Url.Content("http://fonts.googleapis.com/css?family=Open+Sans")' rel='stylesheet' type='text/css' />
+</head>
+<body>
+
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Hospital</a>
+            </div>
+            <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
+                <a href="#" class="btn btn-danger square-btn-adjust">Logout</a>
+            </div>
+        </nav>
+        <!-- /. NAV TOP  -->
+        <!--NAV SIDE -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+                    <li class="text-center">
+                        <img src="@Url.Content("~/Content/dashboardAssets/img/find_user.png")" class="user-image img-responsive" />
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "hospitals")"><i class="fa fa-dashboard fa-3x"></i>My Info</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Services", "hospitals")"><i class="fa fa-sitemap fa-3x"></i>Services</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("BloodCamps", "hospitals")"><i class="fa fa-sitemap fa-3x"></i>Blood Camps</a>
+
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shifts<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level navbar-collapse">
+                            <li>
+                                <a href="#" class="active-menu">Add</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("RemoveShift", "hospitals")">Remove</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shift Managers<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="@Url.Action("AddShiftManager", "hospitals")">Add</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("RemoveShiftManager", "hospitals")">Remove</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-sitemap fa-3x"></i>Stock<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="@Url.Action("AddBloodBag", "hospitals")">Add Blood Bag</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("RemoveBloodBag", "hospitals")">Remove Blood Bag</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- /. NAV SIDE  -->
+
+
+
+
+        <div id="page-wrapper">
+            <
+            <!-- /. PAGE INNER  -->
+
+            <div class="col-md-8 column" id="page-inner">
+
+
+                @using (Html.BeginForm("AddShift", "hospitals", FormMethod.Post))
+                {
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Add Shift</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <form accept-charset="UTF-8" role="form">
+                                            <fieldset>
+
+
+                                                <div class="form-group">
+
+                                                    @if (ViewBag.BloodCamps != null)
+                                                    {
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.blood_camp_id, "Camp ID", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            @Html.DropDownListFor(model => model.blood_camp_id, new SelectList(ViewBag.BloodCamps, "blood_camp_id", "blood_camp_id"), new { @class = "form-group" })
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.blood_camp_id, "Manager username", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            @Html.TextBoxFor(model => model.shift_manager_username, new { @class = "form-group " })
+                                                            @Html.ValidationMessageFor(model => model.shift_manager_username, "", new { @class = "text-danger" })
+
+                                                        </div>
+
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.city, "City", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            @Html.TextBoxFor(model => model.city, new { @class = "form-group" })
+                                                            @Html.ValidationMessageFor(model => model.city, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.governorate, "Governorate", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            @Html.TextBoxFor(model => model.governorate, new { @class = "form-group" })
+                                                            @Html.ValidationMessageFor(model => model.governorate, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.date, "Date", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <input type="date" name="shift_date" class="form-group">
+                                                            @Html.ValidationMessageFor(model => model.governorate, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.start_hour, "Start Time", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <input type="time" name="start" class="form-group">
+                                                            @Html.ValidationMessageFor(model => model.governorate, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.finish_hour, "Finish Time", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <input type="time" name="end" class="form-group">
+                                                            @Html.ValidationMessageFor(model => model.governorate, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                        <input class="btn btn-lg btn-danger btn-block" type="submit" value="Add Shift">
+
+                                                    }
+
+                                                </div>
+                                            </fieldset>
+
+                                            @if (ViewBag.added == true)
+                                            {
+                                                @Html.Label("Shift Added Successfully");
+                                            }
+                                            else if (ViewBag.added == false)
+                                            {
+                                                @Html.Label("Shift not Added");
+
+                                            }
+
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+
+                    </div>
+                }
+            </div>
+
+            <!-- /. PAGE WRAPPER  -->
+            <hr />
+            <div class="container-fluid" style="background-color:#202020;">
+                <div class="text-center center-block bg-dark text-white">
+                    <p style="  color: white;">&copy; @DateTime.Now.Year - Made by Coffee and Love</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /. WRAPPER  -->
+
+  
+}
+
+
+    <script src="@Url.Content("~/Content/dashboardAssets/js/jquery-1.10.2.js")"></script>
+    <!-- BOOTSTRAP SCRIPTS -->
+    <script src="@Url.Content("~/Content/dashboardAssets/js/bootstrap.min.js")"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="@Url.Content("~/Content/dashboardAssets/js/jquery.metisMenu.js")"></script>
+    <!-- MORRIS CHART SCRIPTS -->
+    <script src="@Url.Content("~/Content/dashboardAssets/js/morris/raphael-2.1.0.min.js")"></script>
+    <script src="@Url.Content("~/Content/dashboardAssets/js/morris/morris.js")"></script>
+    <!-- CUSTOM SCRIPTS -->
+    <script src="@Url.Content("~/Content/dashboardAssets/js/custom.js")"></script>
+    <script src="@Url.Content("https://canvasjs.com/assets/script/canvasjs.min.js")"></script>
+
+
+</body>
+</html>
+

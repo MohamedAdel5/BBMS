@@ -1,6 +1,7 @@
-﻿
+﻿@using System.Data;
+@model BBMS.Models.BloodBag
 @{
-    ViewBag.Title = "Hospital dashboard";
+    ViewBag.Title = "Remove Blood Bag";
 }
 @{
     Layout = "";    /*Disable the layout page*/
@@ -49,14 +50,16 @@
                         <img src="@Url.Content("~/Content/dashboardAssets/img/find_user.png")" class="user-image img-responsive" />
                     </li>
                     <li>
-                        <a class="active-menu" href="#"><i class="fa fa-dashboard fa-3x"></i>My Info</a>
+                        <a href="@Url.Action("Index", "hospitals")"><i class="fa fa-dashboard fa-3x"></i>My Info</a>
                     </li>
                     <li>
                         <a href="@Url.Action("Services", "hospitals")"><i class="fa fa-sitemap fa-3x"></i>Services</a>
                     </li>
                     <li>
                         <a href="@Url.Action("BloodCamps", "hospitals")"><i class="fa fa-sitemap fa-3x"></i>Blood Camps</a>
+
                     </li>
+
                     <li>
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shifts<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
@@ -72,28 +75,32 @@
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shift Managers<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="@Url.Action("AddShiftManager", "hospitals")">Add</a>
+                                <a href="@Url.Action("AddShiftManager", "hospitals" )">Add</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("RemoveShiftManager", "hospitals")">Remove</a>
+                                <a href="@Url.Action("RemoveShiftManager", "hospitals" )">Remove</a>
                             </li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i>Stock<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
+                        <ul class="nav nav-second-level navbar-collapse">
                             <li>
                                 <a href="@Url.Action("AddBloodBag", "hospitals")">Add Blood Bag</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("RemoveBloodBag", "hospitals")">Remove Blood Bag</a>
+                                <a href="#" class="active-menu">Remove Blood Bag</a>
                             </li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </nav>
+
+
         <!-- /. NAV SIDE  -->
+
+
 
 
         <div id="page-wrapper">
@@ -101,30 +108,90 @@
             <!-- /. PAGE INNER  -->
 
             <div class="col-md-8 column" id="page-inner">
-                <blockquote>
-                    <p>
-                        <strong>@Model.hospital_name</strong>
-                    </p>
-                    <small>@Model.username</small><br />
-                    <small>@Model.city, @Model.governorate</small><br />
-                    <small>Phone: @Model.phone</small><br />
 
-                </blockquote>
+
+                @using (Html.BeginForm("RemoveBloodBag", "hospitals", FormMethod.Post))
+                {
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Choose Blood type</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <form accept-charset="UTF-8" role="form">
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <label class="control-label">Type </label>
+                                                    @if (ViewBag.BloodTypes != null)
+                                                    {
+                                                        @Html.DropDownListFor(model => model.blood_type, new SelectList(ViewBag.BloodTypes, "", ""), new { @class = "form-horizontal" })
+                                                    }
+                                                    @if (IsPost && ViewBag.bloodbags == null)
+                                                    {
+                                                        <label class="text-danger">No results</label>
+                                                    }
+                                                </div>
+                                                <input class="btn btn-lg btn-danger btn-block" type="submit" value="Filter">
+
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" row">
+
+                            @if (ViewBag.bloodbags != null)
+                            {
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr class=" row">
+                                            @foreach (DataColumn col in ViewBag.bloodbags.Columns)
+                                            {
+                                                <th>@col.ColumnName</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (DataRow row in ViewBag.bloodbags.Rows)
+                                        {
+
+                                            <tr class="row">
+                                                @foreach (DataColumn col in ViewBag.bloodbags.Columns)
+                                                {
+                                                    <td>@row[col.ColumnName]</td>
+                                                }
+                                                <td>@Html.ActionLink(linkText: "Remove", actionName: "RemoveBloodBagConfirmed", controllerName: "Hospitals", routeValues: new { blood_bag_id = row["blood_bag_id"] }, htmlAttributes: new { @class = "text-danger" })</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+
+
+
+                }
             </div>
 
-        </div>
-        <!-- /. PAGE WRAPPER  -->
-        <hr />
-        <div class="container-fluid" style="background-color:#202020;">
-            <div class="text-center center-block bg-dark text-white">
-                <p style="  color: white;">&copy; @DateTime.Now.Year - Made by Coffee and Love</p>
+            <!-- /. PAGE WRAPPER  -->
+            <hr />
+            <div class="container-fluid" style="background-color:#202020;">
+                <div class="text-center center-block bg-dark text-white">
+                    <p style="  color: white;">&copy; @DateTime.Now.Year - Made by Coffee and Love</p>
+                </div>
             </div>
         </div>
     </div>
     <!-- /. WRAPPER  -->
-    
-
-
+    }
 
 
     <script src="@Url.Content("~/Content/dashboardAssets/js/jquery-1.10.2.js")"></script>
@@ -143,106 +210,3 @@
 </body>
 </html>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*@model IEnumerable<BBMS.hospital>
-
-    @{
-        ViewBag.Title = "Index";
-    }
-
-    <h2>Index</h2>
-
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.hospital_name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.city)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.governorate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.login.user_type)
-            </th>
-            <th></th>
-        </tr>
-
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.hospital_name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.city)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.governorate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.login.user_type)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.hospital_id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.hospital_id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.hospital_id })
-            </td>
-        </tr>
-    }
-
-    </table>*@

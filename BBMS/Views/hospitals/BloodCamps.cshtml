@@ -1,6 +1,7 @@
-﻿
+﻿@using System.Data;
+@model BBMS.Models.BloodCamp
 @{
-    ViewBag.Title = "Hospital dashboard";
+    ViewBag.Title = "Blood Camps";
 }
 @{
     Layout = "";    /*Disable the layout page*/
@@ -49,13 +50,14 @@
                         <img src="@Url.Content("~/Content/dashboardAssets/img/find_user.png")" class="user-image img-responsive" />
                     </li>
                     <li>
-                        <a class="active-menu" href="#"><i class="fa fa-dashboard fa-3x"></i>My Info</a>
+                        <a href="@Url.Action("Index", "hospitals")"><i class="fa fa-dashboard fa-3x"></i>My Info</a>
                     </li>
                     <li>
                         <a href="@Url.Action("Services", "hospitals")"><i class="fa fa-sitemap fa-3x"></i>Services</a>
                     </li>
                     <li>
-                        <a href="@Url.Action("BloodCamps", "hospitals")"><i class="fa fa-sitemap fa-3x"></i>Blood Camps</a>
+                        <a href="#" class="active-menu"><i class="fa fa-sitemap fa-3x"></i>Blood Camps</a>
+
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shifts<span class="fa arrow"></span></a>
@@ -80,6 +82,7 @@
                         </ul>
                     </li>
                     <li>
+
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i>Stock<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
@@ -96,20 +99,96 @@
         <!-- /. NAV SIDE  -->
 
 
+
+
         <div id="page-wrapper">
             <
             <!-- /. PAGE INNER  -->
 
             <div class="col-md-8 column" id="page-inner">
-                <blockquote>
-                    <p>
-                        <strong>@Model.hospital_name</strong>
-                    </p>
-                    <small>@Model.username</small><br />
-                    <small>@Model.city, @Model.governorate</small><br />
-                    <small>Phone: @Model.phone</small><br />
 
-                </blockquote>
+
+                @using (Html.BeginForm("AddCamp", "hospitals", FormMethod.Post))
+                {
+                    <div class="panel-body">
+                        <form accept-charset="UTF-8" role="form">
+                            <fieldset>
+                                <div class="form-group">
+                                    <blockquote>
+                                        <p><strong>Add new camp</strong></p><br /><br />
+                                        @Html.TextBoxFor(model => model.driver_name, new { @class = "form-horizontal", @placeholder = "Driver name", @type = "text" })
+                                        <input class="btn" type="submit" value="Add Camp">
+
+
+                                    </blockquote>
+
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                }
+
+
+                @using (Html.BeginForm("RemoveCamp", "hospitals", FormMethod.Post))
+                {
+
+
+
+
+                    <div class="panel-body">
+                        <form accept-charset="UTF-8" role="form">
+                            <fieldset>
+                                <div class="form-group">
+                                    <blockquote>
+                                        <p><strong>Remove existing camp</strong></p><br /><br />
+                                        @if (ViewBag.BloodCamps != null)
+                                        {
+                                            @Html.DropDownListFor(model => model.blood_camp_id, new SelectList(ViewBag.BloodCamps, "blood_camp_id", "blood_camp_id"), new { @class = "form-horizontal" })
+                                            <input class="btn" type="submit" value="Remove Camp">
+                                        }
+                                    </blockquote>
+
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                }
+
+
+                <button data-toggle="collapse" data-target="#campsDetails" class=" btn btn-group-sm">Camps Details</button>
+                <div class="row clearfix">
+                    <div class="col-md-8 column collapse" id="campsDetails">
+                        <hr />
+                        @if (ViewBag.BloodCampsDetails != null)
+                        {
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr class=" row">
+                                        @foreach (DataColumn col in ViewBag.BloodCampsDetails.Columns)
+                                        {
+                                            <th>@col.ColumnName</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataRow row in ViewBag.BloodCampsDetails.Rows)
+                                    {
+                                        <tr class="row">
+                                            @foreach (DataColumn col in ViewBag.BloodCampsDetails.Columns)
+                                            {
+                                                <td>@row[col.ColumnName]</td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                </div>
+
+
+
+
             </div>
 
         </div>
@@ -122,7 +201,6 @@
         </div>
     </div>
     <!-- /. WRAPPER  -->
-    
 
 
 
@@ -143,106 +221,3 @@
 </body>
 </html>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*@model IEnumerable<BBMS.hospital>
-
-    @{
-        ViewBag.Title = "Index";
-    }
-
-    <h2>Index</h2>
-
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.hospital_name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.city)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.governorate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.login.user_type)
-            </th>
-            <th></th>
-        </tr>
-
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.hospital_name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.city)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.governorate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.login.user_type)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.hospital_id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.hospital_id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.hospital_id })
-            </td>
-        </tr>
-    }
-
-    </table>*@

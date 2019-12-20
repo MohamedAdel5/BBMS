@@ -24,9 +24,9 @@ namespace BBMS.Controllers
         // GET: hospitals
         public ActionResult Index()
         {
-            /*var hospitals = db.hospitals.Include(h => h.login);
-            return View(hospitals.ToList());*/
-            return View();
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+            TempData["inputHospital"] = inputHospital;
+            return View(inputHospital);
 
         }
 
@@ -151,23 +151,17 @@ namespace BBMS.Controllers
         //    }
         //    return View(hospital);
         //}
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         // POST: hospitals/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             //hospital hospital = db.hospitals.Find(id);
             //db.hospitals.Remove(hospital);
             //db.SaveChanges();
+
+
             if (dbm.ExecuteNonQuery_proc("deleteHospital", new Dictionary<string, object>() { { "@h_id", id } }) != 0)
             {
                 return RedirectToAction("RemoveHospital");
@@ -176,6 +170,14 @@ namespace BBMS.Controllers
             {
                 return Content("Fatal error");
             }
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         //GET: remove hospital View
@@ -188,7 +190,6 @@ namespace BBMS.Controllers
 
         //GET: remove hospital View
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult RemoveHospital(string searchString)
         {
             /*Retreieve the selected hospital id and redirect*/
@@ -202,7 +203,7 @@ namespace BBMS.Controllers
 
                 foreach (DataRow row in hospitals.Rows)
                 {
-                    if(Convert.ToString(row["hospital_name"]).ToLower().Contains(searchString.ToLower()))
+                    if(Convert.ToString(row["hospital_name"]).Contains(searchString))
                     {
                         DataRow r = hospitalsFilter.NewRow();
                         r["hospital_name"] = Convert.ToString(row["hospital_name"]);
@@ -217,5 +218,592 @@ namespace BBMS.Controllers
             }
             return View();
         }
+
+
+
+        //GET: Sing in page
+        [Route("hospitals/SignIn")]
+        public ActionResult SignIn()
+        {
+            /*The viewBag is empty*/
+            return View();
+        }
+
+        //POST: 
+        /*
+         * redirects the user to his profile pagee if the username and password are correct
+         *else it throws an error and leaves you in the same page
+         */
+        [HttpPost]
+        public ActionResult SignIn(loginViewModel inputLogin)
+        {
+            Dictionary<string, object> Parameters = new Dictionary<string, object>();
+            Parameters.Add("@username", inputLogin.username);
+            Parameters.Add("@password", inputLogin.password);
+
+            if (ModelState.IsValid)
+            {
+                DataTable inputHospitalTable = dbm.ExecuteReader_proc("checkHospital", Parameters);
+                hospital inputHospital;
+                if (inputHospitalTable == null)
+                {
+                    return View(inputLogin);
+                }
+                else
+                {
+                    int hospital_id = Convert.ToInt32(inputHospitalTable.Rows[0]["hospital_id"]);
+                    string hospital_name = Convert.ToString(inputHospitalTable.Rows[0]["hospital_name"]);
+                    string city = Convert.ToString(inputHospitalTable.Rows[0]["city"]);
+                    string governorate = Convert.ToString(inputHospitalTable.Rows[0]["governorate"]);
+                    string username = Convert.ToString(inputHospitalTable.Rows[0]["username"]);
+                    string phone = Convert.ToString(inputHospitalTable.Rows[0]["phone"]);
+                    string password = Convert.ToString(inputHospitalTable.Rows[0]["user_pass"].GetHashCode());
+                    inputHospital = new hospital()
+                    {
+                        hospital_id = hospital_id,
+                        hospital_name = hospital_name,
+                        city = city,
+                        governorate = governorate,
+                        username = username,
+                        phone = phone,
+                        password = password
+                    };
+                    TempData["inputHospital"] = inputHospital;
+                    return RedirectToAction("Index", "hospitals");
+                }
+            }
+            else
+            {
+                return View(inputLogin);
+            }
+
+        }
+
+
+        public ActionResult Services()
+        {
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+
+            DataTable ProvidedServices = dbm.ExecuteReader_proc("HospitalProvideServices", Parameters1);
+            DataTable NotProvidedServices = dbm.ExecuteReader_proc("HospitalNotProvideServices", Parameters1);
+            ViewBag.ProvidedServicesDT = ProvidedServices;
+            if (NotProvidedServices != null)
+
+            ViewBag.NotProvidedServices = NotProvidedServices.AsEnumerable().Select(row => new service
+            {
+                service_id = Convert.ToInt32(row["service_id"]),
+                name = (row["name"]).ToString()
+            });
+
+
+            if (ProvidedServices != null)
+
+                ViewBag.ProvidedServices = ProvidedServices.AsEnumerable().Select(row => new service
+            {
+                service_id = Convert.ToInt32(row["service_id"]),
+                name = (row["name"]).ToString()
+            });
+             
+            TempData["inputHospital"] = inputHospital;
+
+            return View();
+
+        }
+
+        [HttpPost]
+
+        public ActionResult AddService(Service srv)
+        {
+
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+            Parameters1.Add("@service_id", srv.service_id);
+            Parameters1.Add("@value", srv.value);
+
+            dbm.ExecuteNonQuery_proc("AddServiceToHospital", Parameters1);
+
+            TempData["inputHospital"] = inputHospital;
+
+
+            return Redirect("Services");
+        }
+
+        [HttpPost]
+        public ActionResult RemoveService(Service srv)
+        {
+
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+            Parameters1.Add("@service_id", srv.service_id);
+
+            dbm.ExecuteNonQuery_proc("RemoveServiceFromHospital", Parameters1);
+
+            TempData["inputHospital"] = inputHospital;
+
+            return Redirect("Services");
+        }
+
+
+
+
+
+
+        public ActionResult BloodCamps()
+        {
+
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+            ViewBag.BloodCampsDetails = dbm.ExecuteReader_proc("getBloodCampsDetails", Parameters1);
+
+            DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters1);
+
+            if (BloodCamps != null)
+
+                ViewBag.BloodCamps = BloodCamps.AsEnumerable().Select(row => new BloodCamp
+                {
+                    blood_camp_id = Convert.ToInt32(row["blood_camp_id"]),
+                    driver_name = (row["driver_name"]).ToString()
+                });
+
+
+            TempData["inputHospital"] = inputHospital;
+
+            return View();
+
+        }
+
+        public ActionResult AddCamp(BloodCamp camp)
+        {
+
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+            Parameters1.Add("@driver_name", camp.driver_name);
+
+            dbm.ExecuteNonQuery_proc("AddBloodCamp", Parameters1);
+
+            TempData["inputHospital"] = inputHospital;
+
+
+            return Redirect("BloodCamps");
+        }
+
+        [HttpPost]
+        public ActionResult RemoveCamp(BloodCamp camp)
+        {
+
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@blood_camp_id", camp.blood_camp_id);
+
+            dbm.ExecuteNonQuery_proc("RemoveBloodCamp", Parameters1);
+
+            TempData["inputHospital"] = inputHospital;
+
+
+            return Redirect("BloodCamps");
+        }
+
+
+
+
+        public ActionResult RemoveShift()
+        {
+
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+            DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters1);
+
+            if (BloodCamps != null)
+
+                ViewBag.BloodCamps = BloodCamps.AsEnumerable().Select(row => new BloodCamp
+                {
+                    blood_camp_id = Convert.ToInt32(row["blood_camp_id"]),
+                    driver_name = (row["driver_name"]).ToString()
+                });
+
+
+            TempData["inputHospital"] = inputHospital;
+
+            return View();
+
+        }
+
+
+
+        [HttpPost]
+        public ActionResult RemoveShift(Shift shift)
+        {
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@blood_camp_id", shift.blood_camp_id);
+
+            ViewBag.shifts = dbm.ExecuteReader_proc("getCampShifts", Parameters1);
+
+
+            Parameters1.Clear();
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+            DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters1);
+
+            if (BloodCamps != null)
+
+                ViewBag.BloodCamps = BloodCamps.AsEnumerable().Select(row => new BloodCamp
+                {
+                    blood_camp_id = Convert.ToInt32(row["blood_camp_id"]),
+                    driver_name = (row["driver_name"]).ToString()
+                });
+
+
+            TempData["inputHospital"] = inputHospital;
+
+
+
+
+            return View();
+        }
+
+
+
+        public ActionResult RemoveShiftConfirmed(int blood_camp_id, string shift_date)
+        {
+
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@blood_camp_id", blood_camp_id);
+            Parameters1.Add("@shift_date", shift_date);
+
+            TempData["inputHospital"] = inputHospital;
+
+
+            if (dbm.ExecuteNonQuery_proc("RemoveShift", Parameters1) != 0)
+            {
+                return RedirectToAction("RemoveShift");
+            }
+            else
+            {
+                return Content("Fatal error");
+            }
+
+        }
+
+
+        public ActionResult AddShift()
+        {
+
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+            DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters1);
+
+            if (BloodCamps != null)
+
+                ViewBag.BloodCamps = BloodCamps.AsEnumerable().Select(row => new BloodCamp
+                {
+                    blood_camp_id = Convert.ToInt32(row["blood_camp_id"]),
+                    driver_name = (row["driver_name"]).ToString()
+                });
+
+
+            TempData["inputHospital"] = inputHospital;
+
+
+
+
+            return View();
+
+
+        }
+
+        [HttpPost]
+        public ActionResult AddShift(Shift shift, string start, string end, string shift_date)
+        {
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+            start += ":00";
+            end += ":00";
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@blood_camp_id", shift.blood_camp_id);
+            Parameters1.Add("@shift_date", shift_date);
+            Parameters1.Add("@shift_manager_username", shift.shift_manager_username);
+            Parameters1.Add("@start_hour", start);
+            Parameters1.Add("@finish_hour", end);
+            Parameters1.Add("@city", shift.city);
+            Parameters1.Add("@governorate", shift.governorate);
+
+            Parameters1.Clear();
+
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+            DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters1);
+
+            if (BloodCamps != null)
+
+                ViewBag.BloodCamps = BloodCamps.AsEnumerable().Select(row => new BloodCamp
+                {
+                    blood_camp_id = Convert.ToInt32(row["blood_camp_id"]),
+                    driver_name = (row["driver_name"]).ToString()
+                });
+
+
+
+
+
+            TempData["inputHospital"] = inputHospital;
+
+
+            ViewBag.added = (dbm.ExecuteNonQuery_proc("insert_shift", Parameters1) != 0);
+            
+            return View();
+            
+            
+        }
+
+
+
+
+        public ActionResult AddShiftManager() {
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddShiftManager(ShiftManager mgr)
+        {
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+
+
+            Parameters1.Add("@username", mgr.username);
+            Parameters1.Add("@user_pass", mgr.password);
+            Parameters1.Add("@name", mgr.name);
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+
+
+            TempData["inputHospital"] = inputHospital;
+
+
+            ViewBag.added = (dbm.ExecuteNonQuery_proc("insert_shift_manager", Parameters1) != 0);
+
+            return View();
+
+
+        }
+
+
+        public ActionResult RemoveShiftManager()
+        {
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+
+            ViewBag.managers = dbm.ExecuteReader_proc("getShiftManagers", Parameters1);
+            TempData["inputHospital"] = inputHospital;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RemoveShiftManager(ShiftManager mgr)
+        {
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+            ViewBag.managers = dbm.ExecuteReader_proc("getShiftManagers", Parameters1);
+
+
+
+           
+            ViewBag.removed = ((DataTable)ViewBag.managers).AsEnumerable().Any(row => mgr.username == row.Field<String>("username"));
+
+            if (ViewBag.removed == true)
+            {
+                Parameters1.Clear();
+                Parameters1.Add("@username", mgr.username);
+                ViewBag.removed = dbm.ExecuteNonQuery_proc("RemoveShiftManager", Parameters1) != 0;
+            }
+
+            TempData["inputHospital"] = inputHospital;
+
+
+            return View();
+        }
+
+
+
+        public ActionResult RemoveBloodBag()
+        {
+            ViewBag.BloodTypes = new List<object> { "All", "A+", "B+", "B-", "O+", "O-", "AB+", "AB-" };
+
+            return View();
+        }
+
+
+
+        [HttpPost]
+        public ActionResult RemoveBloodBag(BloodBag bag)
+        {
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+            ViewBag.BloodTypes = new List<object> { "All", "A+", "B+", "B-", "O+", "O-", "AB+", "AB-" };
+
+
+
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@blood_type", bag.blood_type);
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+
+            ViewBag.bloodbags = dbm.ExecuteReader_proc("getBloodBagsofType", Parameters1);
+
+
+
+            TempData["inputHospital"] = inputHospital;
+
+
+
+
+            return View();
+        }
+
+
+
+        public ActionResult RemoveBloodBagConfirmed(int blood_bag_id)
+        {
+
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@blood_bag_id", blood_bag_id);
+
+            TempData["inputHospital"] = inputHospital;
+
+
+            if (dbm.ExecuteNonQuery_proc("RemoveBloodBag", Parameters1) != 0)
+            {
+                return RedirectToAction("RemoveBloodBag");
+            }
+            else
+            {
+                return Content("Fatal error");
+            }
+        }
+
+
+
+        public ActionResult AddBloodBag()
+        {
+            ViewBag.BloodTypes = new List<object> {"A+", "B+", "B-", "O+", "O-", "AB+", "AB-" };
+
+
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+
+
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+            DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters1);
+
+            if (BloodCamps != null)
+
+                ViewBag.BloodCamps = BloodCamps.AsEnumerable().Select(row => new BloodCamp
+                {
+                    blood_camp_id = Convert.ToInt32(row["blood_camp_id"]),
+                    driver_name = (row["driver_name"]).ToString()
+                });
+
+
+            TempData["inputHospital"] = inputHospital;
+
+
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddBloodBag(BloodBag bag, string date)
+        {
+
+            hospital inputHospital = (hospital)TempData["inputHospital"];
+
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+            DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters1);
+
+            if (BloodCamps != null)
+
+                ViewBag.BloodCamps = BloodCamps.AsEnumerable().Select(row => new BloodCamp
+                {
+                    blood_camp_id = Convert.ToInt32(row["blood_camp_id"]),
+                    driver_name = (row["driver_name"]).ToString()
+                });
+
+            Parameters1.Add("@national_id", Convert.ToInt64(bag.national_id));
+            Parameters1.Add("@blood_bag_date", date);
+            Parameters1.Add("@blood_camp_id", bag.blood_camp_id);
+            Parameters1.Add("@notes", bag.notes);
+            Parameters1.Add("@blood_type", bag.blood_type);
+
+            ViewBag.added = (dbm.ExecuteNonQuery_proc("AddBloodBag", Parameters1) != 0);
+
+
+            ViewBag.BloodTypes = new List<object> {"A+","B+","B-","O+","O-","AB+","AB-"};
+
+
+            TempData["inputHospital"] = inputHospital;
+            return View();
+
+        }
+
+
     }
 }
+
+
+
+
