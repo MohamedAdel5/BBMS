@@ -49,13 +49,17 @@
                     @foreach (DataRow row in ViewBag.hospitalsFilter.Rows)
                     {
 
-                        <tr class="row">
-                            @foreach (DataColumn col in ViewBag.hospitalsFilter.Columns)
-                            {
-                                <td>@row[col.ColumnName]</td>
-                            }
-                            <td>@Html.ActionLink(linkText: "Remove", actionName: "DeleteConfirmed", controllerName: "Hospitals", routeValues: new { id = row["hospital_id"] }, htmlAttributes: new { @class = "text-danger" })</td>
-                        </tr>
+                    <tr class="row">
+                        @foreach (DataColumn col in ViewBag.hospitalsFilter.Columns)
+                        {
+                            <td>@row[col.ColumnName]</td>
+                        }
+                        @using (Html.BeginForm("DeleteConfirmed", "Hospitals", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <td><button class=" btn btn-xs btn-danger" type="submit" value="@row["hospital_id"]" name="id">Delete</button></td>
+                        }
+                    </tr>
                     }
                 </tbody>
             </table>

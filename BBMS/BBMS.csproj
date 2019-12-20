@@ -332,6 +332,15 @@
     <Content Include="Views\Service\ShowRemoveServices.cshtml" />
     <Content Include="Views\ShiftManager\SignIn.cshtml" />
     <Content Include="Views\Shared\_ShiftMgrLayout.cshtml" />
+    <Content Include="Views\hospitals\AddBloodBag.cshtml" />
+    <Content Include="Views\hospitals\AddShift.cshtml" />
+    <Content Include="Views\hospitals\AddShiftManager.cshtml" />
+    <Content Include="Views\hospitals\BloodCamps.cshtml" />
+    <Content Include="Views\hospitals\RemoveBloodBag.cshtml" />
+    <Content Include="Views\hospitals\RemoveShift.cshtml" />
+    <Content Include="Views\hospitals\RemoveShiftManager.cshtml" />
+    <Content Include="Views\hospitals\Services.cshtml" />
+    <Content Include="Views\hospitals\SignIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
