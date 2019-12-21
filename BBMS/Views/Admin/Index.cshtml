@@ -133,9 +133,15 @@
                     <div class="col-md-9 col-sm-12 col-xs-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Best Blood Camp Belongs to Hospital <strong>#@ViewBag.hospitalID @ViewBag.hospitalName</strong>
-                                <br />
-                                Blood Camp <strong>#@ViewBag.bloodCampID</strong> with Blood Bags = <strong>@ViewBag.bloodCampBags</strong>
+                                @if (ViewBag.bloodCampID != null)
+                                {
+                                <p>
+                                    Best Blood Camp Belongs to Hospital<strong>#@ViewBag.hospitalID @ViewBag.hospitalName</strong>
+                                    <br />
+                                    Blood Camp <strong>#@ViewBag.bloodCampID</strong> with Blood Bags = <strong>@ViewBag.bloodCampBags</strong>
+                                </p>
+                                }
+
                             </div>
                         </div>
                     </div>
@@ -172,7 +178,7 @@
     <script>
         window.onload = function () {
 
-            var chart = new CanvasJS.Chart("blood-bar-chart", {
+                var chart = new CanvasJS.Chart("blood-bar-chart", {
                 animationEnabled: true,
                 theme: "light2", // "light1", "light2", "dark1", "dark2"
                 title: {
@@ -187,23 +193,25 @@
                     legendMarkerColor: "grey",
                     legendText: "Write Legend Text here",
                     dataPoints: [
-                        { y: @ViewBag.AP, label: "A+" },
-                        { y: @ViewBag.AN, label: "A-" },
-                        { y: @ViewBag.BP, label: "B+" },
-                        { y: @ViewBag.BN, label: "B-" },
-                        { y: @ViewBag.ABP, label: "AB+" },
-                        { y: @ViewBag.ABN, label: "AB-" },
-                        { y: @ViewBag.OP, label: "O+" },
-                        { y: @ViewBag.ON, label: "O-" }
+                        { y: @(ViewBag.bloodBagsStatistics != null? ViewBag.AP : 0), label: "A+" },
+                        { y: @(ViewBag.bloodBagsStatistics != null? ViewBag.AN : 0), label: "A-" },
+                        { y: @(ViewBag.bloodBagsStatistics != null? ViewBag.BP : 0), label: "B+" },
+                        { y: @(ViewBag.bloodBagsStatistics != null? ViewBag.BN : 0), label: "B-" },
+                        { y: @(ViewBag.bloodBagsStatistics != null? ViewBag.ABP: 0), label: "AB+" },
+                        { y: @(ViewBag.bloodBagsStatistics != null? ViewBag.ABN: 0), label: "AB-" },
+                        { y: @(ViewBag.bloodBagsStatistics != null? ViewBag.OP : 0), label: "O+" },
+                        { y: @(ViewBag.bloodBagsStatistics != null? ViewBag.ON : 0), label: "O-" }
                     ]
                 }]
-            });
+                });
 
-            var chart2 = new CanvasJS.Chart("hospitals-bar-chart", {
+
+
+                var chart2 = new CanvasJS.Chart("hospitals-bar-chart", {
                 animationEnabled: true,
                 theme: "light2", // "light1", "light2", "dark1", "dark2"
                 title: {
-                    text: "Top " + @ViewBag.topHospitalsCount + " Hospitals Used"
+                    text: "Top " + @(ViewBag.topHospitalsCount != null? ViewBag.topHospitalsCount:0) + " Hospitals Used"
                 },
                 axisY: {
                     title: "Number of Services Used"
@@ -214,19 +222,21 @@
                     legendMarkerColor: "grey",
                     legendText: "Write Legend Text here",
                     dataPoints: [
-                        { y: @ViewBag.usingCount[0], label: "@ViewBag.hospitals[0]" },
-                        { y: @ViewBag.usingCount[1], label: "@ViewBag.hospitals[1]" },
-                        { y: @ViewBag.usingCount[2], label: "@ViewBag.hospitals[2]" },
-                        { y: @ViewBag.usingCount[3], label: "@ViewBag.hospitals[3]" },
-                        { y: @ViewBag.usingCount[4], label: "@ViewBag.hospitals[4]" },
-                        { y: @ViewBag.usingCount[5], label: "@ViewBag.hospitals[5]" },
-                        { y: @ViewBag.usingCount[6], label: "@ViewBag.hospitals[6]" },
-                        { y: @ViewBag.usingCount[7], label: "@ViewBag.hospitals[7]" },
-                        { y: @ViewBag.usingCount[8], label: "@ViewBag.hospitals[8]" },
-                        { y: @ViewBag.usingCount[9], label: "@ViewBag.hospitals[9]" },
+                        { y: @(ViewBag.usingCount != null?ViewBag.usingCount[0]:0), label: @(ViewBag.hospitals != null?"@ViewBag.hospitals[0]":"") },
+                        { y: @(ViewBag.usingCount != null?ViewBag.usingCount[1]:0), label: @(ViewBag.hospitals != null?"@ViewBag.hospitals[1]":"") },
+                        { y: @(ViewBag.usingCount != null?ViewBag.usingCount[2]:0), label: @(ViewBag.hospitals != null?"@ViewBag.hospitals[2]":"") },
+                        { y: @(ViewBag.usingCount != null?ViewBag.usingCount[3]:0), label: @(ViewBag.hospitals != null?"@ViewBag.hospitals[3]":"") },
+                        { y: @(ViewBag.usingCount != null?ViewBag.usingCount[4]:0), label: @(ViewBag.hospitals != null?"@ViewBag.hospitals[4]":"") },
+                        { y: @(ViewBag.usingCount != null?ViewBag.usingCount[5]:0), label: @(ViewBag.hospitals != null?"@ViewBag.hospitals[5]":"") },
+                        { y: @(ViewBag.usingCount != null?ViewBag.usingCount[6]:0), label: @(ViewBag.hospitals != null?"@ViewBag.hospitals[6]":"") },
+                        { y: @(ViewBag.usingCount != null?ViewBag.usingCount[7]:0), label: @(ViewBag.hospitals != null?"@ViewBag.hospitals[7]":"") },
+                        { y: @(ViewBag.usingCount != null?ViewBag.usingCount[8]:0), label: @(ViewBag.hospitals != null?"@ViewBag.hospitals[8]":"") },
+                        { y: @(ViewBag.usingCount != null?ViewBag.usingCount[9]:0), label: @(ViewBag.hospitals != null?"@ViewBag.hospitals[9]":"") },
                     ]
                 }]
             });
+
+
 
             chart.render();
             chart2.render();

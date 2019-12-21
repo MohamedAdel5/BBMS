@@ -49,88 +49,97 @@ namespace BBMS.Controllers
             Int64 ABN = 0;
             Int64 OP = 0;
             Int64 ON = 0;
-
-            foreach (DataRow row in bloodBagsStatistics.Rows)
+            if(bloodBagsStatistics != null && bloodBagsStatistics.Rows.Count != 0)
             {
-                if (Convert.ToString(row["blood_type"]) == "A+")
+                foreach (DataRow row in bloodBagsStatistics.Rows)
                 {
-                    AP = Convert.ToInt64(row["Num"]);
+                    if (Convert.ToString(row["blood_type"]) == "A+")
+                    {
+                        AP = Convert.ToInt64(row["Num"]);
+                    }
+                    else if (Convert.ToString(row["blood_type"]) == "A-")
+                    {
+                        AN = Convert.ToInt64(row["Num"]);
+                    }
+                    else if (Convert.ToString(row["blood_type"]) == "B+")
+                    {
+                        BP = Convert.ToInt64(row["Num"]);
+                    }
+                    else if (Convert.ToString(row["blood_type"]) == "B-")
+                    {
+                        BN = Convert.ToInt64(row["Num"]);
+                    }
+                    else if (Convert.ToString(row["blood_type"]) == "AB+")
+                    {
+                        ABP = Convert.ToInt64(row["Num"]);
+                    }
+                    else if (Convert.ToString(row["blood_type"]) == "AB-")
+                    {
+                        ABN = Convert.ToInt64(row["Num"]);
+                    }
+                    else if (Convert.ToString(row["blood_type"]) == "O+")
+                    {
+                        OP = Convert.ToInt64(row["Num"]);
+                    }
+                    else if (Convert.ToString(row["blood_type"]) == "O-")
+                    {
+                        ON = Convert.ToInt64(row["Num"]);
+                    }
                 }
-                else if (Convert.ToString(row["blood_type"]) == "A-")
-                {
-                    AN = Convert.ToInt64(row["Num"]);
-                }
-                else if (Convert.ToString(row["blood_type"]) == "B+")
-                {
-                    BP = Convert.ToInt64(row["Num"]);
-                }
-                else if (Convert.ToString(row["blood_type"]) == "B-")
-                {
-                    BN = Convert.ToInt64(row["Num"]);
-                }
-                else if (Convert.ToString(row["blood_type"]) == "AB+")
-                {
-                    ABP = Convert.ToInt64(row["Num"]);
-                }
-                else if (Convert.ToString(row["blood_type"]) == "AB-")
-                {
-                    ABN = Convert.ToInt64(row["Num"]);
-                }
-                else if (Convert.ToString(row["blood_type"]) == "O+")
-                {
-                    OP = Convert.ToInt64(row["Num"]);
-                }
-                else if (Convert.ToString(row["blood_type"]) == "O-")
-                {
-                    ON = Convert.ToInt64(row["Num"]);
-                }
+                ViewBag.bloodBagsStatistics = true;
+                ViewBag.AP = AP;
+                ViewBag.AN = AN;
+                ViewBag.BP = BP;
+                ViewBag.BN = BN;
+                ViewBag.ABP = ABP;
+                ViewBag.ABN = ABN;
+                ViewBag.OP = OP;
+                ViewBag.ON = ON;
             }
             
-            ViewBag.AP = AP;
-            ViewBag.AN = AN;
-            ViewBag.BP = BP;
-            ViewBag.BN = BN;
-            ViewBag.ABP = ABP;
-            ViewBag.ABN = ABN;
-            ViewBag.OP = OP;
-            ViewBag.ON = ON;
 
             DataTable hospitalsStatistics = dbm.ExecuteReader_proc("mostHospitalUsed", null);
 
-            string[] hospitals = new string[10];
-            Int64[] usingCount = new Int64[10];
-
-            for (int i = 0; i < 10; ++i)
+            if(hospitalsStatistics != null && hospitalsStatistics.Rows.Count != 0)
             {
-                hospitals[i] = " ";
-                usingCount[i] = 0;
-            }
+                string[] hospitals = new string[10];
+                Int64[] usingCount = new Int64[10];
 
-            for (int i = 0; i < hospitalsStatistics.Rows.Count; ++i)
-            {
-                hospitals[i] = Convert.ToString(hospitalsStatistics.Rows[i]["hospital_name"]);
-                if (hospitalsStatistics.Rows[i]["num"] != DBNull.Value)
+                for (int i = 0; i < 10; ++i)
                 {
-                    usingCount[i] = Convert.ToInt64(hospitalsStatistics.Rows[i]["num"]);
+                    hospitals[i] = " ";
+                    usingCount[i] = 0;
                 }
+
+                for (int i = 0; i < hospitalsStatistics.Rows.Count; ++i)
+                {
+                    hospitals[i] = Convert.ToString(hospitalsStatistics.Rows[i]["hospital_name"]);
+                    if (hospitalsStatistics.Rows[i]["num"] != DBNull.Value)
+                    {
+                        usingCount[i] = Convert.ToInt64(hospitalsStatistics.Rows[i]["num"]);
+                    }
+                }
+
+                ViewBag.topHospitalsCount = hospitalsStatistics.Rows.Count;
+                ViewBag.hospitals = hospitals;
+                ViewBag.usingCount = usingCount;
             }
-
-            ViewBag.topHospitalsCount = hospitalsStatistics.Rows.Count;
-
-            ViewBag.hospitals = hospitals;
-            ViewBag.usingCount = usingCount;
+            
 
             DataTable bestBloodCamp = dbm.ExecuteReader_proc("bestBloodCamp", null);
+            if(bestBloodCamp != null && bestBloodCamp.Rows.Count != 0)
+            {
+                Int64 hospitalID = Convert.ToInt64(bestBloodCamp.Rows[0]["hospital_id"]);
+                string hospitalName = Convert.ToString(bestBloodCamp.Rows[0]["hospital_name"]);
+                Int64 bloodCampID = Convert.ToInt64(bestBloodCamp.Rows[0]["blood_camp_id"]);
+                Int64 bloodCampBags = Convert.ToInt64(bestBloodCamp.Rows[0]["num"]);
 
-            Int64 hospitalID = Convert.ToInt64(bestBloodCamp.Rows[0]["hospital_id"]);
-            string hospitalName = Convert.ToString(bestBloodCamp.Rows[0]["hospital_name"]);
-            Int64 bloodCampID = Convert.ToInt64(bestBloodCamp.Rows[0]["blood_camp_id"]);
-            Int64 bloodCampBags = Convert.ToInt64(bestBloodCamp.Rows[0]["num"]);
-
-            ViewBag.hospitalID = hospitalID;
-            ViewBag.hospitalName = hospitalName;
-            ViewBag.bloodCampID = bloodCampID;
-            ViewBag.bloodCampBags = bloodCampBags;
+                ViewBag.hospitalID = hospitalID;
+                ViewBag.hospitalName = hospitalName;
+                ViewBag.bloodCampID = bloodCampID;
+                ViewBag.bloodCampBags = bloodCampBags;
+            }
+            
 
             return View(inputAdmin);
         }
@@ -163,34 +172,42 @@ namespace BBMS.Controllers
                 usersDon[i] = 0;
                 usersCountServ[i] = 0;
             }
-
-            for (int i = 0; i < topUsers.Rows.Count; ++i)
+            if(topUsers != null)
             {
-                users[i] = Convert.ToString(topUsers.Rows[i]["name"]);
-                if (topUsers.Rows[i]["donation_count"] != DBNull.Value)
+                for (int i = 0; i < topUsers.Rows.Count; ++i)
                 {
-                    usersDon[i] = Convert.ToInt64(topUsers.Rows[i]["donation_count"]);
+                    users[i] = Convert.ToString(topUsers.Rows[i]["name"]);
+                    if (topUsers.Rows[i]["donation_count"] != DBNull.Value)
+                    {
+                        usersDon[i] = Convert.ToInt64(topUsers.Rows[i]["donation_count"]);
+                    }
                 }
+
+                ViewBag.topDonatorsCount = topUsers.Rows.Count;
+                ViewBag.users = users;
+                ViewBag.donsCounts = usersDon;
+            }
+            
+            if(topUserServices != null)
+            {
+                for (int i = 0; i < topUserServices.Rows.Count; ++i)
+                {
+                    usersService[i] = Convert.ToString(topUserServices.Rows[i]["name"]);
+                    if (topUserServices.Rows[i]["num"] != DBNull.Value)
+                    {
+                        usersCountServ[i] = Convert.ToInt64(topUserServices.Rows[i]["num"]);
+                    }
+                }
+
+                ViewBag.topUserServiceCount = topUserServices.Rows.Count;
+                ViewBag.usersService = usersService;
+                ViewBag.usersCountServ = usersCountServ;
+
             }
 
-            ViewBag.topDonatorsCount = topUsers.Rows.Count;
+            
 
-            for (int i = 0; i < topUserServices.Rows.Count; ++i)
-            {
-                usersService[i] = Convert.ToString(topUserServices.Rows[i]["name"]);
-                if (topUserServices.Rows[i]["num"] != DBNull.Value)
-                {
-                    usersCountServ[i] = Convert.ToInt64(topUserServices.Rows[i]["num"]);
-                }
-            }
-
-            ViewBag.topUserServiceCount = topUserServices.Rows.Count;
-
-            ViewBag.users = users;
-            ViewBag.donsCounts = usersDon;
-
-            ViewBag.usersService = usersService;
-            ViewBag.usersCountServ = usersCountServ;
+            
 
             return View();
         }

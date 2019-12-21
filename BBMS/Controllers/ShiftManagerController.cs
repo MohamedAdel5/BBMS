@@ -112,8 +112,14 @@ namespace BBMS.Controllers
         public ActionResult GrantUser(FormCollection collection)
         {
             string username = Convert.ToString(collection["username"]);
+            
+            if(String.IsNullOrEmpty(username) || String.IsNullOrEmpty(collection["points"]))
+            {
+                ViewBag.InvalidInput = true;
+                return View("Index");
+            }
             int points = Convert.ToInt32(collection["points"]);
-            if(dbm.ExecuteReader_proc("checkUsernameIsUser", new Dictionary<string, object>() { { "@username", username} }) == null)
+            if (dbm.ExecuteReader_proc("checkUsernameIsUser", new Dictionary<string, object>() { { "@username", username} }) == null)
             {
                 ViewBag.invalidUsername = true;
                 return View("Index");

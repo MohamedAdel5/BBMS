@@ -123,6 +123,10 @@ namespace BBMS.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 DataTable hospitals = dbm.ExecuteReader_proc("getHospitals", null /*-> no parameters*/);  /*Gets all hospitals*/
+                if(hospitals == null)
+                {
+                    return View();
+                }
                 DataTable hospitalsFilter = new DataTable();    /*will contain the hospitals that match the string*/
                 hospitalsFilter.Columns.Add(new DataColumn("hospital_name", typeof(string)));
                 hospitalsFilter.Columns.Add(new DataColumn("hospital_id", typeof(int)));
@@ -547,9 +551,11 @@ namespace BBMS.Controllers
             Dictionary<string, object> Parameters = new Dictionary<string, object>();
             Parameters.Add("@hospital_id", inputHospital.hospital_id);
 
+            
             DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters);
 
             if (BloodCamps != null)
+            {
 
                 ViewBag.BloodCamps = BloodCamps.AsEnumerable().Select(row => new BloodCamp
                 {
@@ -557,18 +563,24 @@ namespace BBMS.Controllers
                     driver_name = (row["driver_name"]).ToString()
                 });
 
-            Parameters.Clear();
+                DataTable myShiftManagers = dbm.ExecuteReader_proc("getShiftManagers", Parameters);
+                if (!(myShiftManagers).AsEnumerable().Any(row => shift.shift_manager_username == row.Field<String>("username")))
+                {
+                    return View();
+                }
+                Parameters.Clear();
 
-            Parameters.Add("@blood_camp_id", shift.blood_camp_id);
-            Parameters.Add("@shift_date", shift_date);
-            Parameters.Add("@shift_manager_username", shift.shift_manager_username);
-            Parameters.Add("@start_hour", start);
-            Parameters.Add("@finish_hour", end);
-            Parameters.Add("@city", shift.city);
-            Parameters.Add("@governorate", shift.governorate);
+                Parameters.Add("@blood_camp_id", shift.blood_camp_id);
+                Parameters.Add("@shift_date", shift_date);
+                Parameters.Add("@shift_manager_username", shift.shift_manager_username);
+                Parameters.Add("@start_hour", start);
+                Parameters.Add("@finish_hour", end);
+                Parameters.Add("@city", shift.city);
+                Parameters.Add("@governorate", shift.governorate);
 
+                ViewBag.added = (dbm.ExecuteNonQuery_proc("insert_shift", Parameters) != 0);
+            }
 
-            ViewBag.added = (dbm.ExecuteNonQuery_proc("insert_shift", Parameters) != 0);
 
             return View();   
         }
@@ -661,8 +673,16 @@ namespace BBMS.Controllers
                     Parameters1.Add("@hospital_id", inputHospital.hospital_id);
                     ViewBag.managers = dbm.ExecuteReader_proc("getShiftManagers", Parameters1);
                 }
+                else
+                {
+                    ViewBag.managers = managers;
+                }
             }
-           
+            else
+            {
+                ViewBag.managers = managers;
+            }
+
             return View();
         }
 
@@ -859,11 +879,38 @@ namespace BBMS.Controllers
             {
                 return RedirectToAction("SignIn", "Hospitals");
             }
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+
+            DataTable ProvidedServices = dbm.ExecuteReader_proc("HospitalProvideServices", Parameters1);
+            DataTable NotProvidedServices = dbm.ExecuteReader_proc("HospitalNotProvideServices", Parameters1);
+            ViewBag.ProvidedServicesDT = ProvidedServices;
+            if (NotProvidedServices != null)
+
+                ViewBag.NotProvidedServices = NotProvidedServices.AsEnumerable().Select(row => new service
+                {
+                    service_id = Convert.ToInt32(row["service_id"]),
+                    name = (row["name"]).ToString()
+                });
+
+
+            if (ProvidedServices != null)
+
+                ViewBag.ProvidedServices = ProvidedServices.AsEnumerable().Select(row => new service
+                {
+                    service_id = Convert.ToInt32(row["service_id"]),
+                    name = (row["name"]).ToString()
+                });
 
             Dictionary<string, object> Parameters = new Dictionary<string, object>();
             Parameters.Add("@username", username);
 
             DataTable pointsTable = dbm.ExecuteReader_proc("getUserPoints", Parameters);
+            if(pointsTable == null)
+            {
+                return View("Services");
+            }
             int userPoints = Convert.ToInt32(pointsTable.Rows[0]["points"]);
 
             Parameters.Clear();
@@ -871,6 +918,10 @@ namespace BBMS.Controllers
             Parameters.Add("@service_id", service_id);
 
             DataTable service = dbm.ExecuteReader_proc("getHospitalService", Parameters);
+            if(service == null)
+            {
+                return View("Services");
+            }
             int serviceValue = Convert.ToInt32(service.Rows[0]["value"]);
 
             if(userPoints < serviceValue)

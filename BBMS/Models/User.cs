@@ -41,5 +41,7 @@ namespace BBMS.Models
         [StringLength(30, ErrorMessage = "Max length = 30 characters")]
         [DataType(DataType.Password)]
         public string password { get; set; }
+
+        public int donation_count { get; set; }
     }
 }

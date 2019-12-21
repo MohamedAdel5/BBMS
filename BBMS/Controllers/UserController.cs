@@ -29,7 +29,41 @@ namespace BBMS.Controllers
             {
                 return RedirectToAction("SignIn", "User");
             }
-            
+
+            /*REFRESH USER DATA*/
+            TempData.Remove("inputUser");
+            Dictionary<string, object> Parameters = new Dictionary<string, object>();
+            Parameters.Add("@username", inputUser.username);
+            DataTable inputUserTable = dbm.ExecuteReader_proc("getUser", Parameters);
+            int age = Convert.ToInt32(inputUserTable.Rows[0]["age"]);
+            string city = Convert.ToString(inputUserTable.Rows[0]["city"]);
+            string governorate = Convert.ToString(inputUserTable.Rows[0]["governorate"]);
+            string username = Convert.ToString(inputUserTable.Rows[0]["username"]);
+            int points = Convert.ToInt32(inputUserTable.Rows[0]["points"]);
+            String blood_type = Convert.ToString(inputUserTable.Rows[0]["blood_type"]);
+            char gender = Convert.ToString(inputUserTable.Rows[0]["gender"])[0];
+            string name = Convert.ToString(inputUserTable.Rows[0]["name"]);
+            Int64 national_id = Convert.ToInt64(inputUserTable.Rows[0]["national_id"]);
+            string phone = Convert.ToString(inputUserTable.Rows[0]["phone"]);
+            string password = Convert.ToString(inputUserTable.Rows[0]["user_pass"].GetHashCode());
+            int donation_count = Convert.ToInt32(inputUserTable.Rows[0]["donation_count"]);
+            inputUser = new User()
+            {
+                age = age,
+                city = city,
+                governorate = governorate,
+                username = username,
+                points = points,
+                blood_type = blood_type,
+                gender = gender,
+                name = name,
+                national_id = national_id,
+                phone = phone,
+                password = password,
+                donation_count = donation_count
+            };
+
+
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
             Parameters1.Add("@national_id", inputUser.national_id);
             DataTable userDonations = dbm.ExecuteReader_proc("getUserDonations", Parameters1);
@@ -164,7 +198,8 @@ namespace BBMS.Controllers
                     Int64 national_id = Convert.ToInt64(inputUserTable.Rows[0]["national_id"]);
                     string phone = Convert.ToString(inputUserTable.Rows[0]["phone"]);
                     string password = Convert.ToString(inputUserTable.Rows[0]["user_pass"].GetHashCode());
-                   inputUser = new User()
+                    int donation_count = Convert.ToInt32(inputUserTable.Rows[0]["donation_count"]);
+                    inputUser = new User()
                     {
                         age = age,
                         city = city,
@@ -176,7 +211,8 @@ namespace BBMS.Controllers
                         name = name,
                         national_id = national_id,
                         phone = phone,
-                        password = password
+                        password = password,
+                        donation_count = donation_count
                     };
                     TempData["inputUser"] = inputUser;
                     return RedirectToAction("Index", "User");

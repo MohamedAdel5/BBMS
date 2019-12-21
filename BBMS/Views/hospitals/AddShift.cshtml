@@ -140,7 +140,7 @@
                                                             @Html.LabelFor(model => model.blood_camp_id, "Manager username", htmlAttributes: new { @class = "control-label col-md-4" })
                                                             @Html.TextBoxFor(model => model.shift_manager_username, new { @class = "form-group " })
                                                             @Html.ValidationMessageFor(model => model.shift_manager_username, "", new { @class = "text-danger" })
-
+                                                            <label class="text-warning">The shift manager's username has to be one of your registered managers.</label>
                                                         </div>
 
 
@@ -185,11 +185,11 @@
                                                 </div>
                                             </fieldset>
 
-                                            @if (ViewBag.added == true)
+                                            @if (IsPost && ViewBag.added != null && ViewBag.added == true)
                                             {
                                                 @Html.Label("Shift Added Successfully");
                                             }
-                                            else if (ViewBag.added == false)
+                                            else if(IsPost)
                                             {
                                                 @Html.Label("Shift not Added");
 
