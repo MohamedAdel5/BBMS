@@ -28,8 +28,18 @@
                 <small>Blood Type: @((Model.blood_type != null) ? @Model.blood_type : "undefined(Till the first donation)")</small><br /><br />
                 <strong>Points: @Model.points</strong><br />
                 <strong>Donation Count: @Model.donation_count</strong><br />
-
-            </blockquote>
+                <label class="btn label label-danger" id="show">Change Password</label><br/><br/>
+                @using (Html.BeginForm("ChangePassword", "User", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="password" name="pass" style = "display:none;" class="chg_pass"/>
+                    <input type="submit" class="btn btn-xs btn-danger  chg_pass" style = "display:none;"/>
+                }
+                @if(IsPost && ViewBag.passSuccess == true)
+                {
+                    <label class="text-success">Done!</label>
+                }
+                </blockquote>
         </div>
     </div>
     <div class="row clearfix">
@@ -193,3 +203,10 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $("#show").click(function () {
+            $(".chg_pass").toggle("swing");
+        });
+    });
+</script>

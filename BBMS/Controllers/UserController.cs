@@ -230,5 +230,33 @@ namespace BBMS.Controllers
             TempData.Remove("inputUser");
             return RedirectToAction("Index", "Home");
         }
+        [HttpPost]
+        public ActionResult ChangePassword(string pass)
+        {
+            User inputUser = (User)TempData["inputUser"];
+            if (inputUser == null)
+            {
+                return RedirectToAction("SignIn", "User");
+            }
+            TempData["inputUser"] = inputUser;
+            if (String.IsNullOrEmpty(pass))
+            {
+                return View("Index", inputUser);
+            }
+            if (pass.Length > 30)
+            {
+                return View("Index", inputUser);
+            }
+            Dictionary<string, object> Parameters = new Dictionary<string, object>();
+            Parameters.Add("@username", inputUser.username);
+            Parameters.Add("@password", pass);
+            if (dbm.ExecuteNonQuery_proc("changePassword", Parameters) != 0)
+            {
+                ViewBag.passSuccess = true;
+            }
+            return View("Index", inputUser);
+        }
     }
+
+    
 }

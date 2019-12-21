@@ -38,6 +38,7 @@ namespace BBMS.Controllers
             {
                 return RedirectToAction("SignIn", "Admin");
             }
+            ViewBag.passSuccess = Convert.ToBoolean(TempData["passSuccess"]);
 
             DataTable bloodBagsStatistics = dbm.ExecuteReader_proc("getBBagsNums", null);
 
@@ -324,6 +325,35 @@ namespace BBMS.Controllers
         {
             TempData.Remove("inputAdmin");
             return RedirectToAction("SignIn", "Admin");
+        }
+        [HttpPost]
+        public ActionResult ChangePassword(string pass)
+        {
+            Admin inputAdmin = (Admin)TempData["inputAdmin"];
+            if (inputAdmin != null)
+            {
+                TempData["inputAdmin"] = inputAdmin;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            if (String.IsNullOrEmpty(pass))
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            if (pass.Length > 30)
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            Dictionary<string, object> Parameters = new Dictionary<string, object>();
+            Parameters.Add("@username", inputAdmin.username);
+            Parameters.Add("@password", pass);
+            if (dbm.ExecuteNonQuery_proc("changePassword", Parameters) != 0)
+            {
+                TempData["passSuccess"] = true;
+            }
+            return RedirectToAction("Index", "Admin");
         }
     }
 }

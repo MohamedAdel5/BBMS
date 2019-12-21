@@ -111,17 +111,26 @@
                     <small>@Model.username</small><br />
                     <small>@Model.city, @Model.governorate</small><br />
                     <small>Phone: @Model.phone</small><br />
-
+                    <label class="btn label label-danger" id="show">Change Password</label><br /><br />
+                    @using (Html.BeginForm("ChangePassword", "Hospitals", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="password" name="pass" style="display:none;" class="chg_pass" />
+                        <input type="submit" class="btn btn-xs btn-danger  chg_pass" style="display:none;" />
+                    }
+                    @if (ViewBag.passSuccess == true)
+                    {
+                        <label class="text-success">Done!</label>
+                    }
                 </blockquote>
                 <blockquote>
                     <h2>Send A Notification For Users Of Certain Blood Type</h2>
                     @using (Html.BeginForm("sendNotification", "hospitals", FormMethod.Post))
                     {
                         <div class="form-group">
-
                             <label class="control-label col-md-4">Blood Type:</label>
-                            <select name="bloodType" class = "form-horizontal">
-                                @foreach(var li in ViewBag.BloodTypes)
+                            <select name="bloodType" class="form-horizontal">
+                                @foreach (var li in ViewBag.BloodTypes)
                                 {
                                     <option value="@li">@li</option>
                                 }
@@ -132,9 +141,9 @@
                             <input type="text" class="form-control" name="info" />
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Send"  class="btn btn-xs btn-danger" />
+                            <input type="submit" value="Send" class="btn btn-xs btn-danger" />
                         </div>
-                        if(ViewBag.success != null && ViewBag.success == true)
+                        if (ViewBag.success != null && ViewBag.success == true)
                         {
                             <label class="text-success">Done!</label>
                         }
@@ -142,10 +151,10 @@
                     }
                 </blockquote>
             </div>
-            
-                
-           
-            
+
+
+
+
         </div>
         <!-- /. PAGE WRAPPER  -->
         <hr />
@@ -156,7 +165,7 @@
         </div>
     </div>
     <!-- /. WRAPPER  -->
-    
+
 
 
 
@@ -172,7 +181,13 @@
     <!-- CUSTOM SCRIPTS -->
     <script src="@Url.Content("~/Content/dashboardAssets/js/custom.js")"></script>
     <script src="@Url.Content("https://canvasjs.com/assets/script/canvasjs.min.js")"></script>
-
+    <script>
+        $(document).ready(function () {
+            $("#show").click(function () {
+                $(".chg_pass").toggle("swing");
+            });
+        });
+    </script>
 
 </body>
 </html>

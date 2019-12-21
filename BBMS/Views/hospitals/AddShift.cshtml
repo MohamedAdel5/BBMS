@@ -113,6 +113,7 @@
 
                 @using (Html.BeginForm("AddShift", "hospitals", FormMethod.Post))
                 {
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                     <div class="container">
                         <div class="row">
@@ -189,7 +190,7 @@
                                             {
                                                 @Html.Label("Shift Added Successfully");
                                             }
-                                            else if(IsPost)
+                                            else if (IsPost)
                                             {
                                                 @Html.Label("Shift not Added");
 
@@ -202,7 +203,7 @@
                             </div>
                         </div>
 
-                        
+
 
 
                     </div>

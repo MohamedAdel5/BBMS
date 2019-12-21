@@ -13,7 +13,8 @@
         </div>
     </div>
     <div class=" row">
-        
+        @if (ViewBag.services != null)
+        {
             <table class="table table-bordered table-hover table-striped">
                 <thead>
                     <tr class=" row">
@@ -25,8 +26,8 @@
                     {
 
                         <tr class="row">
-                            
-                                <td>@row["name"]</td>
+
+                            <td>@row["name"]</td>
                             @using (Html.BeginForm("RemoveService", "Service", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
@@ -36,6 +37,8 @@
                     }
                 </tbody>
             </table>
+        }
+
     </div>
     <div>
         @Html.ActionLink("Back to Admin dashboard", "Index", "Admin")

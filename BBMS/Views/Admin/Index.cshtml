@@ -36,14 +36,17 @@
                 </button>
                 <a href="@Url.Action("Index", "Admin")" class="navbar-brand">Admin</a>
             </div>
-            @using (Html.BeginForm("SignOut", "Admin", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
+                
+            <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
+                @using (Html.BeginForm("SignOut", "Admin", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
                     <button class=" btn btn-sm btn-danger square-btn-adjust" type="submit" value="SignOut" name="id">Log Out</button>
-                </div>
-            }
-            </nav>
+
+                }
+            </div>
+            
+        </nav>
         <!-- /. NAV TOP  -->
         <!--NAV SIDE -->
         <nav class="navbar-default navbar-side" role="navigation">
@@ -82,6 +85,19 @@
                     </li>
                     <li>
                         <a href="@Url.Action("SignUp", "Admin")"><i class="fa fa-user fa-3x"></i> SignUp an Admin</a>
+                    </li>
+                    <li style="margin-top:10px; margin-left:30px">
+                        @using (Html.BeginForm("ChangePassword", "Admin", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <label class="btn label label-danger" id="show">Change Password</label> <br /><br/>
+                            <input type="password" name="pass" style="display:none;" class="chg_pass" />
+                            <input type="submit" class="btn btn-xs btn-danger  chg_pass" style="display:none;" />
+                        }
+                        @if (ViewBag.passSuccess == true)
+                        {
+                            <label class="text-success">Done!</label>
+                        }
                     </li>
 
                 </ul>
@@ -135,11 +151,11 @@
                             <div class="panel-heading">
                                 @if (ViewBag.bloodCampID != null)
                                 {
-                                <p>
-                                    Best Blood Camp Belongs to Hospital<strong>#@ViewBag.hospitalID @ViewBag.hospitalName</strong>
-                                    <br />
-                                    Blood Camp <strong>#@ViewBag.bloodCampID</strong> with Blood Bags = <strong>@ViewBag.bloodCampBags</strong>
-                                </p>
+                                    <p>
+                                        Best Blood Camp Belongs to Hospital<strong>#@ViewBag.hospitalID @ViewBag.hospitalName</strong>
+                                        <br />
+                                        Blood Camp <strong>#@ViewBag.bloodCampID</strong> with Blood Bags = <strong>@ViewBag.bloodCampBags</strong>
+                                    </p>
                                 }
 
                             </div>
@@ -174,7 +190,13 @@
     <!-- CUSTOM SCRIPTS -->
     <script src="@Url.Content("~/Content/dashboardAssets/js/custom.js")"></script>
     <script src="@Url.Content("https://canvasjs.com/assets/script/canvasjs.min.js")"></script>
-
+    <script>
+        $(document).ready(function () {
+            $("#show").click(function () {
+                $(".chg_pass").toggle("swing");
+            });
+        });
+    </script>
     <script>
         window.onload = function () {
 

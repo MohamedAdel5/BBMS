@@ -33,6 +33,7 @@ namespace BBMS.Controllers
             {
                 return RedirectToAction("SignIn", "Hospitals");
             }
+            ViewBag.passSuccess = Convert.ToBoolean(TempData["passSuccess"]);
             ViewBag.BloodTypes = new List<object> { "A+", "B+", "B-", "O+", "O-", "AB+", "AB-" };
             return View(inputHospital);
 
@@ -991,6 +992,36 @@ namespace BBMS.Controllers
             }
             ViewBag.BloodTypes = new List<object> { "A+", "B+", "B-", "O+", "O-", "AB+", "AB-" };
             return View("Index", inputHospital);
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(string pass)
+        {
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Hospitals");
+            }
+            if (String.IsNullOrEmpty(pass))
+            {
+                return RedirectToAction("Index", "Hospitals");
+            }
+            if (pass.Length > 30)
+            {
+                return RedirectToAction("Index", "Hospitals");
+            }
+            Dictionary<string, object> Parameters = new Dictionary<string, object>();
+            Parameters.Add("@username", inputHospital.username);
+            Parameters.Add("@password", pass);
+            if (dbm.ExecuteNonQuery_proc("changePassword", Parameters) != 0)
+            {
+                TempData["passSuccess"] = true;
+            }
+            return RedirectToAction("Index", "Hospitals");
         }
     }
 }
