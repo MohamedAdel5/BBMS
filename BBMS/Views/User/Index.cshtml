@@ -44,6 +44,9 @@
                     <li>
                         <a href="#panel-123456" data-toggle="tab">My Service activity</a>
                     </li>
+                    <li>
+                        <a href="#panel-7890" data-toggle="tab">Notifications</a>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="panel-200304">
@@ -137,6 +140,40 @@
                                             {
                                                 <tr class=" row">
                                                     @foreach (DataColumn col in ViewBag.userServices.Columns)
+                                                    {
+                                                        <td>@row[col.ColumnName]</td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="panel-7890">
+                        <div class="row clearfix">
+                            <div class="col-md-8 column">
+                                <p>
+                                    <strong>My Notifications</strong><br />
+                                </p>
+                                @if (ViewBag.notifications != null)
+                                {
+                                    <table class="table table-bordered table-hover table-striped">
+                                        <thead>
+                                            <tr class=" row">
+                                                @foreach (DataColumn col in ViewBag.notifications.Columns)
+                                                {
+                                                    <th>@col.ColumnName</th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (DataRow row in ViewBag.notifications.Rows)
+                                            {
+                                                <tr class=" row">
+                                                    @foreach (DataColumn col in ViewBag.notifications.Columns)
                                                     {
                                                         <td>@row[col.ColumnName]</td>
                                                     }

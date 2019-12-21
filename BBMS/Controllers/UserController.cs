@@ -42,11 +42,16 @@ namespace BBMS.Controllers
             Parameters3.Add("@national_id", inputUser.national_id);
             DataTable userServices = dbm.ExecuteReader_proc("getUserServices", Parameters3);
 
+            Dictionary<string, object> Parameters4 = new Dictionary<string, object>();
+            Parameters4.Add("@username", inputUser.username);
+            DataTable notifications = dbm.ExecuteReader_proc("getUserNotifications", Parameters4);
+
 
             TempData["inputUser"] = inputUser;
             ViewBag.userDonations = userDonations;
             ViewBag.userHealthInfo = userHealthInfo;
             ViewBag.userServices = userServices;
+            ViewBag.notifications = notifications;
 
             return View(inputUser);
         }

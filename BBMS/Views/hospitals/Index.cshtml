@@ -1,4 +1,4 @@
-﻿
+﻿@model BBMS.Models.Hospital
 @{
     ViewBag.Title = "Hospital dashboard";
 }
@@ -113,8 +113,39 @@
                     <small>Phone: @Model.phone</small><br />
 
                 </blockquote>
-            </div>
+                <blockquote>
+                    <h2>Send A Notification For Users Of Certain Blood Type</h2>
+                    @using (Html.BeginForm("sendNotification", "hospitals", FormMethod.Post))
+                    {
+                        <div class="form-group">
 
+                            <label class="control-label col-md-4">Blood Type:</label>
+                            <select name="bloodType" class = "form-horizontal">
+                                @foreach(var li in ViewBag.BloodTypes)
+                                {
+                                    <option value="@li">@li</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Message:</label>
+                            <input type="text" class="form-control" name="info" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Send"  class="btn btn-xs btn-danger" />
+                        </div>
+                        if(ViewBag.success != null && ViewBag.success == true)
+                        {
+                            <label class="text-success">Done!</label>
+                        }
+
+                    }
+                </blockquote>
+            </div>
+            
+                
+           
+            
         </div>
         <!-- /. PAGE WRAPPER  -->
         <hr />

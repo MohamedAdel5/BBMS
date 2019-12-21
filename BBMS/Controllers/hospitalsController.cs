@@ -28,12 +28,14 @@ namespace BBMS.Controllers
             if (inputHospital != null)
             {
                 TempData["inputHospital"] = inputHospital;
-                return View(inputHospital);
             }
             else
             {
                 return RedirectToAction("SignIn", "Hospitals");
             }
+            ViewBag.BloodTypes = new List<object> { "A+", "B+", "B-", "O+", "O-", "AB+", "AB-" };
+            return View(inputHospital);
+
         }
 
         //SignUp
@@ -911,9 +913,33 @@ namespace BBMS.Controllers
 
         //POST
         [HttpPost]
-        public ActionResult sendNotification(string bloodType, string message)
+        public ActionResult sendNotification(string bloodType, string info)
         {
-            return View();
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
+            Dictionary<string, object> Parameters = new Dictionary<string, object>();
+            Parameters.Add("@blood_type", bloodType);
+            DataTable usersOfBloodType = dbm.ExecuteReader_proc("getUsersOfBloodType", Parameters);
+            if(usersOfBloodType != null)
+            {
+                foreach(DataRow u in usersOfBloodType.Rows)
+                {
+                    Parameters.Clear();
+                    Parameters.Add("@username", u["username"]);
+                    Parameters.Add("@info", info);
+                    dbm.ExecuteNonQuery_proc("sendNotifications", Parameters);
+                }
+                ViewBag.success = true;
+            }
+            ViewBag.BloodTypes = new List<object> { "A+", "B+", "B-", "O+", "O-", "AB+", "AB-" };
+            return View("Index", inputHospital);
         }
     }
 }
