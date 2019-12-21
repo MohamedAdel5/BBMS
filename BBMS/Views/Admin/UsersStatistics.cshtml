@@ -175,16 +175,16 @@
                     legendMarkerColor: "grey",
                     legendText: "Write Legend Text here",
                     dataPoints: [
-                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[0]:0), label: @(ViewBag.users != null?"@ViewBag.users[0]":"") },
-                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[1]:0), label: @(ViewBag.users != null?"@ViewBag.users[1]":"") },
-                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[2]:0), label: @(ViewBag.users != null?"@ViewBag.users[2]":"") },
-                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[3]:0), label: @(ViewBag.users != null?"@ViewBag.users[3]":"") },
-                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[4]:0), label: @(ViewBag.users != null?"@ViewBag.users[4]":"") },
-                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[5]:0), label: @(ViewBag.users != null?"@ViewBag.users[5]":"") },
-                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[6]:0), label: @(ViewBag.users != null?"@ViewBag.users[6]":"") },
-                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[7]:0), label: @(ViewBag.users != null?"@ViewBag.users[7]":"") },
-                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[8]:0), label: @(ViewBag.users != null?"@ViewBag.users[8]":"") },
-                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[9]:0), label: @(ViewBag.users != null?"@ViewBag.users[9]":"") }
+                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[0]:0), label: "@(ViewBag.users != null?ViewBag.users[0] :"")" + " " },
+                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[1]:0), label: "@(ViewBag.users != null?ViewBag.users[1] :"")" + " " },
+                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[2]:0), label: "@(ViewBag.users != null?ViewBag.users[2] :"")" + " " },
+                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[3]:0), label: "@(ViewBag.users != null?ViewBag.users[3] :"")" + " " },
+                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[4]:0), label: "@(ViewBag.users != null?ViewBag.users[4] :"")" + " " },
+                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[5]:0), label: "@(ViewBag.users != null?ViewBag.users[5] :"")" + " " },
+                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[6]:0), label: "@(ViewBag.users != null?ViewBag.users[6] :"")" + " " },
+                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[7]:0), label: "@(ViewBag.users != null?ViewBag.users[7] :"")" + " " },
+                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[8]:0), label: "@(ViewBag.users != null?ViewBag.users[8] :"")" + " " },
+                        { y: @(ViewBag.donsCounts != null ?ViewBag.donsCounts[9]:0), label: "@(ViewBag.users != null?ViewBag.users[9] :"")" + " " }
                     ]
                 }]
             });
@@ -193,7 +193,7 @@
                 animationEnabled: true,
                 theme: "light2", // "light1", "light2", "dark1", "dark2"
                 title: {
-                    text: "Top " + @(ViewBag.topUserServiceCount != null?@ViewBag.topUserServiceCount:"") + " Service Using Users"
+                    text: "Top " + @(ViewBag.topUserServiceCount != null?@ViewBag.topUserServiceCount:0) + " Service Using Users"
                 },
                 axisY: {
                     title: "Number of Services Used"
@@ -204,16 +204,16 @@
                     legendMarkerColor: "grey",
                     legendText: "Write Legend Text here",
                     dataPoints: [
-                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[0]:0), label: @(ViewBag.usersService != null?"@ViewBag.usersService[0]": "")},
-                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[1]:0), label: @(ViewBag.usersService != null?"@ViewBag.usersService[1]": "")},
-                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[2]:0), label: @(ViewBag.usersService != null?"@ViewBag.usersService[2]": "")},
-                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[3]:0), label: @(ViewBag.usersService != null?"@ViewBag.usersService[3]": "")},
-                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[4]:0), label: @(ViewBag.usersService != null?"@ViewBag.usersService[4]": "")},
-                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[5]:0), label: @(ViewBag.usersService != null?"@ViewBag.usersService[5]": "")},
-                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[6]:0), label: @(ViewBag.usersService != null?"@ViewBag.usersService[6]": "")},
-                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[7]:0), label: @(ViewBag.usersService != null?"@ViewBag.usersService[7]": "")},
-                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[8]:0), label: @(ViewBag.usersService != null?"@ViewBag.usersService[8]": "")},
-                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[9]:0), label: @(ViewBag.usersService != null?"@ViewBag.usersService[9]": "")},
+                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[0]:0), label: "@(ViewBag.usersService != null?ViewBag.usersService[0]: "")" + " "},
+                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[1]:0), label: "@(ViewBag.usersService != null?ViewBag.usersService[1]: "")" + " "},
+                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[2]:0), label: "@(ViewBag.usersService != null?ViewBag.usersService[2]: "")" + " "},
+                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[3]:0), label: "@(ViewBag.usersService != null?ViewBag.usersService[3]: "")" + " "},
+                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[4]:0), label: "@(ViewBag.usersService != null?ViewBag.usersService[4]: "")" + " "},
+                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[5]:0), label: "@(ViewBag.usersService != null?ViewBag.usersService[5]: "")" + " "},
+                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[6]:0), label: "@(ViewBag.usersService != null?ViewBag.usersService[6]: "")" + " "},
+                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[7]:0), label: "@(ViewBag.usersService != null?ViewBag.usersService[7]: "")" + " "},
+                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[8]:0), label: "@(ViewBag.usersService != null?ViewBag.usersService[8]: "")" + " "},
+                        { y: @(ViewBag.usersCountServ != null?ViewBag.usersCountServ[9]:0), label: "@(ViewBag.usersService != null?ViewBag.usersService[9]: "")" + " "}
                     ]
                 }]
             });

@@ -143,9 +143,13 @@
                         <div class="form-group">
                             <input type="submit" value="Send" class="btn btn-xs btn-danger" />
                         </div>
-                        if (ViewBag.success != null && ViewBag.success == true)
+                        if (IsPost && ViewBag.success != null && ViewBag.success == true)
                         {
                             <label class="text-success">Done!</label>
+                        }
+                        else if (IsPost && ViewBag.success != null && ViewBag.success == false)
+                        {
+                            <label class="text-success">Failed to send</label>
                         }
 
                     }

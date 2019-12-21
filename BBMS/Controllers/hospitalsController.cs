@@ -976,20 +976,29 @@ namespace BBMS.Controllers
             {
                 return RedirectToAction("SignIn", "Hospitals");
             }
-            Dictionary<string, object> Parameters = new Dictionary<string, object>();
-            Parameters.Add("@blood_type", bloodType);
-            DataTable usersOfBloodType = dbm.ExecuteReader_proc("getUsersOfBloodType", Parameters);
-            if(usersOfBloodType != null)
+            if(!String.IsNullOrEmpty(info))
             {
-                foreach(DataRow u in usersOfBloodType.Rows)
+                Dictionary<string, object> Parameters = new Dictionary<string, object>();
+                Parameters.Add("@blood_type", bloodType);
+                DataTable usersOfBloodType = dbm.ExecuteReader_proc("getUsersOfBloodType", Parameters);
+                if (usersOfBloodType != null)
                 {
-                    Parameters.Clear();
-                    Parameters.Add("@username", u["username"]);
-                    Parameters.Add("@info", info);
-                    dbm.ExecuteNonQuery_proc("sendNotifications", Parameters);
+                    foreach (DataRow u in usersOfBloodType.Rows)
+                    {
+                        Parameters.Clear();
+                        Parameters.Add("@username", u["username"]);
+                        Parameters.Add("@info", info);
+                        dbm.ExecuteNonQuery_proc("sendNotifications", Parameters);
+                    }
+                    ViewBag.success = true;
                 }
-                ViewBag.success = true;
             }
+            else
+            {
+                ViewBag.success = false;
+
+            }
+
             ViewBag.BloodTypes = new List<object> { "A+", "B+", "B-", "O+", "O-", "AB+", "AB-" };
             return View("Index", inputHospital);
         }
