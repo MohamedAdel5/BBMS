@@ -37,9 +37,14 @@
                 </button>
                 <a class="navbar-brand" href="#">Hospital</a>
             </div>
-            <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
-                <a href="#" class="btn btn-danger square-btn-adjust">Logout</a>
-            </div>
+            @using (Html.BeginForm("SignOut", "Hospitals", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
+                    <button class=" btn btn-sm btn-danger square-btn-adjust" type="submit" value="SignOut" name="id">Log Out</button>
+                </div>
+            }
+
         </nav>
         <!-- /. NAV TOP  -->
         <!--NAV SIDE -->
@@ -63,10 +68,10 @@
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shifts<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="@Url.Action("AddShift", "hospitals")">Add</a>
+                                <a href="@Url.Action("AddShift", "hospitals")">Add Shift</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("RemoveShift", "hospitals")">Remove</a>
+                                <a href="@Url.Action("RemoveShift", "hospitals")">Show/Remove Shifts</a>
                             </li>
                         </ul>
                     </li>
@@ -74,10 +79,10 @@
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shift Managers<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="@Url.Action("AddShiftManager", "hospitals")">Add</a>
+                                <a href="@Url.Action("AddShiftManager", "hospitals")">Add Shift manager</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("RemoveShiftManager", "hospitals")">Remove</a>
+                                <a href="@Url.Action("RemoveShiftManager", "hospitals" )">Show/Remove Shift managers</a>
                             </li>
                         </ul>
                     </li>
@@ -89,7 +94,7 @@
                                 <a href="@Url.Action("AddBloodBag", "hospitals")">Add Blood Bag</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("RemoveBloodBag", "hospitals")">Remove Blood Bag</a>
+                                <a href="@Url.Action("RemoveBloodBag", "hospitals")">Show/Remove Blood Bag</a>
                             </li>
                         </ul>
                     </li>
@@ -158,6 +163,11 @@
                 <button data-toggle="collapse" data-target="#campsDetails" class=" btn btn-group-sm">Camps Details</button>
                 <div class="row clearfix">
                     <div class="col-md-8 column collapse" id="campsDetails">
+                        <p class="text-warning">
+                            Note: <br />
+                            The following table shows all your blood camps and the associated shifts for each blood camp. <br/>
+                            If the blood camp has no associated shifts, the shifts details will be empty in the table.
+                        </p>
                         <hr />
                         @if (ViewBag.BloodCampsDetails != null)
                         {

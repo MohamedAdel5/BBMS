@@ -37,9 +37,13 @@
                 </button>
                 <a class="navbar-brand" href="#">Hospital</a>
             </div>
-            <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
-                <a href="#" class="btn btn-danger square-btn-adjust">Logout</a>
-            </div>
+            @using (Html.BeginForm("SignOut", "Hospitals", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
+                    <button class=" btn btn-sm btn-danger square-btn-adjust" type="submit" value="SignOut" name="id">Log Out</button>
+                </div>
+            }
         </nav>
         <!-- /. NAV TOP  -->
         <!--NAV SIDE -->
@@ -64,10 +68,10 @@
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shifts<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="@Url.Action("AddShift", "hospitals")">Add</a>
+                                <a href="@Url.Action("AddShift", "hospitals")">Add Shift</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("RemoveShift", "hospitals")">Remove</a>
+                                <a href="@Url.Action("RemoveShift", "hospitals")">Show/Remove Shifts</a>
                             </li>
                         </ul>
                     </li>
@@ -89,7 +93,7 @@
                                 <a href="#" class="active-menu">Add Blood Bag</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("RemoveBloodBag", "hospitals")">Remove Blood Bag</a>
+                                <a href="@Url.Action("RemoveBloodBag", "hospitals")">Show/Remove Blood Bag</a>
                             </li>
                         </ul>
                     </li>
@@ -102,7 +106,7 @@
 
 
         <div id="page-wrapper">
-            
+
             <!-- /. PAGE INNER  -->
 
             <div class="col-md-8 column" id="page-inner">
@@ -119,10 +123,12 @@
                                         <h3 class="panel-title">Add Blood Bag</h3>
                                     </div>
                                     <div class="panel-body">
+                                        <p class="text-warning">
+                                            Note: <br />
+                                            The blood bag date has to match one of the shifts of the chosen blood camp.<br />
+                                        </p>
                                         <form accept-charset="UTF-8" role="form">
                                             <fieldset>
-
-
                                                 <div class="form-group">
 
                                                     @if (ViewBag.BloodCamps != null)
@@ -160,8 +166,18 @@
                                                             @Html.ValidationMessageFor(model => model.notes, "", new { @class = "text-danger" })
                                                         </div>
 
+                                                        <hr />
+                                                        <h2>Donor Health Info</h2>
 
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-4">Blood pressure</label>
+                                                            <input type="text" class="form-group" name="bloodPressure" />
+                                                        </div>
 
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-4">Glucose level</label>
+                                                            <input type="text" class="form-group" name="glucoseLevel" />
+                                                        </div>
 
                                                         <input class="btn btn-lg btn-danger btn-block" type="submit" value="Add Blood Bag">
 

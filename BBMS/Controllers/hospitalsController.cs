@@ -24,54 +24,31 @@ namespace BBMS.Controllers
         // GET: hospitals
         public ActionResult Index()
         {
-            hospital inputHospital = (hospital)TempData["inputHospital"];
-            TempData["inputHospital"] = inputHospital;
-            return View(inputHospital);
-
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+                return View(inputHospital);
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
         }
 
-        // GET: hospitals/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            hospital hospital = db.hospitals.Find(id);
-            if (hospital == null)
-            {
-                return HttpNotFound();
-            }
-            return View(hospital);
-        }
-
+        //SignUp
         // GET: hospitals/Create
         public ActionResult Create()
         {
-            ViewBag.username = new SelectList(db.logins, "username", "user_type");
             return View();
         }
 
+        //SignUp
         // POST: hospitals/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Hospital hospital)
         {
-            //string q1 = $"INSERT INTO login (username,user_pass, user_type) " + $"Values ('{hospital.username}', HASHBYTES('SHA2_512','{hospital.password}'),'H')";
-            //    dbm.ExecuteNonQuery(q1);
-            //string q2 = "INSERT INTO Hospital (username,hospital_name, phone, City, governorate)"+$"Values('{hospital.username}','{hospital.hospital_name}','{hospital.phone}','{hospital.city}','{hospital.governorate}')";
-
-            //dbm.ExecuteNonQuery(q2);
-            //if (ModelState.IsValid)
-            //{
-
-            //    return RedirectToAction("Index", "Admin");
-            //}
-
-            //ViewBag.username = new SelectList(db.logins, "username", "user_type", hospital.username);
-            //return View(hospital);
             Dictionary<string, object> Parameters = new Dictionary<string, object>();
             Parameters.Add("@username", hospital.username);
             Parameters.Add("@user_pass", hospital.password);
@@ -84,7 +61,6 @@ namespace BBMS.Controllers
             {
                 if (dbm.ExecuteNonQuery_proc("insert_hospital", Parameters) != 0)
                 {
-                    
                     return RedirectToAction("Create", "hospitals");
                 }
                 else
@@ -96,72 +72,21 @@ namespace BBMS.Controllers
             {
                 return View(hospital);
             }
-            
         }
 
-        // GET: hospitals/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            hospital hospital = db.hospitals.Find(id);
-            if (hospital == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.username = new SelectList(db.logins, "username", "user_type", hospital.username);
-            return View(hospital);
-        }
-
-        // POST: hospitals/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(hospital hospital)
+        public ActionResult SignOut()
         {
-            string q1 = $"UPDATE hospital SET hospital_name = '{hospital.hospital_name}',phone = '{hospital.phone}',City= '{hospital.city}',governorate='{hospital.governorate}' WHERE username='{hospital.username}'";
-            dbm.ExecuteNonQuery(q1);
-
-            if (ModelState.IsValid)
-            {
-
-
-           //     db.Entry(hospital).State = EntityState.Modified;
-             //   db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.username = new SelectList(db.logins, "username", "user_type", hospital.username);
-            return View(hospital);
+            TempData.Remove("inputHospital");
+            return RedirectToAction("SignIn", "Hospitals");
         }
 
-        //// GET: hospitals/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    hospital hospital = db.hospitals.Find(id);
-        //    if (hospital == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(hospital);
-        //}
-
         // POST: hospitals/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            //hospital hospital = db.hospitals.Find(id);
-            //db.hospitals.Remove(hospital);
-            //db.SaveChanges();
-
-
             if (dbm.ExecuteNonQuery_proc("deleteHospital", new Dictionary<string, object>() { { "@h_id", id } }) != 0)
             {
                 return RedirectToAction("RemoveHospital");
@@ -171,21 +96,20 @@ namespace BBMS.Controllers
                 return Content("Fatal error");
             }
         }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         //GET: remove hospital View
         public ActionResult RemoveHospital()
         {
-          
-            /*Get all hospitals names and ids and send them to the view through the view bag*/
-            return View();
+            Admin inputAdmin = (Admin)TempData["inputAdmin"];
+            if (inputAdmin != null)
+            {
+                TempData["inputAdmin"] = inputAdmin;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Admin");
+            }
         }
 
         //GET: remove hospital View
@@ -225,14 +149,24 @@ namespace BBMS.Controllers
         [Route("hospitals/SignIn")]
         public ActionResult SignIn()
         {
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+                return RedirectToAction("Index", "Hospitals");
+            }
+            else
+            {
+                return View();
+            }
             /*The viewBag is empty*/
             return View();
         }
 
         //POST: 
         /*
-         * redirects the user to his profile pagee if the username and password are correct
-         *else it throws an error and leaves you in the same page
+         * redirects the hospital admin to his dashboard if the username and password are correct
+         *else it throws an error and leaves him in the same page
          */
         [HttpPost]
         public ActionResult SignIn(loginViewModel inputLogin)
@@ -244,7 +178,7 @@ namespace BBMS.Controllers
             if (ModelState.IsValid)
             {
                 DataTable inputHospitalTable = dbm.ExecuteReader_proc("checkHospital", Parameters);
-                hospital inputHospital;
+                Hospital inputHospital;
                 if (inputHospitalTable == null)
                 {
                     return View(inputLogin);
@@ -258,7 +192,7 @@ namespace BBMS.Controllers
                     string username = Convert.ToString(inputHospitalTable.Rows[0]["username"]);
                     string phone = Convert.ToString(inputHospitalTable.Rows[0]["phone"]);
                     string password = Convert.ToString(inputHospitalTable.Rows[0]["user_pass"].GetHashCode());
-                    inputHospital = new hospital()
+                    inputHospital = new Hospital()
                     {
                         hospital_id = hospital_id,
                         hospital_name = hospital_name,
@@ -282,7 +216,15 @@ namespace BBMS.Controllers
 
         public ActionResult Services()
         {
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
 
@@ -308,18 +250,24 @@ namespace BBMS.Controllers
                 name = (row["name"]).ToString()
             });
              
-            TempData["inputHospital"] = inputHospital;
+            
 
             return View();
 
         }
 
         [HttpPost]
-
         public ActionResult AddService(Service srv)
         {
-
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
 
@@ -329,8 +277,6 @@ namespace BBMS.Controllers
 
             dbm.ExecuteNonQuery_proc("AddServiceToHospital", Parameters1);
 
-            TempData["inputHospital"] = inputHospital;
-
 
             return Redirect("Services");
         }
@@ -339,7 +285,15 @@ namespace BBMS.Controllers
         public ActionResult RemoveService(Service srv)
         {
 
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
 
@@ -348,7 +302,6 @@ namespace BBMS.Controllers
 
             dbm.ExecuteNonQuery_proc("RemoveServiceFromHospital", Parameters1);
 
-            TempData["inputHospital"] = inputHospital;
 
             return Redirect("Services");
         }
@@ -361,7 +314,15 @@ namespace BBMS.Controllers
         public ActionResult BloodCamps()
         {
 
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
 
@@ -379,8 +340,6 @@ namespace BBMS.Controllers
                 });
 
 
-            TempData["inputHospital"] = inputHospital;
-
             return View();
 
         }
@@ -388,7 +347,15 @@ namespace BBMS.Controllers
         public ActionResult AddCamp(BloodCamp camp)
         {
 
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
 
@@ -396,8 +363,6 @@ namespace BBMS.Controllers
             Parameters1.Add("@driver_name", camp.driver_name);
 
             dbm.ExecuteNonQuery_proc("AddBloodCamp", Parameters1);
-
-            TempData["inputHospital"] = inputHospital;
 
 
             return Redirect("BloodCamps");
@@ -407,7 +372,15 @@ namespace BBMS.Controllers
         public ActionResult RemoveCamp(BloodCamp camp)
         {
 
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
 
@@ -427,39 +400,47 @@ namespace BBMS.Controllers
         public ActionResult RemoveShift()
         {
 
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
-
             Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+
             DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters1);
 
             if (BloodCamps != null)
-
                 ViewBag.BloodCamps = BloodCamps.AsEnumerable().Select(row => new BloodCamp
                 {
                     blood_camp_id = Convert.ToInt32(row["blood_camp_id"]),
                     driver_name = (row["driver_name"]).ToString()
-                });
-
-
-            TempData["inputHospital"] = inputHospital;
+                });    
 
             return View();
 
         }
 
-
-
         [HttpPost]
         public ActionResult RemoveShift(Shift shift)
         {
-            hospital inputHospital = (hospital)TempData["inputHospital"];
-
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
-
             Parameters1.Add("@blood_camp_id", shift.blood_camp_id);
 
             ViewBag.shifts = dbm.ExecuteReader_proc("getCampShifts", Parameters1);
@@ -467,21 +448,15 @@ namespace BBMS.Controllers
 
             Parameters1.Clear();
             Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+
             DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters1);
 
             if (BloodCamps != null)
-
                 ViewBag.BloodCamps = BloodCamps.AsEnumerable().Select(row => new BloodCamp
                 {
                     blood_camp_id = Convert.ToInt32(row["blood_camp_id"]),
                     driver_name = (row["driver_name"]).ToString()
                 });
-
-
-            TempData["inputHospital"] = inputHospital;
-
-
-
 
             return View();
         }
@@ -491,16 +466,20 @@ namespace BBMS.Controllers
         public ActionResult RemoveShiftConfirmed(int blood_camp_id, string shift_date)
         {
 
-            hospital inputHospital = (hospital)TempData["inputHospital"];
-
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
-
             Parameters1.Add("@blood_camp_id", blood_camp_id);
             Parameters1.Add("@shift_date", shift_date);
-
-            TempData["inputHospital"] = inputHospital;
-
+            
 
             if (dbm.ExecuteNonQuery_proc("RemoveShift", Parameters1) != 0)
             {
@@ -517,8 +496,15 @@ namespace BBMS.Controllers
         public ActionResult AddShift()
         {
 
-            hospital inputHospital = (hospital)TempData["inputHospital"];
-
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
@@ -533,11 +519,6 @@ namespace BBMS.Controllers
                     blood_camp_id = Convert.ToInt32(row["blood_camp_id"]),
                     driver_name = (row["driver_name"]).ToString()
                 });
-
-
-            TempData["inputHospital"] = inputHospital;
-
-
 
 
             return View();
@@ -548,25 +529,23 @@ namespace BBMS.Controllers
         [HttpPost]
         public ActionResult AddShift(Shift shift, string start, string end, string shift_date)
         {
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
             start += ":00";
             end += ":00";
 
-            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+            Dictionary<string, object> Parameters = new Dictionary<string, object>();
+            Parameters.Add("@hospital_id", inputHospital.hospital_id);
 
-            Parameters1.Add("@blood_camp_id", shift.blood_camp_id);
-            Parameters1.Add("@shift_date", shift_date);
-            Parameters1.Add("@shift_manager_username", shift.shift_manager_username);
-            Parameters1.Add("@start_hour", start);
-            Parameters1.Add("@finish_hour", end);
-            Parameters1.Add("@city", shift.city);
-            Parameters1.Add("@governorate", shift.governorate);
-
-            Parameters1.Clear();
-
-            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
-            DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters1);
+            DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters);
 
             if (BloodCamps != null)
 
@@ -576,18 +555,20 @@ namespace BBMS.Controllers
                     driver_name = (row["driver_name"]).ToString()
                 });
 
+            Parameters.Clear();
+
+            Parameters.Add("@blood_camp_id", shift.blood_camp_id);
+            Parameters.Add("@shift_date", shift_date);
+            Parameters.Add("@shift_manager_username", shift.shift_manager_username);
+            Parameters.Add("@start_hour", start);
+            Parameters.Add("@finish_hour", end);
+            Parameters.Add("@city", shift.city);
+            Parameters.Add("@governorate", shift.governorate);
 
 
+            ViewBag.added = (dbm.ExecuteNonQuery_proc("insert_shift", Parameters) != 0);
 
-
-            TempData["inputHospital"] = inputHospital;
-
-
-            ViewBag.added = (dbm.ExecuteNonQuery_proc("insert_shift", Parameters1) != 0);
-            
-            return View();
-            
-            
+            return View();   
         }
 
 
@@ -602,19 +583,22 @@ namespace BBMS.Controllers
         [HttpPost]
         public ActionResult AddShiftManager(ShiftManager mgr)
         {
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
+
+
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
-
-
-
             Parameters1.Add("@username", mgr.username);
             Parameters1.Add("@user_pass", mgr.password);
             Parameters1.Add("@name", mgr.name);
             Parameters1.Add("@hospital_id", inputHospital.hospital_id);
-
-
-            TempData["inputHospital"] = inputHospital;
-
 
             ViewBag.added = (dbm.ExecuteNonQuery_proc("insert_shift_manager", Parameters1) != 0);
 
@@ -626,43 +610,57 @@ namespace BBMS.Controllers
 
         public ActionResult RemoveShiftManager()
         {
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
             Parameters1.Add("@hospital_id", inputHospital.hospital_id);
 
             ViewBag.managers = dbm.ExecuteReader_proc("getShiftManagers", Parameters1);
-            TempData["inputHospital"] = inputHospital;
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult RemoveShiftManager(ShiftManager mgr)
+        public ActionResult RemoveShiftManager(string mgr)
         {
-
-            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
-
-            hospital inputHospital = (hospital)TempData["inputHospital"];
-
-            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
-            ViewBag.managers = dbm.ExecuteReader_proc("getShiftManagers", Parameters1);
-
-
-
-           
-            ViewBag.removed = ((DataTable)ViewBag.managers).AsEnumerable().Any(row => mgr.username == row.Field<String>("username"));
-
-            if (ViewBag.removed == true)
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
             {
-                Parameters1.Clear();
-                Parameters1.Add("@username", mgr.username);
-                ViewBag.removed = dbm.ExecuteNonQuery_proc("RemoveShiftManager", Parameters1) != 0;
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
             }
 
-            TempData["inputHospital"] = inputHospital;
 
+            Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
+            Parameters1.Add("@hospital_id", inputHospital.hospital_id);
 
+            DataTable managers = dbm.ExecuteReader_proc("getShiftManagers", Parameters1);
+            if(!String.IsNullOrEmpty(mgr) && managers != null)
+            {
+                ViewBag.removed = (managers).AsEnumerable().Any(row => mgr == row.Field<String>("username"));
+
+                if (ViewBag.removed == true)
+                {
+                    Parameters1.Clear();
+                    Parameters1.Add("@username", mgr);
+                    ViewBag.removed = dbm.ExecuteNonQuery_proc("RemoveShiftManager", Parameters1) != 0;
+                    Parameters1.Clear();
+                    Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+                    ViewBag.managers = dbm.ExecuteReader_proc("getShiftManagers", Parameters1);
+                }
+            }
+           
             return View();
         }
 
@@ -670,6 +668,16 @@ namespace BBMS.Controllers
 
         public ActionResult RemoveBloodBag()
         {
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
+
             ViewBag.BloodTypes = new List<object> { "All", "A+", "B+", "B-", "O+", "O-", "AB+", "AB-" };
 
             return View();
@@ -680,26 +688,24 @@ namespace BBMS.Controllers
         [HttpPost]
         public ActionResult RemoveBloodBag(BloodBag bag)
         {
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
+
 
             ViewBag.BloodTypes = new List<object> { "All", "A+", "B+", "B-", "O+", "O-", "AB+", "AB-" };
 
-
-
-
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
-
             Parameters1.Add("@blood_type", bag.blood_type);
             Parameters1.Add("@hospital_id", inputHospital.hospital_id);
 
             ViewBag.bloodbags = dbm.ExecuteReader_proc("getBloodBagsofType", Parameters1);
-
-
-
-            TempData["inputHospital"] = inputHospital;
-
-
-
 
             return View();
         }
@@ -709,14 +715,20 @@ namespace BBMS.Controllers
         public ActionResult RemoveBloodBagConfirmed(int blood_bag_id)
         {
 
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
-
             Parameters1.Add("@blood_bag_id", blood_bag_id);
 
-            TempData["inputHospital"] = inputHospital;
 
 
             if (dbm.ExecuteNonQuery_proc("RemoveBloodBag", Parameters1) != 0)
@@ -733,17 +745,21 @@ namespace BBMS.Controllers
 
         public ActionResult AddBloodBag()
         {
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
+
             ViewBag.BloodTypes = new List<object> {"A+", "B+", "B-", "O+", "O-", "AB+", "AB-" };
 
-
-            hospital inputHospital = (hospital)TempData["inputHospital"];
-
-
-
-
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
-
             Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+
             DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters1);
 
             if (BloodCamps != null)
@@ -754,25 +770,26 @@ namespace BBMS.Controllers
                     driver_name = (row["driver_name"]).ToString()
                 });
 
-
-            TempData["inputHospital"] = inputHospital;
-
-
-
-
             return View();
         }
 
         [HttpPost]
-        public ActionResult AddBloodBag(BloodBag bag, string date)
+        public ActionResult AddBloodBag(BloodBag bag, string date, string bloodPressure, string glucoseLevel)
         {
 
-            hospital inputHospital = (hospital)TempData["inputHospital"];
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
 
             Dictionary<string, object> Parameters1 = new Dictionary<string, object>();
-
-
             Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+
             DataTable BloodCamps = dbm.ExecuteReader_proc("GetBloodCamps", Parameters1);
 
             if (BloodCamps != null)
@@ -789,18 +806,115 @@ namespace BBMS.Controllers
             Parameters1.Add("@notes", bag.notes);
             Parameters1.Add("@blood_type", bag.blood_type);
 
-            ViewBag.added = (dbm.ExecuteNonQuery_proc("AddBloodBag", Parameters1) != 0);
+            
+            ViewBag.added = (dbm.ExecuteNonQuery_proc("AddBloodBag", Parameters1) != 0); //This procedure adds the blood bag to stock and inserts the blood type in donor
+            if(ViewBag.added == true)
+            {
+                Parameters1.Clear();
+                Parameters1.Add("@hospital_id", inputHospital.hospital_id);
+                Parameters1.Add("@national_id", Convert.ToInt64(bag.national_id));
+                Parameters1.Add("@report_date", date);
+                Parameters1.Add("@blood_pressure", bloodPressure);
+                Parameters1.Add("@glucose_level", glucoseLevel);
+                Parameters1.Add("@notes", bag.notes);
 
+                dbm.ExecuteNonQuery_proc("insert_donorHealthInfo", Parameters1);
+            }
 
             ViewBag.BloodTypes = new List<object> {"A+","B+","B-","O+","O-","AB+","AB-"};
 
 
-            TempData["inputHospital"] = inputHospital;
             return View();
 
         }
 
+        ////GET
+        //public ActionResult consumeService()
+        //{
+        //    Hospital inputHospital = (Hospital)TempData["inputHospital"];
 
+        //    if (inputHospital != null)
+        //    {
+        //        TempData["inputHospital"] = inputHospital;
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("SignIn", "Hospitals");
+        //    }
+        //    return View();
+        //}
+
+        //POST
+        [HttpPost]
+        public ActionResult ConsumeService(string username, int service_id)
+        {
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
+
+            Dictionary<string, object> Parameters = new Dictionary<string, object>();
+            Parameters.Add("@username", username);
+
+            DataTable pointsTable = dbm.ExecuteReader_proc("getUserPoints", Parameters);
+            int userPoints = Convert.ToInt32(pointsTable.Rows[0]["points"]);
+
+            Parameters.Clear();
+            Parameters.Add("@hospital_id", inputHospital.hospital_id);
+            Parameters.Add("@service_id", service_id);
+
+            DataTable service = dbm.ExecuteReader_proc("getHospitalService", Parameters);
+            int serviceValue = Convert.ToInt32(service.Rows[0]["value"]);
+
+            if(userPoints < serviceValue)
+            {
+                ViewBag.lowPoints = true;
+                return View("Services");
+            }
+
+            Parameters.Add("@username", username);
+            Parameters.Add("@service_value", serviceValue);
+
+
+            if (dbm.ExecuteNonQuery_proc("consumeService", Parameters) != 0)
+            {
+                ViewBag.successProcess = true;
+                return View("Services");
+            }
+            else
+            {
+                return Content("Fatal Error");
+            }
+        }
+
+        //GET
+        public ActionResult SendNotification()
+        {
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("SignIn", "Hospitals");
+            }
+
+
+            return View();
+        }
+
+        //POST
+        [HttpPost]
+        public ActionResult sendNotification(string bloodType, string message)
+        {
+            return View();
+        }
     }
 }
 

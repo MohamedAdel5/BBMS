@@ -37,9 +37,13 @@
                 </button>
                 <a class="navbar-brand" href="#">Hospital</a>
             </div>
-            <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
-                <a href="#" class="btn btn-danger square-btn-adjust">Logout</a>
-            </div>
+            @using (Html.BeginForm("SignOut", "Hospitals", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
+                    <button class=" btn btn-sm btn-danger square-btn-adjust" type="submit" value="SignOut" name="id">Log Out</button>
+                </div>
+            }
         </nav>
         <!-- /. NAV TOP  -->
         <!--NAV SIDE -->
@@ -63,10 +67,10 @@
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shifts<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="@Url.Action("AddShift", "hospitals")">Add</a>
+                                <a href="@Url.Action("AddShift", "hospitals")">Add Shift</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("RemoveShift", "hospitals")">Remove</a>
+                                <a href="@Url.Action("RemoveShift", "hospitals")">Show/Remove Shifts</a>
                             </li>
                         </ul>
                     </li>
@@ -74,10 +78,10 @@
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shift Managers<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="@Url.Action("AddShiftManager", "hospitals")">Add</a>
+                                <a href="@Url.Action("AddShiftManager", "hospitals")">Add Shift manager</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("RemoveShiftManager", "hospitals")">Remove</a>
+                                <a href="@Url.Action("RemoveShiftManager", "hospitals" )">Show/Remove Shift managers</a>
                             </li>
                         </ul>
                     </li>
@@ -88,7 +92,7 @@
                                 <a href="@Url.Action("AddBloodBag", "hospitals")">Add Blood Bag</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("RemoveBloodBag", "hospitals")">Remove Blood Bag</a>
+                                <a href="@Url.Action("RemoveBloodBag", "hospitals")">Show/Remove Blood Bag</a>
                             </li>
                         </ul>
                     </li>
@@ -118,13 +122,13 @@
 
 
                                         {
-                                    <p>
-                                        @Html.DropDownListFor(model => model.service_id, new SelectList(ViewBag.NotProvidedServices, "service_id", "name"), new { @class = "form-horizontal" })
-                                        Value:
-                                        @Html.EditorFor(model => model.value, new { @class = "form-horizontal", @placeholder = "value", @type = "number" })
-                                      @*  @Html.ValidationMessageFor(model => model.value, "", new { @class = "text-danger" })*@
+                                            <p>
+                                                @Html.DropDownListFor(model => model.service_id, new SelectList(ViewBag.NotProvidedServices, "service_id", "name"), new { @class = "form-horizontal" })
+                                                Value:
+                                                @Html.EditorFor(model => model.value, new { @class = "form-horizontal", @placeholder = "value", @type = "number" })
+                                                @*  @Html.ValidationMessageFor(model => model.value, "", new { @class = "text-danger" })*@
 
-                                    </p><input class="btn" type="submit" value="Add Service">
+                                            </p><input class="btn" type="submit" value="Add Service">
                                             <p>If your desired service does <strong>NOT EXIST</strong> in the list, kindly contact the app admin.</p>
 
                                         }
@@ -159,6 +163,38 @@
 
                 }
 
+                @using (Html.BeginForm("ConsumeService", "hospitals", FormMethod.Post))
+                {
+                    <div class="panel-body">
+                        <form accept-charset="UTF-8" role="form">
+                            <fieldset>
+                                <div class="form-group col-lg-6">
+                                    <label>Username:</label>
+                                    <input type="text" name="username" class="form-control" />
+                                </div>
+                                <div class="form-group col-lg-8">
+                                    <blockquote>
+                                        <p><strong>Consume Service [For Users]</strong></p><br /><br />
+                                        @if (ViewBag.ProvidedServices != null)
+                                        {
+                                            @Html.DropDownListFor(model => model.service_id, new SelectList(ViewBag.ProvidedServices, "service_id", "name"), new { @class = "form-horizontal" })
+                                            <input class="btn" type="submit" value="Consume Service">
+                                        }
+                                    </blockquote>
+                                    @if (ViewBag.lowPoints != null && ViewBag.lowPoints == true)
+                                    {
+                                        <p class="text-danger">This user does not have enough points to use this service</p>
+                                    }
+                                    @if (ViewBag.successProcess != null && ViewBag.successProcess == true)
+                                    {
+                                        <p class="text-danger">Done!</p>
+                                    }
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+
+                }
                 <button data-toggle="collapse" data-target="#servicesDetails" class=" btn btn-group-sm">View all provided services</button>
                 <div class="row clearfix">
                     <div class="col-md-8 column collapse" id="servicesDetails">

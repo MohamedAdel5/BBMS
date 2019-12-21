@@ -1,9 +1,11 @@
 ﻿@model BBMS.ViewModels.loginViewModel
 @{
     ViewBag.Title = "SignIn";
+    Layout = "~/Views/Shared/_NoNavLayout.cshtml";
+
 }
 
-<h2>SignIn</h2>
+<h2>Hospital Sign In</h2>
 @using (Html.BeginForm("SignIn", "hospitals", FormMethod.Post))
 {
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })

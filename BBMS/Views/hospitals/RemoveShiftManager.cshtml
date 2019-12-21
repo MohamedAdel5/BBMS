@@ -37,9 +37,13 @@
                 </button>
                 <a class="navbar-brand" href="#">Hospital</a>
             </div>
-            <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
-                <a href="#" class="btn btn-danger square-btn-adjust">Logout</a>
-            </div>
+            @using (Html.BeginForm("SignOut", "Hospitals", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
+                    <button class=" btn btn-sm btn-danger square-btn-adjust" type="submit" value="SignOut" name="id">Log Out</button>
+                </div>
+            }
         </nav>
         <!-- /. NAV TOP  -->
         <!--NAV SIDE -->
@@ -64,10 +68,10 @@
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shifts<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="@Url.Action("AddShift", "hospitals")">Add</a>
+                                <a href="@Url.Action("AddShift", "hospitals")">Add Shift</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("RemoveShift", "hospitals")">Remove</a>
+                                <a href="@Url.Action("RemoveShift", "hospitals")">Show/Remove Shifts</a>
                             </li>
                         </ul>
                     </li>
@@ -78,7 +82,7 @@
                         <a href="#"><i class="fa fa-sitemap fa-3x"></i>Shift Managers<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level navbar-collapse">
                             <li>
-                                <a href="@Url.Action("AddShiftManager", "hospitals")">Add</a>
+                                <a href="@Url.Action("AddShiftManager", "hospitals")">Add Shift manager</a>
                             </li>
                             <li>
                                 <a href="" class="active-menu">Remove</a>
@@ -92,7 +96,7 @@
                                 <a href="@Url.Action("AddBloodBag", "hospitals")">Add Blood Bag</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("RemoveBloodBag", "hospitals")">Remove Blood Bag</a>
+                                <a href="@Url.Action("RemoveBloodBag", "hospitals")">Show/Remove Blood Bag</a>
                             </li>
 
                         </ul>
@@ -131,27 +135,27 @@
                                                 <div class="form-group">
 
                                                     <div class="form-group">
-                                                        @Html.LabelFor(model => model.username, "Username", htmlAttributes: new { @class = "control-label col-md-4" })
-                                                        @Html.TextBoxFor(model => model.username, new { @class = "form-group" })
-                                                        @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                                                        <label class="control-label col-md-4">Username</label>
+                                                        <input type="text" name="mgr" class="form-group" />
                                                     </div>
-
-
                                                     <input class="btn btn-lg btn-danger btn-block" type="submit" value="Remove Manager">
 
 
                                                 </div>
                                             </fieldset>
                                         </form>
-                                        @if (ViewBag.removed == true)
+                                        @if (ViewBag.removed != null)
                                         {
-                                            @Html.Label("Shift Manager Removed Successfully");
+                                            if (ViewBag.removed == true)
+                                            {
+                                                Html.Label("Shift Manager Removed Successfully");
+                                            }
+                                            else if (ViewBag.removed == false)
+                                            {
+                                                Html.Label("Failed, Username is invalid");
+                                            }
                                         }
-                                        else if (ViewBag.removed == false)
-                                        {
-                                            @Html.Label("Failed, Username is invalid");
 
-                                        }
 
                                     </div>
                                 </div>
