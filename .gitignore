@@ -410,3 +410,4 @@ _[Ss]cripts
 *.nupkg
 *.ncrunchsolution
 *.dot[Cc]over
+BBMS/Web.config
