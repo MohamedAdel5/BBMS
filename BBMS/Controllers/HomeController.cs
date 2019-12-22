@@ -87,27 +87,30 @@ namespace BBMS.Controllers
             }
             DataTable services = dbm.ExecuteReader_proc("getServices", null /*-> no parameters*/);  /*Gets all services*/
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(searchString) && services != null)
             {
                 DataTable servicesFilter = new DataTable();    /*will contain the hospitals that match the string*/
-                servicesFilter.Columns.Add(new DataColumn("Service name", typeof(string)));
-                servicesFilter.Columns.Add(new DataColumn("Provided By Hospital", typeof(string)));
-                servicesFilter.Columns.Add(new DataColumn("Service Value", typeof(int)));
-
-                foreach (DataRow row in services.Rows)
+                if(servicesFilter != null)
                 {
-                    if (Convert.ToString(row["name"]).ToLower().Contains(searchString.ToLower()))
-                    {
-                        DataRow r = servicesFilter.NewRow();
-                        r["Service name"] = Convert.ToString(row["name"]);
-                        r["Provided By Hospital"] = Convert.ToString(row["hospital_name"]);
-                        r["Service Value"] = Convert.ToInt32(row["value"]);
-                        servicesFilter.Rows.Add(r);
-                    }
+                    servicesFilter.Columns.Add(new DataColumn("Service name", typeof(string)));
+                    servicesFilter.Columns.Add(new DataColumn("Provided By Hospital", typeof(string)));
+                    servicesFilter.Columns.Add(new DataColumn("Service Value", typeof(int)));
 
+                    foreach (DataRow row in services.Rows)
+                    {
+                        if (Convert.ToString(row["name"]).ToLower().Contains(searchString.ToLower()))
+                        {
+                            DataRow r = servicesFilter.NewRow();
+                            r["Service name"] = Convert.ToString(row["name"]);
+                            r["Provided By Hospital"] = Convert.ToString(row["hospital_name"]);
+                            r["Service Value"] = Convert.ToInt32(row["value"]);
+                            servicesFilter.Rows.Add(r);
+                        }
+
+                    }
+                    if (servicesFilter.Rows.Count != 0)
+                        ViewBag.servicesFilter = servicesFilter;
                 }
-                if (servicesFilter.Rows.Count != 0)
-                    ViewBag.servicesFilter = servicesFilter;
 
             }
             ViewBag.services = services;
