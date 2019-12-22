@@ -1032,6 +1032,38 @@ namespace BBMS.Controllers
             }
             return RedirectToAction("Index", "Hospitals");
         }
+
+        [HttpPost]
+        public ActionResult getVolunteerHealthInfo(string n_id)
+        {
+            Hospital inputHospital = (Hospital)TempData["inputHospital"];
+            if (inputHospital != null)
+            {
+                TempData["inputHospital"] = inputHospital;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Hospitals");
+            }
+            Int64 national_id = Convert.ToInt64(n_id);
+
+            Dictionary<string, object> Parameters = new Dictionary<string, object>();
+            Parameters.Add("@n_id", n_id);
+            Parameters.Add("@h_id", inputHospital.hospital_id);
+
+            DataTable volunteer = dbm.ExecuteReader_proc("getVolunteerHealthInfo", Parameters);
+            ViewBag.BloodTypes = new List<object> { "A+", "B+", "B-", "O+", "O-", "AB+", "AB-" };
+            if (volunteer == null)
+            {
+                return View("Index", inputHospital);
+            }
+            else
+            {
+                ViewBag.volunteer = volunteer;
+                return View("Index", inputHospital);
+            }
+        }
+        
     }
 }
 

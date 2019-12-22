@@ -1,4 +1,5 @@
-﻿@model BBMS.Models.Hospital
+﻿@using System.Data;
+@model BBMS.Models.Hospital
 @{
     ViewBag.Title = "Hospital dashboard";
 }
@@ -123,6 +124,7 @@
                         <label class="text-success">Done!</label>
                     }
                 </blockquote>
+                <hr />
                 <blockquote>
                     <h2>Send A Notification For Users Of Certain Blood Type</h2>
                     @using (Html.BeginForm("sendNotification", "hospitals", FormMethod.Post))
@@ -154,6 +156,45 @@
 
                     }
                 </blockquote>
+                <hr />
+                <blockquote>
+                    <h2>Get a volunteer's health info.</h2>
+                    @using (Html.BeginForm("getVolunteerHealthInfo", "hospitals", FormMethod.Post))
+                    {
+
+                        <div class="form-group">
+                            <label>National ID:</label>
+                            <input type="number" required min="10000000000000" max="99999999999999" class="form-control" name="n_id" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Get data" class="btn btn-xs btn-danger" />
+                        </div>
+                    }
+                </blockquote>
+                @if (ViewBag.volunteer != null)
+                {
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr class=" row">
+                                @foreach (DataColumn col in ViewBag.volunteer.Columns)
+                                {
+                                    <th>@col.ColumnName</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (DataRow row in ViewBag.volunteer.Rows)
+                            {
+                                <tr class="row">
+                                    @foreach (DataColumn col in ViewBag.volunteer.Columns)
+                                    {
+                                        <td>@row[col.ColumnName]</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
             </div>
 
 
